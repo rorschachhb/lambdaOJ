@@ -38,7 +38,7 @@ pip install -r requirements.txt
 
 Create local database
 ```
-./create_db.py  
+./db_create.py  
 ./db_migrate.py
 ```
 
