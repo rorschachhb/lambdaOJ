@@ -36,6 +36,12 @@ Then, install requirements:
 pip install -r requirements.txt
 ```
 
+Create local database
+```
+./create_db.py  
+./db_migrate.py
+```
+
 
 
 ## Testing

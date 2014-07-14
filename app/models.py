@@ -61,8 +61,8 @@ class Problem(db.Model):
 
 class Submit(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
-	problem = db.Column(db.Integer, db.ForeignKey('Problem.id'))
-	user = db.Column(db.Integer, db.ForeignKey('User.id'))
+	problem = db.Column(db.Integer, db.ForeignKey('problem.id'))
+	user = db.Column(db.Integer, db.ForeignKey('user.id'))
 	status = db.Column(db.SmallInteger)
 	time = db.Column(db.Integer)
 	memory = db.Column(db.Integer)
