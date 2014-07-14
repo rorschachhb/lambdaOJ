@@ -33,7 +33,7 @@ source venv/bin/activate
 Then, install requirements:
 
 ```
-$ pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 
