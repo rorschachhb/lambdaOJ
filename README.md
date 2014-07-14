@@ -56,7 +56,7 @@ It will listen on `127.0.0.1:5000` by default.
 	
 
 
-## Run from uWSGI
+## uWSGI
 
 Initialization:
 
@@ -67,11 +67,7 @@ Initialization:
 It will prompt for `user`, `group`, `port` for lambdaOJ Web Process,
 and generate `lambdaoj.ini` and `run.sh`.
 
-Run from uWSGI by:
-
-```
-./run.sh
-```
+After that, you can execute `run.sh` to run from uWSGI each time.
 
 Of course, for actual use,
 you also need to configure your web server.
