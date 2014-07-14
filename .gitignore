@@ -1,4 +1,6 @@
 *~
 \#*
 *.pyc
+*.ini
+run.sh
 venv/
