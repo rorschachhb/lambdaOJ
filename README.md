@@ -15,7 +15,7 @@ Basic Requirements:
 To start from uWSGI, you need to have it installed:
 
 ```
-$ sudo pip install uwsgi
+sudo pip install uwsgi
 ```
 
 
@@ -26,8 +26,8 @@ First, `cd` into the `lambdaOJ` directory,
 create and activate virtual environment:
 
 ```
-$ virtualenv --no-site-packages venv
-$ source venv/bin/activate
+virtualenv --no-site-packages venv
+source venv/bin/activate
 ```
 
 Then, install requirements:
