@@ -1,0 +1,26 @@
+<html>
+
+<head>
+    <title>Upload</title>
+</head>
+
+<body>
+    <h1>Upload your code:</h1>
+    <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data" name="upload">
+        {{form.hidden_tag()}}
+        <table>
+            <tr>
+                {{ form.problem_id }}
+            </tr>
+            <tr>
+                {{ form.recaptcha }}
+            </tr>
+            <tr>
+            <td>{{ form.upload_file }}</td>
+            <td><input type="submit" value="ok"></td>
+            </tr>
+            </table>
+    </form>
+</body>
+
+</html>

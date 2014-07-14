@@ -1,0 +1,43 @@
+<html>
+
+<head>
+	<title>Sign Up</title>
+</head>
+
+<body>
+	<h1>Sign In</h1>
+	<form action="" method="post" name="signin">
+	    {{form.hidden_tag()}}
+	    <p>
+	        Please enter your email:<br>
+	        {{form.email(size=80)}}<br>
+	        {% for error in form.errors.email %}
+	        <span style="color: red;">[{{error}}]</span>
+	        {% endfor %}<br>
+	    </p>
+	    <p>
+	        Please enter your nickname:<br>
+	        {{form.nickname(size=80)}}<br>
+	        {% for error in form.errors.nickname %}
+	        <span style="color: red;">[{{error}}]</span>
+	        {% endfor %}<br>
+	    </p>
+	    <p>
+	        Please enter your password:<br>
+	        {{form.password(size=80)}}<br>
+	        {% for error in form.errors.password %}
+	        <span style="color: red;">[{{error}}]</span>
+	        {% endfor %}<br>
+	    </p>
+	    <p>
+	        Please enter your password again:<br>
+	        {{form.password_confirm(size=80)}}<br>
+	        {% for error in form.errors.password_confirm %}
+	        <span style="color: red;">[{{error}}]</span>
+	        {% endfor %}<br>
+	    </p>
+	    <p><input type="submit" value="Sign up"></p>
+	</form>
+</body>
+
+</html>
