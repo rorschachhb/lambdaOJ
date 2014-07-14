@@ -40,7 +40,13 @@ pip install -r requirements.txt
 
 ## Testing
 
-You can run it without a web server:
+Make sure you have activated the virtual environment:
+
+```
+source venv/bin/activate
+```
+
+Run it (without a web server):
 
 ```
 ./lambdaoj.py
@@ -61,7 +67,7 @@ Initialization:
 It will prompt for `user`, `group`, `port` for lambdaOJ Web Process,
 and generate `lambdaoj.ini` and `run.sh`.
 
-Then you can run from uWSGI by:
+Run from uWSGI by:
 
 ```
 ./run.sh
