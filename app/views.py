@@ -51,7 +51,7 @@ def status():
 	return render_template('status.html', 
 		subs = subs)
 
-@app.route('/oj/submit_info/', defaults={'page'=1})
+@app.route('/oj/submit_info/', defaults={'page':1})
 @login_required
 def submit_info(sid, page):
 	if sid is not None:
@@ -80,7 +80,7 @@ def upload():
 	return render_template('upload.html',
 		form = form)
 
-@app.route('/oj/problems/', defaults={'problem_id'=1})
+@app.route('/oj/problems/', defaults={'problem_id':1})
 @app.route('/oj/problems/<int:problem_id>')
 def problem(problem_id):
 	problem = Problem.query.filter_by(problem_id=problem_id).first()
