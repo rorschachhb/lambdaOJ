@@ -5,7 +5,25 @@
 </head>
 
 <body>
-	<p>Hello, world!</p>
+	{% for p in pbs.items %}
+		<p>
+		{{p.problem_id}} {{ p.title }}
+		</p>
+	{% endfor %}
+
+	{% if pbs.has_prev %}<a href="{{ url_for('index', page = pbs.prev_num) }}"><< prev</a> |{% endif %}
+	{% for page in pbs.iter_pages() %}
+		{% if page %}
+			{% if page != pbs.page %}
+				<a href="{{ url_for('index', page=page) }}">{{ page }}</a> |
+			{% else %}
+				<strong>{{ page }} |</strong>
+			{% endif %}
+		{% else %}
+			<span class=ellipsis>…</span>
+		{% endif %}
+	{% endfor %}
+	{% if pbs.has_next %}<a href="{{ url_for('index', page = pbs.next_num) }}">next >></a>{% endif %}
 </body>
 
 

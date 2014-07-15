@@ -6,11 +6,15 @@ from models import *
 from datetime import datetime, timedelta
 from werkzeug import secure_filename
 
+
+PROBLEMS_PER_PAGE = 1
+
 @app.route('/oj/')
-@app.route('/oj/index/')
+@app.route('/oj/index/', defaults={'page': 1})
+@app.route('/oj/index/<int:page>')
 @login_required
-def index():
-	pbs=None
+def index(page):
+	pbs = Problem.query.paginate(page, PROBLEMS_PER_PAGE)
 	return render_template("index.html",
 		pbs=pbs)
 
