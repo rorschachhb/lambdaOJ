@@ -1,10 +1,18 @@
-from app import app, db
+from app import db
 
 ROLE_USER = 0
 ROLE_ADMIN = 1
 
+roles = { ROLE_USER: 'user',
+	ROLE_ADMIN: 'admin'
+}
+
 STATUS_NORMAL = 0
 STATUS_BLOCKED = 1
+
+status = { STATUS_NORMAL: 'normal',
+	STATUS_BLOCKED: 'blocked'
+}
 
 PENDING = 0
 TIME_LIMIT_EXCEEDED = 1
@@ -16,9 +24,27 @@ PRESENTATION_ERROR = 6
 OUTPUT_LIMIT_EXCEEDED = 7
 ACCEPTED = 8
 
+results = {
+	PENDING: 'pending',
+	TIME_LIMIT_EXCEEDED: 'time limit exceeded',
+	MEM_LIMIT_EXCEEDED: 'memory limit exceeded',
+	WRONG_ANSWER: 'wrong answer',
+	RUNTIME_ERROR: 'runtime error',
+	COMPILE_ERROR: 'compile error',
+	PRESENTATION_ERROR: 'presentation error',
+	OUTPUT_LIMIT_EXCEEDED: 'output limit exceeded',
+	ACCEPTED: 'accepted'
+}
+
 C = 0
 CPP = 1
 PYTHON = 2
+
+languages = {
+	C: 'c',
+	CPP: 'cpp',
+	PYTHON: 'python'
+}
 
 class User(db.Model):
 	id = db.Column(db.Integer, primary_key = True)

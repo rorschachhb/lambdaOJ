@@ -8,11 +8,11 @@ from werkzeug import secure_filename
 
 
 PROBLEMS_PER_PAGE = 1
+SUBS_PER_PAGE = 1
 
-@app.route('/oj/')
+@app.route('/oj/', defaults={'page': 1})
 @app.route('/oj/index/', defaults={'page': 1})
 @app.route('/oj/index/<int:page>')
-@login_required
 def index(page):
 	pbs = Problem.query.paginate(page, PROBLEMS_PER_PAGE)
 	return render_template("index.html",
@@ -40,23 +40,38 @@ def logout():
 	logout_user()
 	return redirect(url_for('index'))
 
-@app.route('/oj/status/')
+@app.route('/oj/status/', defaults={'page': 1})
+@app.route('/oj/status/<int:page>')
 @login_required
 def status():
-	subs = None
-	render_template('status.html', 
+	subs = Submit.query.paginate(page, SUBS_PER_PAGE)
+	for s in subs.items:
+		s.status = results[s.status]
+		s.language = results[s.language]
+	return render_template('status.html', 
 		subs = subs)
 
-@app.route('/oj/submit_info/')
+@app.route('/oj/submit_info/', defaults={'page'=1})
 @login_required
-def submit_info():
-	problem = None
-	sub = None
-	code_file = None
-	render_template('submit_info.html', 
-		problem = problem, 
-		sub = sub,
-		code_file = code_file)
+def submit_info(sid, page):
+	if sid is not None:
+		sub = Submit.query.filter_by(id=sid).first()
+		if sub:
+			user = User.query.filter_by(id=sub.user).first()
+			if user.id == g.user.id:
+				code_file = sub.code_file
+				sub.status = results[s.status]
+				sub.language = languages[s.language]
+				problem = Problem.query.filter_by(id=sub.problem).first()
+				return render_template('submit_info.html', 
+					problem = problem, 
+					sub = sub,
+					code_file = code_file)
+			else:
+				flash("you don't have access to this submition record.")
+		else:
+			flash("submition record doesn't exist.")
+	return redirect(url_for('status', page=page))
 
 @app.route('/oj/upload/', methods = ['GET', 'POST'])
 @login_required
@@ -64,6 +79,17 @@ def upload():
 	form = UploadForm()
 	return render_template('upload.html',
 		form = form)
+
+@app.route('/oj/problems/', defaults={'problem_id'=1})
+@app.route('/oj/problems/<int:problem_id>')
+def problem(problem_id):
+	problem = Problem.query.filter_by(problem_id=problem_id).first()
+	if problem:
+		return render_template('problem.html', problem=problem)
+	else:
+		flash("problem doesn't exit.")
+		return redirect(url_for('index'))
+
 
 @app.route('/oj/signup/', methods = ['GET', 'POST'])
 def signup():
