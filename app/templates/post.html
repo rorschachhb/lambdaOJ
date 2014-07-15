@@ -1,0 +1,94 @@
+<html>
+
+<head>
+	<title>Post</title>
+</head>
+
+<body>
+	<h1>Release problems</h1>
+	{% with messages = get_flashed_messages() %}
+	    {% if messages %}
+	        <ul>
+	        {% for message in messages %}
+	            <li>{{ message }} </li>
+	        {% endfor %}
+	        </ul>
+	    {% endif %}
+	{% endwith %}
+	<form action="" method="post" name="signin">
+	    {{form.hidden_tag()}}
+	    <p>
+	        Please enter problem ID(integer):<br>
+	        {{form.problem_id}}<br>
+	        {% for error in form.errors.problem_id %}
+	        <span style="color: red;">[{{error}}]</span>
+	        {% endfor %}<br>
+	    </p>
+	    <p>
+	        Please enter problem title:<br>
+	        {{form.title}}<br>
+	        {% for error in form.errors.title %}
+	        <span style="color: red;">[{{error}}]</span>
+	        {% endfor %}<br>
+	    </p>
+	    <p>
+	        Please enter time limit(integer, s):<br>
+	        {{form.time_limit}}<br>
+	        {% for error in form.errors.time_limit %}
+	        <span style="color: red;">[{{error}}]</span>
+	        {% endfor %}<br>
+	    </p>
+	    <p>
+	        Please enter memory limit(integer, kb):<br>
+	        {{form.memory_limit}}<br>
+	        {% for error in form.errors.memory_limit %}
+	        <span style="color: red;">[{{error}}]</span>
+	        {% endfor %}<br>
+	    </p>
+	    <p>
+	        Please enter problem description:<br>
+	        {{form.description}}<br>
+	        {% for error in form.errors.description %}
+	        <span style="color: red;">[{{error}}]</span>
+	        {% endfor %}<br>
+	    </p>
+	    <p>
+	        Please enter input descriptioin:<br>
+	        {{form.input_description}}<br>
+	        {% for error in form.errors.input_description %}
+	        <span style="color: red;">[{{error}}]</span>
+	        {% endfor %}<br>
+	    </p>
+	    <p>
+	        Please enter input sample:<br>
+	        {{form.input_sample}}<br>
+	        {% for error in form.errors.input_sample %}
+	        <span style="color: red;">[{{error}}]</span>
+	        {% endfor %}<br>
+	    </p>
+	    <p>
+	        Please enter output descriptioni:<br>
+	        {{form.output_description}}<br>
+	        {% for error in form.errors.output_description %}
+	        <span style="color: red;">[{{error}}]</span>
+	        {% endfor %}<br>
+	    </p>
+	    <p>
+	        Please enter output sample:<br>
+	        {{form.output_sample}}<br>
+	        {% for error in form.errors.output_sample %}
+	        <span style="color: red;">[{{error}}]</span>
+	        {% endfor %}<br>
+	    </p>
+	    <p>
+	        Please enter hint:<br>
+	        {{form.hint}}<br>
+	        {% for error in form.errors.hint %}
+	        <span style="color: red;">[{{error}}]</span>
+	        {% endfor %}<br>
+	    </p>
+	    <p><input type="submit" value="Post"></p>
+	</form>
+</body>
+
+</html>

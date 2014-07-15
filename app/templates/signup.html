@@ -6,6 +6,15 @@
 
 <body>
 	<h1>Sign In</h1>
+	{% with messages = get_flashed_messages() %}
+	    {% if messages %}
+	        <ul>
+	        {% for message in messages %}
+	            <li>{{ message }} </li>
+	        {% endfor %}
+	        </ul>
+	    {% endif %}
+	{% endwith %}
 	<form action="" method="post" name="signin">
 	    {{form.hidden_tag()}}
 	    <p>
@@ -33,6 +42,13 @@
 	        Please enter your password again:<br>
 	        {{form.password_confirm(size=80)}}<br>
 	        {% for error in form.errors.password_confirm %}
+	        <span style="color: red;">[{{error}}]</span>
+	        {% endfor %}<br>
+	    </p>
+	    <p>
+	        Please choose your role:<br>
+	        {{form.role}}<br>
+	        {% for error in form.errors.role %}
 	        <span style="color: red;">[{{error}}]</span>
 	        {% endfor %}<br>
 	    </p>
