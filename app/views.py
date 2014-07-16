@@ -7,8 +7,8 @@ from datetime import datetime, timedelta
 from werkzeug import secure_filename
 
 
-PROBLEMS_PER_PAGE = 1
-SUBS_PER_PAGE = 1
+PROBLEMS_PER_PAGE = 10
+SUBS_PER_PAGE = 10
 
 @app.route('/oj/', defaults={'page': 1})
 @app.route('/oj/index/', defaults={'page': 1})

@@ -1,0 +1,165 @@
+body {
+    background-color: #ffffff;
+    margin: 0px;
+}
+
+.wrapper {
+    width: 940px;
+    margin: auto;
+}
+
+
+#mainnav {
+    background-color: #444444;
+    color: #ffffff;
+    font-size: 1.05em;
+    height: 40px;
+    margin: 0px;
+}
+#mainnav ul {
+    margin: 0px;
+    padding: 8px 0px 5px 0px;
+}
+#mainnav li {
+    display: inline;
+    margin-right: 40px;
+}
+#mainnav li a {
+    color: #aaaaaa;
+    text-decoration: none;
+}
+#mainnav li a:hover {
+    color: #ffffff;
+}
+
+
+
+header {
+    margin: 0px;
+    overflow: auto;
+}
+header h1 {
+    text-align: center;
+    margin: 14px 0px;
+    padding: 0px;
+}
+
+div.navwrapper {
+    float: left;
+    width: 660px;
+    margin: 0px;
+    padding: 0px;
+}
+nav {
+    float: right;
+    width: 380px;
+    background: #cccccc;
+    border: 1px solid #666666;
+    border-radius: 6px;
+    font-size: 1.1em;
+}
+nav ul {
+    margin: 0px;
+    padding: 7px 0px 7px 20px;
+}
+nav li {
+    display: inline;
+    margin: 0px 20px;
+}
+nav li a {
+    color: #222222;
+    text-decoration: none;
+}
+nav li a:hover {
+    color: #888888;
+}
+
+header #userinfo {
+    float: right;
+    font-size: 1.05em;
+    margin: 0px 20px 0px 0px;
+    padding-top: 15px;
+}
+
+
+
+#content {
+    min-height: 400px;
+    margin-top: 35px;
+}
+
+#pbs {
+    width: 100%;
+    border-collapse: collapse;
+}
+#pbs th, #pbs td {
+    border: 1px solid;
+}
+#pbs th {
+    padding: 7px 0px 7px 0px;
+    background-color: #e0e0e0;
+}
+#pbs tr.odd {
+    background-color: #ffffff;
+}
+#pbs tr.even {
+    background-color: #f8f8f8;
+}
+#pbs td {
+    padding: 6px 0px 6px 0px;
+}
+#pbs .pid {
+    width: 27%;
+    text-align: center;
+}
+#pbs .title {
+    text-align: left;
+    padding-left: 12px;
+}
+#pbs a {
+    color: blue;
+    text-decoration: none;
+}
+#pbs a:hover {
+    color: navy;
+    text-decoration: underline;
+}
+
+#pagenav {
+    width: 200px;
+    margin: 20px auto 0px auto;
+    overflow: auto;
+    text-align: center;
+    background: #cccccc;
+    padding: 7px 20px;
+    border: 1px solid;
+    border-radius: 5px;
+}
+#pagenav ul {
+    margin: 0px;
+    padding: 0px;
+}
+#pagenav li {
+    float: left;
+    width: 40px;
+    display: inline;
+    margin: 0px;
+    padding: 0px;
+}
+#pagenav li a {
+    color: #222222;
+    text-decoration: none;
+}
+#pagenav li a:hover {
+    color: #888888;
+}
+#pagenav li.disabled {
+    color: #888888;
+}
+
+
+
+footer {
+    text-align: center;
+    margin-top: 50px;
+}

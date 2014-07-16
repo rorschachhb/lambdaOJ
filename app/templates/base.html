@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html>
+
+  <head>
+    {% block head %}
+    <link href="/static/styles/style.css" type="text/css" rel="stylesheet" />
+    <title>{% block title %}{% endblock %} - LambdaOJ</title>
+    {% endblock head %}
+  </head>
+
+  <body>
+
+    <div id="mainnav">
+      <div class="wrapper">
+	<ul>
+	  <li>LAMBDA.COOL</li>
+	  <li><a href="/">Home</a></li>
+	  <li><a href="/oj/">Online Judge</a></li>
+	  <li><a href="/wiki/">Wiki</a></li>
+	  <li><a href="/dl/">Download</a></li>
+	</ul>
+      </div>
+    </div>
+
+    <div class="wrapper">
+      <header>
+	{% block header %}
+	<h1>Online Judge</h1>
+	<div class="navwrapper">
+	  <nav>
+	    <ul>
+	      <li><a href="/oj/index/">Problems</a></li>
+	      <li><a href="/oj/upload/">Submit</a></li>
+	      <li><a href="/oj/status/">Status</a></li>
+	    </ul>
+	  </nav>
+	</div>
+	<p id="userinfo">
+	  <a href="/oj/logout/">Logout</a>
+	</p>
+	{% endblock header %}
+      </header>
+
+      <div id="content">
+	{% block content %}
+	{% endblock content %}
+      </div>
+
+      <footer>
+	{% block footer %}
+	&copy; Copyright 2014 by lambda.cool
+	{% endblock footer %}
+      </footer>
+    </div>
+
+  </body>
+
+</html>
