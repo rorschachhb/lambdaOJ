@@ -35,19 +35,22 @@ body {
 
 
 header {
+    background-color: #cccccc;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
     margin: 0px;
     overflow: auto;
 }
 header h1 {
     text-align: center;
-    margin: 14px 0px;
+    margin: 16px 0px;
     padding: 0px;
 }
 
 div.navwrapper {
     float: left;
     width: 660px;
-    margin: 0px;
+    margin: 0px 0px 0px 0px;
     padding: 0px;
 }
 nav {
@@ -55,7 +58,9 @@ nav {
     width: 380px;
     background: #cccccc;
     border: 1px solid #666666;
-    border-radius: 6px;
+    border-bottom: none;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
     font-size: 1.1em;
 }
 nav ul {
@@ -92,10 +97,11 @@ header #userinfo {
     width: 100%;
     border-collapse: collapse;
 }
-#pbs th, #pbs td {
+#pbs td {
     border: 1px solid;
 }
 #pbs th {
+    border: 1px solid;
     padding: 7px 0px 7px 0px;
     background-color: #e0e0e0;
 }
@@ -109,31 +115,31 @@ header #userinfo {
     padding: 6px 0px 6px 0px;
 }
 #pbs .pid {
-    width: 27%;
+    width: 21%;
     text-align: center;
 }
 #pbs .title {
     text-align: left;
     padding-left: 12px;
 }
-#pbs a {
+#pbs .pid a {
     color: blue;
     text-decoration: none;
 }
-#pbs a:hover {
+#pbs .pid a:hover {
     color: navy;
     text-decoration: underline;
 }
 
 #pagenav {
-    width: 200px;
+    width: 21.28%;
     margin: 20px auto 0px auto;
     overflow: auto;
     text-align: center;
     background: #cccccc;
     padding: 7px 20px;
-    border: 1px solid;
-    border-radius: 5px;
+    border: 1px solid #666666;
+    border-radius: 6px;
 }
 #pagenav ul {
     margin: 0px;
@@ -141,7 +147,7 @@ header #userinfo {
 }
 #pagenav li {
     float: left;
-    width: 40px;
+    width: 20%;
     display: inline;
     margin: 0px;
     padding: 0px;
@@ -162,4 +168,5 @@ header #userinfo {
 footer {
     text-align: center;
     margin-top: 50px;
+    margin-bottom: 10px;
 }
