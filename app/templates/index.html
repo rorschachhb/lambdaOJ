@@ -13,7 +13,7 @@ Problem List
   {% for pb in pbs.items %}
   <tr class="{{ loop.cycle('odd', 'even') }}">
     <td class="pid">
-      <a href="/oj/problems/{{ pb.problem_id }}">{{ pb.problem_id }}</a>
+      <a href="/oj/problem/{{ pb.problem_id }}">{{ pb.problem_id }}</a>
     </td>
     <td class="title">{{ pb.title }}</td>
   </tr>

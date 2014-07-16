@@ -164,6 +164,43 @@ header #userinfo {
 }
 
 
+.pb-title {
+    text-align: center;
+}
+.pb-title h3 {
+    margin: 10px 0px 8px 0px;
+}
+.pb-title .limits {
+    font-size: 85%;
+}
+.pb-details pre {
+    font-size: 120%;
+    background-color: #cccccc;
+    padding: 8px 5px 8px 12px;
+    border-radius: 6px;
+}
+.pb-submit {
+    margin-top: 32px;
+}
+.pb-submit span {
+    background-color: blue;
+    border-radius: 5px;
+    padding: 8px;
+}
+.pb-submit span a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+
+span.lable-success {
+    border-radius: 4px;
+    background-color: darkgreen;
+    color: #ffffff;
+    padding: 2px;
+}
+
+
 
 footer {
     text-align: center;

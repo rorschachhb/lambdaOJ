@@ -73,15 +73,15 @@ def submit_info(sid, page):
 			flash("submition record doesn't exist.")
 	return redirect(url_for('status', page=page))
 
-@app.route('/oj/upload/', methods = ['GET', 'POST'])
+@app.route('/oj/submit/', methods = ['GET', 'POST'])
 @login_required
 def upload():
 	form = UploadForm()
-	return render_template('upload.html',
+	return render_template('submit.html',
 		form = form)
 
-@app.route('/oj/problems/', defaults={'problem_id':1})
-@app.route('/oj/problems/<int:problem_id>')
+@app.route('/oj/problem/', defaults={'problem_id':1})
+@app.route('/oj/problem/<int:problem_id>')
 def problem(problem_id):
 	problem = Problem.query.filter_by(problem_id=problem_id).first()
 	if problem:
