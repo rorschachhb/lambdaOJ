@@ -8,7 +8,7 @@ from models import *
 class LoginForm(Form):
 	email = TextField('email', validators = [DataRequired(), Email()])
 	password =  PasswordField('password', validators = [DataRequired()])
-	remember_me = BooleanField('remember_me', default = False)
+	remember_me = BooleanField('remember_me', default = True)
 
 class EditForm(Form):	
 	password =  PasswordField('password', validators = [DataRequired(), EqualTo('password_confirm', message='Passwords must match')])

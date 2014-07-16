@@ -1,40 +1,54 @@
-<html>
-<head>
-    <title>Log In</title>
-</head>
-<body>
-<h1>Sign In</h1>
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <ul>
-        {% for message in messages %}
-            <li>{{ message }} </li>
-        {% endfor %}
-        </ul>
-    {% endif %}
-{% endwith %}
-<form action="" method="post" name="login">
-    {{form.hidden_tag()}}
-    <p>
-        Please enter your email:<br>
-        {{form.email}}<br>
-        {% for error in form.errors.email %}
-        <span style="color: red;">[{{error}}]</span>
-        {% endfor %}<br>
-    </p>
-    <p>
-        Please enter your password:<br>
-        {{form.password}}<br>
-        {% for error in form.errors.password %}
-        <span style="color: red;">[{{error}}]</span>
-        {% endfor %}<br>
-    </p>
-    <p>
-        {{form.recaptcha}}
-    </p>
-    <p>{{form.remember_me}} Remember Me</p>
-    <p><input type="submit" value="Sign In"></p>
-</form>
-</body>
+{% extends "base.html" %}
 
-</html>
+{% block title %}
+Login
+{% endblock %}
+
+{% block content %}
+<article id="login">
+  <h2>Login</h2>
+
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  {% for message in messages %}
+  {% if loop.last %}
+  <p class="message">{{ message }}</p>
+  {% endif %}
+  {% endfor %}
+  {% endif %}
+  {% endwith %}
+
+  <form action="" method="post" name="login" id="loginform">
+    {{form.hidden_tag()}}
+
+    <div>
+      <lable for="email" class="form-title">Email :</lable>
+      {{ form.email }}
+      {% for error in form.errors.email %}
+      <p class="form-error">[{{ error }}]</p>
+      {% endfor %}
+    </div>
+
+    <div>
+      <lable for="password" class="form-title">Password :</lable>
+      {{ form.password }}
+      {% for error in form.errors.password %}
+      <p class="form-error">[{{ error }}]</p>
+      {% endfor %}
+    </div>
+
+    <div>
+      <lable for="remember_me">{{ form.remember_me }} Remember Me</lable>
+    </div>
+
+    <div>
+      <span class="login">
+	<input type="submit" name="login" value="Login">
+	or
+	<a href="/oj/signup/">sign up</a>
+      </span>
+    </div>
+  </form>
+</article>
+{% endblock content %}
+
