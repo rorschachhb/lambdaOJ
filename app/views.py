@@ -74,11 +74,14 @@ def submit_info(sid, page):
 	return redirect(url_for('status', page=page))
 
 @app.route('/oj/submit/', methods = ['GET', 'POST'])
+@app.route('/oj/submit/<int:pid>', methods = ['GET', 'POST'])
 @login_required
-def submit():
+def submit(pid = None):
 	form = SubmitForm()
+	if form.validate_on_submit():
+                pass
 	return render_template('submit.html',
-		form = form)
+                               form = form, pid = pid)
 
 @app.route('/oj/problem/', defaults={'problem_id':1})
 @app.route('/oj/problem/<int:problem_id>')

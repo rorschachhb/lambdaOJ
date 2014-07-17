@@ -1,26 +1,42 @@
-<html>
+{% extends "base.html" %}
 
-<head>
-    <title>Upload</title>
-</head>
+{% block title %}
+Submit
+{% endblock title %}
 
-<body>
-    <h1>Upload your code:</h1>
-    <form action="{{ url_for('submit') }}" method="post" enctype="multipart/form-data" name="upload">
-        {{form.hidden_tag()}}
-        <table>
-            <tr>
-                {{ form.problem_id }}
-            </tr>
-            <tr>
-                {{ form.recaptcha }}
-            </tr>
-            <tr>
-            <td>{{ form.upload_file }}</td>
-            <td><input type="submit" value="ok"></td>
-            </tr>
-            </table>
-    </form>
-</body>
+{% block content %}
+<form action="{{ url_for('submit') }}" method="post" 
+      enctype="multipart/form-data" name="submit" id="submitform">
+  {{ form.hidden_tag() }}
 
-</html>
+  <fieldset>
+    <legend>Submit</legend>
+
+    <div>
+      <lable for="problem_id" class="form-title">Problem ID :</lable>
+      {% if pid %}
+      {{ form.problem_id(value=pid) }}
+      {% else %}
+      {{ form.problem_id }}
+      {% endif %}
+      {% for error in form.errors.problem_id %}
+      <p class="form-error">[{{ error }}]</p>
+      {% endfor %}
+    </div>
+
+    <div>
+      <lable for="upload_file" class="form-title">Code File :</lable>
+      {{ form.upload_file }}
+      {% for error in form.errors.upload_file %}
+      <p class="form-error">[{{ error }}]</p>
+      {% endfor %}
+    </div>
+
+    <div>
+      <span class="submit">
+	<input type="submit" value="Submit">
+      </span>
+    </div>
+  </fieldset>
+</form>
+{% endblock content %}

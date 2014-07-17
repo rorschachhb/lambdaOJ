@@ -15,9 +15,8 @@ class EditForm(Form):
 	password_confirm =  PasswordField('password_confirm', validators = [DataRequired()])
 
 class SubmitForm(Form):
-	problem_id = SelectField('problem id:', choices = [(1, 'one'), (2, 'two'), (3, 'three')], validators = [DataRequired()])
-	upload_file = FileField('image', validators=[FileRequired()])
-	recaptcha = RecaptchaField()
+	problem_id = TextField('problem_id', validators = [DataRequired()])
+	upload_file = FileField('upload_file', validators=[FileRequired()])
 
 class SignupForm(Form):
 	email = TextField('email', validators = [DataRequired(), Email()])

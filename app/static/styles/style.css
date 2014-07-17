@@ -137,10 +137,16 @@ form div span.submit {
 }
 
 #loginform, #signupform {
-    width: 40%;
+    width: 38.2%;
+}
+#submitform {
+    width: 61.8%;
 }
 #loginform .form-title, #signupform .form-title {
     width: 30%;
+}
+#submitform .form-title {
+    width: 38%;
 }
 #loginform lable[for="remember_me"] {
     float: right;
