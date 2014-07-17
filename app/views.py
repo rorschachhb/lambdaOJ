@@ -64,7 +64,7 @@ def status(page):
 @login_required
 def submit_info(sid, page):
 	if sid is not None:
-		sub = Submituser.query.filter_by(id=sid).first()
+		sub = Submit.query.filter_by(id=sid).first()
 		if sub:
 			user = User.query.filter_by(id=sub.user).first()
 			if user.id == g.user.id:
