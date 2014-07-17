@@ -38,10 +38,10 @@ Status
   <ul>
     {% if subs.has_prev %}
     <li>
-      <a href="{{ url_for('index', page = 1) }}"><strong>&lt;&lt;</strong></a>
+      <a href="{{ url_for('status', page = 1) }}"><strong>&lt;&lt;</strong></a>
     </li>
     <li>
-      <a href="{{ url_for('index', page = subs.prev_num) }}"><strong>&lt;</strong></a>
+      <a href="{{ url_for('status', page = subs.prev_num) }}"><strong>&lt;</strong></a>
     </li>
     {% else %}
     <li class="disabled"><strong>&lt;&lt;</strong></li>
@@ -52,10 +52,10 @@ Status
 
     {% if subs.has_next %}
     <li>
-    <a href="{{ url_for('index', page = subs.next_num) }}"><strong>&gt;</strong></a>
+    <a href="{{ url_for('status', page = subs.next_num) }}"><strong>&gt;</strong></a>
     </li>
     <li>
-      <a href="{{ url_for('index', page = subs.pages) }}"><strong>&gt;&gt;</strong></a>
+      <a href="{{ url_for('status', page = subs.pages) }}"><strong>&gt;&gt;</strong></a>
     </li>
     {% else %}
     <li class="disabled"><strong>&gt;&gt;</strong></li>

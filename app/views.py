@@ -60,8 +60,8 @@ def submit_info(sid, page):
 		if sub:
 			user = User.query.filter_by(id=sub.user).first()
 			if user.id == g.user.id:
-				sub.status = results[s.status]
-				sub.language = languages[s.language]
+				sub.status = results[sub.status]
+				sub.language = languages[sub.language]
 				problem = Problem.query.filter_by(id=sub.problem).first()
 				return render_template('submit_info.html', 
 					problem = problem, 
