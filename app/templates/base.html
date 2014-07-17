@@ -26,12 +26,16 @@
       <header>
 	{% block header %}
 	<div id="userinfo">
+	  {% if user %}
 	  {% if user.role == "admin" %}
 	  {{ user.nickname }}(<a href="/oj/admin/">admin</a>),
 	  {% else %}
 	  {{ user.nickname }}({{ user.role }}), 
 	  {% endif %}
 	  <a href="/oj/logout/">logout</a>
+	  {% else %}
+	  <a href="/oj/login/">login</a>
+	  {% endif %}
 	</div>
 	<div class="navwrapper">
 	  <h1>Online Judge</h1>

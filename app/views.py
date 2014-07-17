@@ -15,9 +15,7 @@ SUBS_PER_PAGE = 10
 @app.route('/oj/index/<int:page>')
 def index(page):
 	pbs = Problem.query.paginate(page, PROBLEMS_PER_PAGE)
-	tuser = g.user
-	tuser.role = roles[tuser.role]
-	tuser.status = statuses[tuser.status]
+	tuser = modify_user(g.user)
 	return render_template("index.html",
 		pbs=pbs, 
 		user = tuser)
@@ -54,9 +52,7 @@ def status(page):
 		s.language = languages[s.language]
                 user_tmp = User.query.filter_by(id=s.user).first()
                 s.user = user_tmp.nickname
-	tuser = g.user
-	tuser.role = roles[tuser.role]
-	tuser.status = statuses[tuser.status]
+	tuser = modify_user(g.user)
 	return render_template('status.html', 
 		subs = subs, 
 		user = tuser)
@@ -73,9 +69,7 @@ def submit_info(sid, page):
 				sub.status = results[sub.status]
 				sub.language = languages[sub.language]
 				problem = Problem.query.filter_by(id=sub.problem).first()
-				tuser = g.user
-				tuser.role = roles[tuser.role]
-				tuser.status = statuses[tuser.status]
+                                tuser = modify_user(g.user)
 				return render_template('submit_info.html', 
 					problem = problem, 
 					sub = sub, 
@@ -93,9 +87,7 @@ def submit(pid = None):
 	form = SubmitForm()
 	if form.validate_on_submit():
 		pass
-	tuser = g.user
-	tuser.role = roles[tuser.role]
-	tuser.status = statuses[tuser.status]
+        tuser = modify_user(g.user)
 	return render_template('submit.html',
                                form = form,
                                pid = pid, 
@@ -106,10 +98,8 @@ def submit(pid = None):
 def problem(problem_id):
 	problem = Problem.query.filter_by(problem_id=problem_id).first()
 	if problem:
-		tuser = g.user
-		tuser.role = roles[tuser.role]
-		tuser.status = statuses[tuser.status]
-		return render_template('problem.html',
+                tuser = modify_user(g.user)
+                return render_template('problem.html',
 			problem=problem, 
 			user = tuser)
 	else:
@@ -147,3 +137,11 @@ def before_request():
 @lm.user_loader
 def load_user(id):
 	return User.query.get(int(id))
+
+def modify_user(tuser):
+        try: 
+                tuser.role = roles[tuser.role]
+                tuser.status = statuses[tuser.status]
+        except AttributeError:
+                tuser = None
+        return tuser
