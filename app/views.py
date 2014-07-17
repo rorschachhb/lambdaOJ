@@ -140,40 +140,6 @@ def signup():
 	return render_template('signup.html',
 		form = form)
 
-@app.route('/oj/post/', methods = ['GET', 'POST'])
-@login_required
-def post():
-	if g.user and g.user.role is ROLE_ADMIN:
-		form = PostForm()
-		if form.validate_on_submit():
-			p = Problem.query.filter_by(problem_id=form.problem_id.data).first()
-			if p is None:
-				p = Problem(problem_id=form.problem_id.data, 
-					title=form.title.data, 
-					time_limit=form.time_limit.data,
-					memory_limit=form.time_limit.data,
-					description=form.description.data,
-					input_description=form.input_description.data,
-					output_description=form.output_description.data,
-					input_sample=form.input_sample.data,
-					output_sample=form.output_sample.data,
-					hint=form.hint.data)
-				db.session.add(p)
-				db.session.commit()
-				flash('problem posted.')
-				return redirect(url_for('index'))
-			else:
-				flash('problem_id is occupied, please try another one.')
-	else:
-		flash('Only admin can post problems.')
-		return redirect(url_for('index'))
-	tuser = g.user
-	tuser.role = roles[tuser.role]
-	tuser.status = statuses[tuser.status]
-	return render_template('post.html',
-		form = form, 
-		user = tuser)
-
 @app.before_request
 def before_request():
 	g.user = current_user

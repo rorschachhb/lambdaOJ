@@ -53,6 +53,11 @@ div.navwrapper {
     margin: 0px 0px 0px 0px;
     padding: 0px;
 }
+div.navwrapper h1 {
+    width: 380px;
+    float: right;
+    clear: both;
+}
 nav {
     float: right;
     width: 380px;
@@ -81,9 +86,7 @@ nav li a:hover {
 
 header #userinfo {
     float: right;
-    font-size: 1.05em;
-    margin: 0px 20px 0px 0px;
-    padding-top: 15px;
+    margin: 10px 15px 0px 0px;
 }
 
 
