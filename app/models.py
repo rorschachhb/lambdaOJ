@@ -20,20 +20,18 @@ MEM_LIMIT_EXCEEDED = 2
 WRONG_ANSWER = 3
 RUNTIME_ERROR = 4
 COMPILE_ERROR = 5
-PRESENTATION_ERROR = 6
-OUTPUT_LIMIT_EXCEEDED = 7
-ACCEPTED = 8
+BANNED_SYSCALL = 6
+ACCEPTED = 7
 
 results = {
-	PENDING: 'pending',
-	TIME_LIMIT_EXCEEDED: 'time limit exceeded',
-	MEM_LIMIT_EXCEEDED: 'memory limit exceeded',
-	WRONG_ANSWER: 'wrong answer',
-	RUNTIME_ERROR: 'runtime error',
-	COMPILE_ERROR: 'compile error',
-	PRESENTATION_ERROR: 'presentation error',
-	OUTPUT_LIMIT_EXCEEDED: 'output limit exceeded',
-	ACCEPTED: 'accepted'
+	PENDING: 'Pending...',
+	TIME_LIMIT_EXCEEDED: 'Timeout',
+	MEM_LIMIT_EXCEEDED: 'Memory exceeded',
+	WRONG_ANSWER: 'Wrong Answer',
+	RUNTIME_ERROR: 'Runtime Error',
+	COMPILE_ERROR: 'Compilation Error',
+	BANNED_SYSCALL: 'Banned Syscall',
+	ACCEPTED: 'Accepted'
 }
 
 C = 0
