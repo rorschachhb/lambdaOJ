@@ -7,13 +7,15 @@ Problem List
 {% block content %}
 <table id="pbs" class="list">
   <tr>
-    <th class="pid">Problem ID</th>
-    <th class="title">Problem Name</th>
+    <th class="pid">Problem</th>
+    <th class="title">Title</th>
   </tr>
   {% for pb in pbs.items %}
   <tr class="{{ loop.cycle('odd', 'even') }}">
     <td class="pid">
-      <a href="/oj/problem/{{ pb.problem_id }}">{{ pb.problem_id }}</a>
+      <span class="id">
+	<a href="/oj/problem/{{ pb.problem_id }}">{{ pb.problem_id }}</a>
+      </span>
     </td>
     <td class="title">{{ pb.title }}</td>
   </tr>

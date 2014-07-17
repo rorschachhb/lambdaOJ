@@ -5,10 +5,10 @@ Status
 {% endblock title %}
 
 {% block content %}
-<table id="status" class="list">
+<table id="subs" class="list">
   <tr>
-    <th class="id">Submit ID</th>
-    <th class="problem">Problem ID</th>
+    <th class="id">Submit</th>
+    <th class="problem">Problem</th>
     <th class="user">User</th>
     <th class="status">Result</th>
     <th class="time">Time</th>
@@ -18,10 +18,14 @@ Status
   {% for sub in subs.items %}
   <tr class="{{ loop.cycle('odd', 'even') }}">
     <td class="id">
-      <a href="/oj/submit_info/{{ sub.id }}/{{ subs.page }}">{{ sub.id }}</a>
+      <span class="id">
+	<a href="/oj/submit_info/{{ sub.id }}/{{ subs.page }}">{{ sub.id }}</a>
+      </span>
     </td>
     <td class="problem">
-      <a href="/oj/problem/{{ sub.problem }}">{{ sub.problem }}</a>
+      <span class="id">
+	<a href="/oj/problem/{{ sub.problem }}">{{ sub.problem }}</a>
+      </span>
     </td>
     <td class="user">{{ sub.user }}</td>
     <td class="status">

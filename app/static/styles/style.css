@@ -177,6 +177,7 @@ table.list td {
     border: 1px solid;
 }
 table.list th {
+    text-align: center;
     border: 1px solid;
     padding: 7px 0px 7px 0px;
     background-color: #e0e0e0;
@@ -198,34 +199,33 @@ table.list a:hover {
     color: navy;
     text-decoration: underline;
 }
-table.list td span {
+table.list td span.id {
     display: block;
+    width: 80%;
+    text-align: right;
 }
 
 #pbs .pid {
-    width: 130px;
+    width: 110px;
 }
-#pbs th.pid {
-    text-align: center;
-}
-#pbs td.pid span {
-    width: 61.8%;
-    text-align: right;
-}
-#pbs .title {
+#pbs td.title {
     text-align: left;
-    padding-left: 12px;
-}
-#subs td.id {
-    width: 90px;
-    text-align: right;
-    padding-right: 25px;
-}
-#subs td.problem {
-    width: 140px;
-    text-align: center;
+    padding: 0px 20px;
 }
 
+#subs td.user {
+    padding-left: 16px;
+}
+#subs td.status {
+    text-align: center;
+}
+#subs td.time, #subs td.memory {
+    padding-right: 12px;
+    text-align: right;
+}
+#subs td.language {
+    text-align: center;
+}
 
 
 .pagenav {
