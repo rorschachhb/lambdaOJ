@@ -51,7 +51,8 @@ def status(page):
 	return render_template('status.html', 
 		subs = subs)
 
-@app.route('/oj/submit_info/', defaults={'page':1})
+@app.route('/oj/submit_info/<int:sid>/', defaults={'page':1})
+@app.route('/oj/submit_info/<int:sid>/<int:page>')
 @login_required
 def submit_info(sid, page):
 	if sid is not None:
