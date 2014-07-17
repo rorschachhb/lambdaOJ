@@ -25,6 +25,14 @@ Submit
     </div>
 
     <div>
+      <lable for="language" class="form-title">Language :</lable>
+      {{ form.language }}
+      {% for error in form.errors.language %}
+      <p class="form-error">[{{ error }}]</p>
+      {% endfor %}
+    </div>
+
+    <div>
       <lable for="upload_file" class="form-title">Code File :</lable>
       {{ form.upload_file }}
       {% for error in form.errors.upload_file %}

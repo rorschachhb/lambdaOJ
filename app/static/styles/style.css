@@ -153,10 +153,18 @@ form div span.submit {
     margin-right: 8%;
     clear: both;
 }
-form input#upload_file {
+#submitform input#upload_file{
     font-size: 90%;
 }
-form lable[for="upload_file"] {
+#submitform lable[for="upload_file"] {
+    padding-top: 3px;
+}
+#submitform select#language {
+    font-size: 90%;
+    padding: 1px 2px 1px 2px;
+    width: 120px;
+}
+#submitform lable[for="language"] {
     padding-top: 3px;
 }
 
