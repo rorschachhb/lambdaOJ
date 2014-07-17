@@ -33,8 +33,9 @@ def login():
 			return redirect(request.args.get('next') or url_for('index'))
 		else:
 			flash('Wrong name or password!')
+	tuser = modify_user(g.user)
 	return render_template('login.html',
-		form = form)
+		               form = form, user = tuser)
 
 @app.route('/oj/logout/')
 @login_required
@@ -127,8 +128,9 @@ def signup():
 			return redirect(url_for('login'))
 		else:
 			flash('This email address has already been registerd, please try another one.')
+	tuser = modify_user(g.user)
 	return render_template('signup.html',
-		form = form)
+                               form = form, user = tuser)
 
 @app.before_request
 def before_request():
