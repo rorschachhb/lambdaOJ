@@ -290,21 +290,26 @@ span.status-error {
 }
 
 
-.pb-title {
+.pb-title, .sub-title {
     text-align: center;
 }
-.pb-title h3 {
-    margin: 10px 0px 8px 0px;
+.pb-title h2 {
+    margin: 10px 0px;
 }
 .pb-title .limits {
     font-size: 85%;
 }
-.pb-details pre {
+.pb-details pre, .sub-details pre {
     font-size: 120%;
     background-color: #cccccc;
     padding: 8px 5px 8px 12px;
     border-radius: 6px;
 }
+.sub-title div {
+    font-weight: bold;
+    font-size: 90%;
+}
+
 .pb-submit {
     margin-top: 32px;
 }
@@ -316,14 +321,6 @@ span.status-error {
 .pb-submit span a {
     color: #ffffff;
     text-decoration: none;
-}
-
-
-span.lable-success {
-    border-radius: 4px;
-    background-color: darkgreen;
-    color: #ffffff;
-    padding: 2px;
 }
 
 

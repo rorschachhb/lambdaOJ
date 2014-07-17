@@ -35,10 +35,8 @@ Status
       <span class="status-correct">{{ sub.status }}</span>
       {% elif sub.status in ["Timeout", "Memory Exceeded", "Banned Syscall"] %}
       <span class="status-warning">{{ sub.status }}</span>
-      {% elif sub.status in ["Compilation Error", "Runtime Error", "Wrong Answer"] %}
-      <span class="status-error">{{ sub.status }}</span>
       {% else %}
-      <span>{{ sub.status }}</span>
+      <span class="status-error">{{ sub.status }}</span>
       {% endif %}
     </td>
     <td class="time">{{ sub.time }} s</td>

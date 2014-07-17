@@ -6,16 +6,16 @@ Problem {{ problem.problem_id }}
 
 {% block content %}
 <article class="pb-title">
-  <h3>Problem {{ problem.problem_id }} : {{ problem.title }}</h3>
+  <h2>Problem {{ problem.problem_id }} : {{ problem.title }}</h2>
   <div class="limits">
     <strong>
       Time Limit:
-      <span class="lable-success">{{ problem.time_limit }}s</span>
+      <span class="status-correct">{{ problem.time_limit }}s</span>
     </strong>
     &nbsp;&nbsp;&nbsp;
     <strong>
       Memory Limit:
-      <span class="lable-success">{{ problem.memory_limit }}K</span>
+      <span class="status-correct">{{ problem.memory_limit }}K</span>
     </strong>
   </div>
 </article>

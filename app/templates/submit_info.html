@@ -7,17 +7,26 @@ Submit {{ sub.id }}
 {% block content %}
 <article class="sub-title">
   <hgroup>
-    <h3>Submit {{ sub.id }} ({{ sub.user }})</h3>
-    <h4>Problem {{ problem.problem_id }} : {{ problem.title }}</h4>
+    <h2>Submit {{ sub.id }} ({{ sub.user }})</h2>
+    <h3>Problem {{ problem.problem_id }} : {{ problem.title }}</h3>
   </hgroup>
   <div>
-    Status: <span class="status">{{ sub.status }}</span>
-    &nbsp;&nbsp;&nbsp;
-    Time: {{ sub.time }}
-    &nbsp;&nbsp;&nbsp;
-    Memory: {{ sub.memory }}
-    &nbsp;&nbsp;&nbsp;
-    Language: {{ sub.language }}
+    Status:&nbsp;
+    {% if sub.status == "Pending..." %}
+    <span class="status-waiting">{{ sub.status }}</span>
+    {% elif sub.status == "Accepted" %}
+    <span class="status-correct">{{ sub.status }}</span>
+    {% elif sub.status in ["Timeout", "Memory Exceeded", "Banned Syscall"] %}
+    <span class="status-warning">{{ sub.status }}</span>
+    {% else %}
+    <span class="status-error">{{ sub.status }}</span>
+    {% endif %}
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Time:&nbsp; {{ sub.time }} s
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Memory:&nbsp; {{ sub.memory }} KiB
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Language:&nbsp; {{ sub.language }}
   </div>
 </article>
 <article class="sub-details">
