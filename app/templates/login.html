@@ -5,21 +5,21 @@ Login
 {% endblock %}
 
 {% block content %}
-<article id="login">
-  <h2>Login</h2>
+<form action="" method="post" name="login" id="loginform">
+  {{ form.hidden_tag() }}
 
-  {% with messages = get_flashed_messages() %}
-  {% if messages %}
-  {% for message in messages %}
-  {% if loop.last %}
-  <p class="message">{{ message }}</p>
-  {% endif %}
-  {% endfor %}
-  {% endif %}
-  {% endwith %}
+  <fieldset>
+    <legend>Login</legend>
 
-  <form action="" method="post" name="login" id="loginform">
-    {{form.hidden_tag()}}
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    {% if loop.last %}
+    <p class="message">[{{ message }}]</p>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
 
     <div>
       <lable for="email" class="form-title">Email :</lable>
@@ -42,13 +42,13 @@ Login
     </div>
 
     <div>
-      <span class="login">
+      <span class="submit">
 	<input type="submit" name="login" value="Login">
 	or
 	<a href="/oj/signup/">sign up</a>
       </span>
     </div>
-  </form>
-</article>
+  </fieldset>
+</form>
 {% endblock content %}
 

@@ -14,7 +14,7 @@ class EditForm(Form):
 	password =  PasswordField('password', validators = [DataRequired(), EqualTo('password_confirm', message='Passwords must match')])
 	password_confirm =  PasswordField('password_confirm', validators = [DataRequired()])
 
-class UploadForm(Form):
+class SubmitForm(Form):
 	problem_id = SelectField('problem id:', choices = [(1, 'one'), (2, 'two'), (3, 'three')], validators = [DataRequired()])
 	upload_file = FileField('image', validators=[FileRequired()])
 	recaptcha = RecaptchaField()
@@ -24,7 +24,6 @@ class SignupForm(Form):
 	nickname = TextField('nickname', validators = [DataRequired()])
 	password =  PasswordField('password', validators = [DataRequired(), EqualTo('password_confirm', message='Passwords must match')])
 	password_confirm =  PasswordField('password_confirm', validators = [DataRequired()])
-	role = SelectField('role', choices = [(ROLE_USER, 'user'), (ROLE_ADMIN, 'admin')], validators = [DataRequired()])
 
 class PostForm(Form):
 	problem_id = IntegerField('problem_id', validators = [DataRequired()])

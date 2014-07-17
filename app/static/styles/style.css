@@ -94,52 +94,59 @@ header #userinfo {
 }
 
 
-#login {
-    width: 35%;
-    margin: 50px auto 0px auto;
-    padding: 0px 0px 0px 20px;
-    border: 1px solid #666666;
+form {
+    margin: 0px auto;
+    overflow: auto;
+}
+form fieldset {
+    border: 3px solid #aaaaaa;
     border-radius: 6px;
+    margin-top: 20px;
+}
+form legend {
+    font-size: 160%;
+}
+form p.message {
+    color: red;
+    margin: 0px 0px 20px 0px;
+}
+form div {
+    margin: 10px 0px 10px 0px;
     overflow: auto;
 }
-#login h2 {
-    margin: 16px 0px 10px 0px;
-}
-#login p.message {
-    margin: 10px 0px 20px 0px;
-}
-#loginform div {
-    margin: 10px 0px;
-    overflow: auto;
-}
-#loginform .form-title {
-    float: left;
-    width: 27%;
-    text-align: right;
-    padding-right: 10px;
-}
-#loginform lable[for="remember_me"] {
-    float: right;
-    margin-right: 10%;
-    clear: both;
-}
-#loginform span.login {
-    float: right;
-    margin: 10px 10% 10px 0px;
-    clear: both;
-}
-#loginform input[name="login"] {
-    font-size: 95%;
-    padding: 3px 8px;
-}
-#loginform p.form-error {
+form p.form-error {
     float: right;
     clear: both;
     font-size: 90%;
     color: red;
-    margin: 0px 10% 0px 0px;
+    margin: 0px 8% 0px 0px;
+}
+form .form-title {
+    float: left;
+    text-align: right;
+    padding-right: 10px;
+}
+form input[type="submit"] {
+    font-size: 95%;
+    padding: 3px 8px;
+}
+form div span.submit {
+    float: right;
+    margin: 4px 8% 0px 0px;
+    clear: both;
 }
 
+#loginform, #signupform {
+    width: 40%;
+}
+#loginform .form-title, #signupform .form-title {
+    width: 30%;
+}
+#loginform lable[for="remember_me"] {
+    float: right;
+    margin-right: 8%;
+    clear: both;
+}
 
 
 #pbs {
@@ -252,6 +259,7 @@ span.lable-success {
 
 
 footer {
+    font-size: 90%;
     text-align: center;
     margin-top: 50px;
     margin-bottom: 10px;

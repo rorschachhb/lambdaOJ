@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, session, url_for, request, g 
 from flask.ext.login import login_user, logout_user, current_user, login_required, login_fresh, confirm_login, fresh_login_required
 from app import app, db, lm
-from forms import LoginForm, EditForm, UploadForm, SignupForm, PostForm
+from forms import LoginForm, EditForm, SubmitForm, SignupForm, PostForm
 from models import *
 from datetime import datetime, timedelta
 from werkzeug import secure_filename
@@ -43,7 +43,7 @@ def logout():
 @app.route('/oj/status/', defaults={'page': 1})
 @app.route('/oj/status/<int:page>')
 @login_required
-def status():
+def status(page):
 	subs = Submit.query.paginate(page, SUBS_PER_PAGE)
 	for s in subs.items:
 		s.status = results[s.status]
@@ -75,8 +75,8 @@ def submit_info(sid, page):
 
 @app.route('/oj/submit/', methods = ['GET', 'POST'])
 @login_required
-def upload():
-	form = UploadForm()
+def submit():
+	form = SubmitForm()
 	return render_template('submit.html',
 		form = form)
 
@@ -102,7 +102,7 @@ def signup():
 			user = User(email=form.email.data, 
 				password=form.password.data, 
 				nickname=form.nickname.data, 
-				role=form.role.data,
+				role=ROLE_ADMIN,
 				status=STATUS_NORMAL)
 			db.session.add(user)
 			db.session.commit()

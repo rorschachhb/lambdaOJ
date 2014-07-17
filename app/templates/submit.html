@@ -6,7 +6,7 @@
 
 <body>
     <h1>Upload your code:</h1>
-    <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data" name="upload">
+    <form action="{{ url_for('submit') }}" method="post" enctype="multipart/form-data" name="upload">
         {{form.hidden_tag()}}
         <table>
             <tr>

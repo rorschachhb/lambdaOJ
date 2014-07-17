@@ -1,59 +1,65 @@
-<html>
+{% extends "base.html" %}
 
-<head>
-	<title>Sign Up</title>
-</head>
+{% block title %}
+Sign Up
+{% endblock title %}
 
-<body>
-	<h1>Sign In</h1>
-	{% with messages = get_flashed_messages() %}
-	    {% if messages %}
-	        <ul>
-	        {% for message in messages %}
-	            <li>{{ message }} </li>
-	        {% endfor %}
-	        </ul>
-	    {% endif %}
-	{% endwith %}
-	<form action="" method="post" name="signin">
-	    {{form.hidden_tag()}}
-	    <p>
-	        Please enter your email:<br>
-	        {{form.email(size=80)}}<br>
-	        {% for error in form.errors.email %}
-	        <span style="color: red;">[{{error}}]</span>
-	        {% endfor %}<br>
-	    </p>
-	    <p>
-	        Please enter your nickname:<br>
-	        {{form.nickname(size=80)}}<br>
-	        {% for error in form.errors.nickname %}
-	        <span style="color: red;">[{{error}}]</span>
-	        {% endfor %}<br>
-	    </p>
-	    <p>
-	        Please enter your password:<br>
-	        {{form.password(size=80)}}<br>
-	        {% for error in form.errors.password %}
-	        <span style="color: red;">[{{error}}]</span>
-	        {% endfor %}<br>
-	    </p>
-	    <p>
-	        Please enter your password again:<br>
-	        {{form.password_confirm(size=80)}}<br>
-	        {% for error in form.errors.password_confirm %}
-	        <span style="color: red;">[{{error}}]</span>
-	        {% endfor %}<br>
-	    </p>
-	    <p>
-	        Please choose your role:<br>
-	        {{form.role}}<br>
-	        {% for error in form.errors.role %}
-	        <span style="color: red;">[{{error}}]</span>
-	        {% endfor %}<br>
-	    </p>
-	    <p><input type="submit" value="Sign up"></p>
-	</form>
-</body>
+{% block content %}
+<form action="" method="post" name="signup" id="signupform">
+  {{form.hidden_tag()}}
 
-</html>
+  <fieldset>
+    <legend>Create an account</legend>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    {% if loop.last %}
+    <p class="message">[{{ message }}]</p>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <div>
+      <lable for="email" class="form-title">Email :</lable>
+      {{ form.email }}
+      {% for error in form.errors.email %}
+      <p class="form-error">[{{ error }}]</p>
+      {% endfor %}
+    </div>
+
+    <div>
+      <lable for="nickname" class="form-title">Nickname :</lable>
+      {{ form.nickname }}
+      {% for error in form.errors.nickname %}
+      <p class="form-error">[{{ error }}]</p>
+      {% endfor %}
+    </div>
+
+    <div>
+      <lable for="password" class="form-title">Password :</lable>
+      {{ form.password }}
+      {% for error in form.errors.password %}
+      <p class="form-error">[{{ error }}]</p>
+      {% endfor %}
+    </div>
+
+    <div>
+      <lable for="password_confirm" class="form-title">Again :</lable>
+      {{ form.password_confirm }}
+      {% for error in form.errors.password_confirm %}
+      <p class="form-error">[{{ error }}]</p>
+      {% endfor %}<br>
+    </div>
+
+    <div>
+      <span class="submit">
+	<input type="submit" value="Create Account">
+	or
+	<a href="/oj/login/">log in</a>
+      </span>
+    </div>
+  </fieldset>
+</form>
+{% endblock content %}
