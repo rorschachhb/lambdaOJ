@@ -15,8 +15,12 @@ SUBS_PER_PAGE = 10
 @app.route('/oj/index/<int:page>')
 def index(page):
 	pbs = Problem.query.paginate(page, PROBLEMS_PER_PAGE)
+	tuser = g.user
+	tuser.role = roles[t.role]
+	tuser.status = status[t.status]
 	return render_template("index.html",
-		pbs=pbs)
+		pbs=pbs, 
+		user = tuser)
 
 @app.route('/oj/login/', methods = ['GET', 'POST'])
 def login():
@@ -48,8 +52,12 @@ def status(page):
 	for s in subs.items:
 		s.status = results[s.status]
 		s.language = languages[s.language]
+	tuser = g.user
+	tuser.role = roles[t.role]
+	tuser.status = status[t.status]
 	return render_template('status.html', 
-		subs = subs)
+		subs = subs, 
+		user = tuser)
 
 @app.route('/oj/submit_info/<int:sid>/', defaults={'page':1})
 @app.route('/oj/submit_info/<int:sid>/<int:page>')
@@ -63,9 +71,13 @@ def submit_info(sid, page):
 				sub.status = results[sub.status]
 				sub.language = languages[sub.language]
 				problem = Problem.query.filter_by(id=sub.problem).first()
+				tuser = g.user
+				tuser.role = roles[t.role]
+				tuser.status = status[t.status]
 				return render_template('submit_info.html', 
 					problem = problem, 
-					sub = sub)
+					sub = sub, 
+					user = tuser)
 			else:
 				flash("you don't have access to this submition record.")
 		else:
@@ -78,16 +90,26 @@ def submit_info(sid, page):
 def submit(pid = None):
 	form = SubmitForm()
 	if form.validate_on_submit():
-                pass
+		pass
+	tuser = g.user
+	tuser.role = roles[t.role]
+	tuser.status = status[t.status]
 	return render_template('submit.html',
-                               form = form, pid = pid)
+                               form = form,
+                               pid = pid, 
+                               user = tuser)
 
 @app.route('/oj/problem/', defaults={'problem_id':1})
 @app.route('/oj/problem/<int:problem_id>')
 def problem(problem_id):
 	problem = Problem.query.filter_by(problem_id=problem_id).first()
 	if problem:
-		return render_template('problem.html', problem=problem)
+		tuser = g.user
+		tuser.role = roles[t.role]
+		tuser.status = status[t.status]
+		return render_template('problem.html',
+			problem=problem, 
+			user = tuser)
 	else:
 		flash("problem doesn't exit.")
 		return redirect(url_for('index'))
@@ -143,7 +165,12 @@ def post():
 	else:
 		flash('Only admin can post problems.')
 		return redirect(url_for('index'))
-	return render_template('post.html', form = form)
+	tuser = g.user
+	tuser.role = roles[t.role]
+	tuser.status = status[t.status]
+	return render_template('post.html',
+		form = form, 
+		user = tuser)
 
 @app.before_request
 def before_request():
