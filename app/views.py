@@ -69,7 +69,9 @@ def submit_info(sid, page):
 			if user.id == g.user.id:
 				sub.status = results[sub.status]
 				sub.language = languages[sub.language]
-				problem = Problem.query.filter_by(id=sub.problem).first()
+                                user_tmp = User.query.filter_by(id=sub.user).first()
+                                sub.user = user_tmp.nickname
+                                problem = Problem.query.filter_by(id=sub.problem).first()
                                 tuser = modify_user(g.user)
 				return render_template('submit_info.html', 
 					problem = problem, 
