@@ -16,6 +16,7 @@ class EditForm(Form):
 
 class SubmitForm(Form):
 	problem_id = TextField('problem_id', validators = [InputRequired()])
+	language = SelectField('language', choices = [(C, 'C'), (CPP, 'C++'), (PYTHON, 'Python')], validators = [InputRequired()], coerce=int)
 	upload_file = FileField('upload_file', validators=[FileRequired()])
 
 class SignupForm(Form):
