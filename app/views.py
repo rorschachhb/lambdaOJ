@@ -16,8 +16,8 @@ SUBS_PER_PAGE = 10
 def index(page):
 	pbs = Problem.query.paginate(page, PROBLEMS_PER_PAGE)
 	tuser = g.user
-	tuser.role = roles[t.role]
-	tuser.status = status[t.status]
+	tuser.role = roles[tuser.role]
+	tuser.status = statuses[tuser.status]
 	return render_template("index.html",
 		pbs=pbs, 
 		user = tuser)
@@ -53,8 +53,8 @@ def status(page):
 		s.status = results[s.status]
 		s.language = languages[s.language]
 	tuser = g.user
-	tuser.role = roles[t.role]
-	tuser.status = status[t.status]
+	tuser.role = roles[tuser.role]
+	tuser.status = statuses[tuser.status]
 	return render_template('status.html', 
 		subs = subs, 
 		user = tuser)
@@ -64,7 +64,7 @@ def status(page):
 @login_required
 def submit_info(sid, page):
 	if sid is not None:
-		sub = Submit.query.filter_by(id=sid).first()
+		sub = Submituser.query.filter_by(id=sid).first()
 		if sub:
 			user = User.query.filter_by(id=sub.user).first()
 			if user.id == g.user.id:
@@ -72,8 +72,8 @@ def submit_info(sid, page):
 				sub.language = languages[sub.language]
 				problem = Problem.query.filter_by(id=sub.problem).first()
 				tuser = g.user
-				tuser.role = roles[t.role]
-				tuser.status = status[t.status]
+				tuser.role = roles[tuser.role]
+				tuser.status = statuses[tuser.status]
 				return render_template('submit_info.html', 
 					problem = problem, 
 					sub = sub, 
@@ -92,8 +92,8 @@ def submit(pid = None):
 	if form.validate_on_submit():
 		pass
 	tuser = g.user
-	tuser.role = roles[t.role]
-	tuser.status = status[t.status]
+	tuser.role = roles[tuser.role]
+	tuser.status = statuses[tuser.status]
 	return render_template('submit.html',
                                form = form,
                                pid = pid, 
@@ -105,8 +105,8 @@ def problem(problem_id):
 	problem = Problem.query.filter_by(problem_id=problem_id).first()
 	if problem:
 		tuser = g.user
-		tuser.role = roles[t.role]
-		tuser.status = status[t.status]
+		tuser.role = roles[tuser.role]
+		tuser.status = statuses[tuser.status]
 		return render_template('problem.html',
 			problem=problem, 
 			user = tuser)
@@ -166,8 +166,8 @@ def post():
 		flash('Only admin can post problems.')
 		return redirect(url_for('index'))
 	tuser = g.user
-	tuser.role = roles[t.role]
-	tuser.status = status[t.status]
+	tuser.role = roles[tuser.role]
+	tuser.status = statuses[tuser.status]
 	return render_template('post.html',
 		form = form, 
 		user = tuser)

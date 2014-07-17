@@ -10,7 +10,7 @@ roles = { ROLE_USER: 'user',
 STATUS_NORMAL = 0
 STATUS_BLOCKED = 1
 
-status = { STATUS_NORMAL: 'normal',
+statuses = { STATUS_NORMAL: 'normal',
 	STATUS_BLOCKED: 'blocked'
 }
 
