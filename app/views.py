@@ -52,6 +52,8 @@ def status(page):
 	for s in subs.items:
 		s.status = results[s.status]
 		s.language = languages[s.language]
+                user_tmp = User.query.filter_by(id=s.user).first()
+                s.user = user_tmp.nickname
 	tuser = g.user
 	tuser.role = roles[tuser.role]
 	tuser.status = statuses[tuser.status]
