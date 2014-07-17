@@ -5,7 +5,7 @@ Problem List
 {% endblock title %}
 
 {% block content %}
-<table id="pbs">
+<table id="pbs" class="list">
   <tr>
     <th class="pid">Problem ID</th>
     <th class="title">Problem Name</th>
@@ -20,7 +20,7 @@ Problem List
   {% endfor %}
 </table>
 
-<div id="pagenav">
+<div class="pagenav">
   <ul>
     {% if pbs.has_prev %}
     <li>
@@ -49,5 +49,4 @@ Problem List
     {% endif %}
   </ul>
 </div>
-
 {% endblock content %}

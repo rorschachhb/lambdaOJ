@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}
+Status
+{% endblock title %}
+
+{% block content %}
+<table id="status" class="list">
+  <tr>
+    <th class="id">Submit ID</th>
+    <th class="problem">Problem ID</th>
+    <th class="user">User</th>
+    <th class="status">Result</th>
+    <th class="time">Time</th>
+    <th class="memory">Memory</th>
+    <th class="language">Language</th>
+  </tr>
+  {% for sub in subs.items %}
+  <tr class="{{ loop.cycle('odd', 'even') }}">
+    <td class="id">
+      <a href="/oj/submit_info/{{ sub.id }}">{{ sub.id }}</a>
+    </td>
+    <td class="problem">
+      <a href="/oj/problem/{{ sub.problem }}">{{ sub.problem }}</a>
+    </td>
+    <td class="user">{{ sub.user }}</td>
+    <td class="status">
+      <span>{{ sub.status }}</span>
+    </td>
+    <td class="time">{{ sub.time }} s</td>
+    <td class="memory">{{ sub.memory }} KiB</td>
+    <td class="language">{{ sub.language }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<div class="pagenav">
+  <ul>
+    {% if subs.has_prev %}
+    <li>
+      <a href="{{ url_for('index', page = 1) }}"><strong>&lt;&lt;</strong></a>
+    </li>
+    <li>
+      <a href="{{ url_for('index', page = subs.prev_num) }}"><strong>&lt;</strong></a>
+    </li>
+    {% else %}
+    <li class="disabled"><strong>&lt;&lt;</strong></li>
+    <li class="disabled"><strong>&lt;</strong></li>
+    {% endif %}
+
+    <li>{{ subs.page }}</li>
+
+    {% if subs.has_next %}
+    <li>
+    <a href="{{ url_for('index', page = subs.next_num) }}"><strong>&gt;</strong></a>
+    </li>
+    <li>
+      <a href="{{ url_for('index', page = subs.pages) }}"><strong>&gt;&gt;</strong></a>
+    </li>
+    {% else %}
+    <li class="disabled"><strong>&gt;&gt;</strong></li>
+    <li class="disabled"><strong>&gt;</strong></li>
+    {% endif %}
+  </ul>
+</div>
+{% endblock content %}

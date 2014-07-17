@@ -161,45 +161,46 @@ form lable[for="upload_file"] {
 }
 
 
-#pbs {
+table.list {
     width: 100%;
     border-collapse: collapse;
 }
-#pbs td {
+table.list td {
     border: 1px solid;
 }
-#pbs th {
+table.list th {
     border: 1px solid;
     padding: 7px 0px 7px 0px;
     background-color: #e0e0e0;
 }
-#pbs tr.odd {
+table.list tr.odd {
     background-color: #ffffff;
 }
-#pbs tr.even {
+table.list tr.even {
     background-color: #f8f8f8;
 }
-#pbs td {
+table.list td {
     padding: 6px 0px 6px 0px;
 }
-#pbs .pid {
-    width: 21%;
-    text-align: center;
-}
-#pbs .title {
-    text-align: left;
-    padding-left: 12px;
-}
-#pbs .pid a {
+table.list a {
     color: blue;
     text-decoration: none;
 }
-#pbs .pid a:hover {
+table.list a:hover {
     color: navy;
     text-decoration: underline;
 }
 
-#pagenav {
+table#pbs .pid {
+    width: 21%;
+    text-align: center;
+}
+table#pbs .title {
+    text-align: left;
+    padding-left: 12px;
+}
+
+.pagenav {
     width: 21.28%;
     margin: 20px auto 0px auto;
     overflow: auto;
@@ -209,25 +210,25 @@ form lable[for="upload_file"] {
     border: 1px solid #666666;
     border-radius: 6px;
 }
-#pagenav ul {
+.pagenav ul {
     margin: 0px;
     padding: 0px;
 }
-#pagenav li {
+.pagenav li {
     float: left;
     width: 20%;
     display: inline;
     margin: 0px;
     padding: 0px;
 }
-#pagenav li a {
+.pagenav li a {
     color: #222222;
     text-decoration: none;
 }
-#pagenav li a:hover {
+.pagenav li a:hover {
     color: #888888;
 }
-#pagenav li.disabled {
+.pagenav li.disabled {
     color: #888888;
 }
 
