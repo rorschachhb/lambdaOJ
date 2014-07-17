@@ -22,8 +22,8 @@ class SubmitForm(Form):
 class SignupForm(Form):
 	email = TextField('email', validators = [InputRequired(), Email()])
 	nickname = TextField('nickname', validators = [InputRequired()])
-	password =  PasswordField('password', validators = [InputRequired(), EqualTo('password_confirm', message='Passwords must match')])
-	password_confirm =  PasswordField('password_confirm', validators = [InputRequired()])
+	password =  PasswordField('password', validators = [InputRequired()])
+	password_confirm =  PasswordField('password_confirm', validators = [InputRequired(),EqualTo('password', message='Passwords must match')])
 	role = SelectField('role', choices = [(ROLE_USER, 'user'), (ROLE_ADMIN, 'admin')], validators = [InputRequired()], coerce=int)
 
 class PostForm(Form):

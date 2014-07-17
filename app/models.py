@@ -39,9 +39,9 @@ CPP = 1
 PYTHON = 2
 
 languages = {
-	C: 'c',
-	CPP: 'cpp',
-	PYTHON: 'python'
+	C: 'C',
+	CPP: 'C++',
+	PYTHON: 'Python'
 }
 
 class User(db.Model):

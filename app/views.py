@@ -47,7 +47,7 @@ def status(page):
 	subs = Submit.query.paginate(page, SUBS_PER_PAGE)
 	for s in subs.items:
 		s.status = results[s.status]
-		s.language = results[s.language]
+		s.language = languages[s.language]
 	return render_template('status.html', 
 		subs = subs)
 
