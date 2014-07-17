@@ -54,6 +54,14 @@ Sign Up
     </div>
 
     <div>
+      <lable for="role" class="form-title">Role :</lable>
+      {{ form.role }}
+      {% for error in form.errors.role %}
+      <p class="form-error">[{{ error }}]</p>
+      {% endfor %}<br>
+    </div>
+
+    <div>
       <span class="submit">
 	<input type="submit" value="Create Account">
 	or

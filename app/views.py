@@ -99,12 +99,13 @@ def signup():
 		return redirect(url_for('index'))
 	form = SignupForm()
 	if form.validate_on_submit():
+		print form.role.data
 		user = User.query.filter_by(email=form.email.data).first()
 		if user is None:
 			user = User(email=form.email.data, 
 				password=form.password.data, 
 				nickname=form.nickname.data, 
-				role=ROLE_ADMIN,
+				role=form.role.data,
 				status=STATUS_NORMAL)
 			db.session.add(user)
 			db.session.commit()
