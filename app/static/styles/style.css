@@ -218,13 +218,36 @@ table.list td span.id {
 }
 #subs td.status {
     text-align: center;
+    width: 180px;
 }
 #subs td.time, #subs td.memory {
-    padding-right: 12px;
+    padding-right: 10px;
     text-align: right;
 }
 #subs td.language {
     text-align: center;
+    width: 110px;
+}
+
+
+span[class|=status] {
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 85%;
+    border-radius: 4px;
+    padding: 3px 5px;
+}
+span.status-waiting {
+    background-color: blue;
+}
+span.status-correct {
+    background-color: darkgreen;
+}
+span.status-warning {
+    background-color: darkorange;
+}
+span.status-error {
+    background-color: darkred;
 }
 
 
