@@ -27,23 +27,24 @@
 	{% block header %}
 	<div id="userinfo">
 	  {% if user %}
-	  {% if user.role == "admin" %}
-	  {{ user.nickname }}(<a href="/oj/admin/" target="_blank">admin</a>),
-	  {% else %}
-	  {{ user.nickname }}({{ user.role }}), 
-	  {% endif %}
+	  {{ user.nickname }}, 
 	  <a href="/oj/logout/">logout</a>
 	  {% else %}
 	  <a href="/oj/login/">login</a>
 	  {% endif %}
 	</div>
-	<div class="headerwrapper">
+	<div class="header-wrapper">
 	  <h1>Online Judge</h1>
+	</div>
+	<div class="nav-wrapper">
 	  <nav>
 	    <ul>
 	      <li><a href="/oj/index/">Problems</a></li>
 	      <li><a href="/oj/submit/">Submit</a></li>
 	      <li><a href="/oj/status/">Status</a></li>
+	      {% if user.role == "admin" %}
+	      <li><a href="/oj/admin/" target="_blank">Admin</a></li>
+	      {% endif %}
 	    </ul>
 	  </nav>
 	</div>

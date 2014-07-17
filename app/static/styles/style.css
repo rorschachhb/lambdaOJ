@@ -46,13 +46,13 @@ header #userinfo {
     margin: 0px;
     padding: 12px 15px 0px 0px;
 }
-div.headerwrapper {
+div.header-wrapper {
     float: left;
     width: 660px;
     margin: 0px 0px 0px 0px;
     padding: 0px;
 }
-div.headerwrapper h1 {
+div.header-wrapper h1 {
     float: right;
     clear: both;
     width: 380px;
@@ -60,19 +60,25 @@ div.headerwrapper h1 {
     margin: 16px 0px;
     padding: 0px;
 }
+div.nav-wrapper {
+    float: left;
+    clear: both;
+    width: 100%;
+    text-align: center;
+}
 nav {
-    float: right;
-    width: 380px;
+    font-size: 1.1em;
+    margin: 0px;
+    height: 30px;
+}
+nav ul {
+    display: inline;
     background: #cccccc;
     border: 1px solid #666666;
     border-bottom: none;
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
-    font-size: 1.1em;
-}
-nav ul {
-    margin: 0px;
-    padding: 7px 0px 7px 20px;
+    padding: 7px 10px 7px 10px;
 }
 nav li {
     display: inline;
