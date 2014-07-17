@@ -41,22 +41,24 @@ header {
     margin: 0px;
     overflow: auto;
 }
-header h1 {
-    text-align: center;
-    margin: 16px 0px;
-    padding: 0px;
+header #userinfo {
+    float: right;
+    margin: 0px;
+    padding: 12px 15px 0px 0px;
 }
-
-div.navwrapper {
+div.headerwrapper {
     float: left;
     width: 660px;
     margin: 0px 0px 0px 0px;
     padding: 0px;
 }
-div.navwrapper h1 {
-    width: 380px;
+div.headerwrapper h1 {
     float: right;
     clear: both;
+    width: 380px;
+    text-align: center;
+    margin: 16px 0px;
+    padding: 0px;
 }
 nav {
     float: right;
@@ -82,11 +84,6 @@ nav li a {
 }
 nav li a:hover {
     color: #888888;
-}
-
-header #userinfo {
-    float: right;
-    margin: 10px 15px 0px 0px;
 }
 
 
@@ -201,15 +198,35 @@ table.list a:hover {
     color: navy;
     text-decoration: underline;
 }
+table.list td span {
+    display: block;
+}
 
-table#pbs .pid {
-    width: 21%;
+#pbs .pid {
+    width: 130px;
+}
+#pbs th.pid {
     text-align: center;
 }
-table#pbs .title {
+#pbs td.pid span {
+    width: 61.8%;
+    text-align: right;
+}
+#pbs .title {
     text-align: left;
     padding-left: 12px;
 }
+#subs td.id {
+    width: 90px;
+    text-align: right;
+    padding-right: 25px;
+}
+#subs td.problem {
+    width: 140px;
+    text-align: center;
+}
+
+
 
 .pagenav {
     width: 21.28%;

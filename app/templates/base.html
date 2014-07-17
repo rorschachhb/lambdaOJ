@@ -17,7 +17,7 @@
 	  <li><a href="/">Home</a></li>
 	  <li><a href="/oj/">Online Judge</a></li>
 	  <li><a href="/wiki/">λ Wiki</a></li>
-	  <li><a href="/dl/">Download</a></li>
+	  <li><a href="ftp://lambda.cool/" target="_blank">Download</a></li>
 	</ul>
       </div>
     </div>
@@ -28,7 +28,7 @@
 	<div id="userinfo">
 	  {% if user %}
 	  {% if user.role == "admin" %}
-	  {{ user.nickname }}(<a href="/oj/admin/">admin</a>),
+	  {{ user.nickname }}(<a href="/oj/admin/" target="_blank">admin</a>),
 	  {% else %}
 	  {{ user.nickname }}({{ user.role }}), 
 	  {% endif %}
@@ -37,7 +37,7 @@
 	  <a href="/oj/login/">login</a>
 	  {% endif %}
 	</div>
-	<div class="navwrapper">
+	<div class="headerwrapper">
 	  <h1>Online Judge</h1>
 	  <nav>
 	    <ul>
