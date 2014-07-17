@@ -26,7 +26,7 @@ ACCEPTED = 7
 results = {
 	PENDING: 'Pending...',
 	TIME_LIMIT_EXCEEDED: 'Timeout',
-	MEM_LIMIT_EXCEEDED: 'Memory exceeded',
+	MEM_LIMIT_EXCEEDED: 'Memory Exceeded',
 	WRONG_ANSWER: 'Wrong Answer',
 	RUNTIME_ERROR: 'Runtime Error',
 	COMPILE_ERROR: 'Compilation Error',
