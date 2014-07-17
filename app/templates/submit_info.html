@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}
+Submit {{ sub.id }}
+{% endblock title %}
+
+{% block content %}
+<article class="sub-title">
+  <hgroup>
+    <h3>Submit {{ sub.id }} ({{ sub.user }})</h3>
+    <h4>Problem {{ problem.problem_id }} : {{ problem.title }}</h4>
+  </hgroup>
+  <div>
+    Status: <span class="status">{{ sub.status }}</span>
+    &nbsp;&nbsp;&nbsp;
+    Time: {{ sub.time }}
+    &nbsp;&nbsp;&nbsp;
+    Memory: {{ sub.memory }}
+    &nbsp;&nbsp;&nbsp;
+    Language: {{ sub.language }}
+  </div>
+</article>
+<article class="sub-details">
+  <h4>Error Message</h4>
+  <div class="error-message">{{ sub.error_message }}</div>
+  <h4>Code File</h4>
+  <pre class="code-file">{{ sub.code_file }}</pre>
+</article>
+{% endblock content %}

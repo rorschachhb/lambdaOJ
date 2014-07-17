@@ -59,14 +59,12 @@ def submit_info(sid, page):
 		if sub:
 			user = User.query.filter_by(id=sub.user).first()
 			if user.id == g.user.id:
-				code_file = sub.code_file
 				sub.status = results[s.status]
 				sub.language = languages[s.language]
 				problem = Problem.query.filter_by(id=sub.problem).first()
 				return render_template('submit_info.html', 
 					problem = problem, 
-					sub = sub,
-					code_file = code_file)
+					sub = sub)
 			else:
 				flash("you don't have access to this submition record.")
 		else:
