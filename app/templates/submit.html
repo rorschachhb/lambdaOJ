@@ -4,6 +4,10 @@
 Submit
 {% endblock title %}
 
+{% block navsubmit %}
+<a href="/oj/submit/" class="now">Submit</a>
+{% endblock navsubmit %}
+
 {% block content %}
 <form action="{{ url_for('submit') }}" method="post" 
       enctype="multipart/form-data" name="submit" id="submitform">

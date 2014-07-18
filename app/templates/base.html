@@ -4,6 +4,7 @@
   <head>
     {% block head %}
     <link href="/static/styles/style.css" type="text/css" rel="stylesheet" />
+    <link rel="shortcut icon" href="/static/images/icon.png">
     <title>{% block title %}{% endblock %} - LambdaOJ</title>
     {% endblock head %}
   </head>
@@ -11,13 +12,11 @@
   <body>
     <div id="mainnav">
       <div class="wrapper">
-	<ul>
-	  <li class="logo">LAMBDA.COOL</li>
-	  <li><a href="/">Home</a></li>
-	  <li><a href="/oj/">Online Judge</a></li>
-	  <li><a href="/wiki/">λ Wiki</a></li>
-	  <li><a href="ftp://lambda.cool/" target="_blank">Download</a></li>
-	</ul>
+	<span class="logo">LAMBDA.COOL</span>
+	<a href="/">Home</a>
+	<a href="/oj/" class="now">Online Judge</a>
+	<a href="/wiki/">λ Wiki</a>
+	<a href="ftp://lambda.cool/" target="_blank">Download</a>
       </div>
     </div>
 
@@ -30,23 +29,31 @@
       </header>
 
       <nav>
-	<ul>
-	  <li><a href="/oj/index/">Problems</a></li>
-	  <li><a href="/oj/submit/">Submit</a></li>
-	  <li><a href="/oj/status/">Status</a></li>
+	<div class="outer">
+	  <div class="inner">
+	    {% block navindex %}
+	    <a href="/oj/index/">Problems</a>
+	    {% endblock navindex %}
+	    {% block navsubmit %}
+	    <a href="/oj/submit/">Submit</a>
+	    {% endblock navsubmit %}
+	    {% block navstatus %}
+	    <a href="/oj/status/">Status</a>
+	    {% endblock navstatus %}
+	    {% if user %}
+	    {% if user.role == "admin" %}
+	    <a href="/oj/admin/" target="_blank">Admin</a>
+	    {% endif %}
+	    {% endif %}
+	  </div>
 	  {% if user %}
-	  {% if user.role == "admin" %}
-	  <li><a href="/oj/admin/" target="_blank">Admin</a></li>
-	  {% endif %}
-	  {% endif %}
-	</ul>
-	<span id="login-logout">
-	  {% if user %}
-	  <a href="/oj/logout/">logout</a>
+	  <a href="/oj/logout/" class="logout">logout</a>
 	  {% else %}
-	  <a href="/oj/login/">login</a>
+	  {% block navlogin %}
+	  <a href="/oj/login/" class="login">login</a>
+	  {% endblock navlogin %}
 	  {% endif %}
-	</span>
+	</div>
       </nav>
 
       <div id="content">

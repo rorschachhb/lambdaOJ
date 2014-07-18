@@ -4,6 +4,10 @@
 Login
 {% endblock %}
 
+{% block navlogin %}
+<a href="/oj/login/" class="login now">login</a>
+{% endblock navlogin %}
+
 {% block content %}
 <form action="" method="post" name="login" id="loginform">
   {{ form.hidden_tag() }}

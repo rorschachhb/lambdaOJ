@@ -9,7 +9,8 @@
 }
 
 body {
-    background-image: url('/static/images/flower.gif');
+    background-color: #f0f0f0;
+    color: #000000;
     margin: 0px;
     font-size: 16px;
     font-family: helvetica, sans-serif;
@@ -38,35 +39,44 @@ header {
 header img {
     display: inline;
     vertical-align: middle;
-    padding: 12px 0px;
+    padding: 16px 0px;
 }
 
 
 #mainnav {
-    background-color: #444444;
+    background-color: #404040;
     color: #ffffff;
     font-size: 1.1em;
     font-weight: bold;
     height: 36px;
     margin: 0px;
-    padding: 0px;
+    padding: 1px 0px 0px 0px;
 }
-#mainnav ul {
-    display: inline;
+#mainnav span.logo, #mainnav a {
+    float: left;
     line-height: 36px;
-    margin: 0px;
-    padding: 0px;
+    margin: 0px 12px;
+    padding: 0px 18px;
 }
-#mainnav li {
-    display: inline;
-    margin: 0px 40px 0px 0px;
+#mainnav span.logo {
+    padding-left: 0px;
+    margin-left: 0px;
 }
-#mainnav li a {
+#mainnav a {
     color: #c0c0c0;
     text-decoration: none;
 }
-#mainnav li a:hover {
+#mainnav a:hover {
     color: #ffffff;
+}
+#mainnav a.now {
+    background-color: #f0f0f0;
+    color: #000000;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+#mainnav a.now:hover {
+    color: #000000;
 }
 
 
@@ -85,38 +95,51 @@ nav {
     color: #ffffff;
     font-size: 1.1em;
     font-weight: bold;
-    line-height: 36px;
-    text-align: center;
     margin: 0px;
 }
-nav ul {
-    display: inline;
-    background: #505050;
-    border-radius: 6px;
-    padding: 4px 16px;
+nav div.outer {
+    width: 600px;
+    margin: 0px auto;
+    background-color: #404040;
+    height: 36px;
+    padding: 1px 20px 0px 20px;
 }
-nav li {
-    display: inline;
-    margin: 0px 16px;
+nav div.inner {
+    float: left;
+    height: 36px;
 }
-nav li a {
+nav a {
+    float: left;
+    line-height: 36px;
+    padding: 0px 20px;
     color: #bbbbbb;
     text-decoration: none;
 }
-nav li a:hover {
+nav a:hover {
     color: #ffffff;
 }
-nav #login-logout {
-    position: absolute;
-    right: 12px;
+nav a.login, nav a.logout {
+    float: right;
+}
+nav a.now {
+    background-color: #f0f0f0;
+    color: #000000;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
 }
 
 
 
 #content {
     position: relative;
-    min-height: 350px;
-    margin-top: 35px;
+    min-height: 300px;
+    padding-top: 35px;
+}
+footer {
+    font-size: 90%;
+    text-align: center;
+    padding-top: 50px;
+    padding-bottom: 10px;
 }
 
 
@@ -341,13 +364,4 @@ span.status-error {
 .pb-submit span a {
     color: #ffffff;
     text-decoration: none;
-}
-
-
-
-footer {
-    /* font-size: 90%; */
-    text-align: center;
-    margin-top: 50px;
-    margin-bottom: 10px;
 }
