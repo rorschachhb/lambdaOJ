@@ -167,7 +167,7 @@ form {
     overflow: auto;
 }
 form fieldset {
-    border: 3px solid #aaaaaa;
+    border: 3px solid #b0b0b0;
     border-radius: 12px;
     margin-top: 17px;
 }
@@ -248,26 +248,32 @@ form div span.submit {
 
 table.list {
     width: 100%;
-    border-collapse: collapse;
-}
-table.list td {
-    border: 1px solid;
+    border-spacing: 0px;
+    border-radius: 8px;
+    border: 2px solid #b0b0b0;
 }
 table.list th {
     text-align: center;
-    border: 1px solid;
     padding: 7px 0px 7px 0px;
-    background-color: #e0e0e0;
-}
-table.list tr.odd {
-    background-color: #ffffff;
-}
-table.list tr.even {
-    background-color: #f8f8f8;
 }
 table.list td {
     padding: 6px 0px 6px 0px;
 }
+
+table.list tr th, table.list tr:not(:last-child) td {
+    border-bottom: 2px solid #b0b0b0;
+}
+table.list td:not(:last-child), table.list th:not(:last-child) {
+    border-right: 2px solid #b0b0b0;
+}
+
+table.list tr.odd {
+
+}
+table.list tr.even {
+
+}
+
 table.list a {
     color: blue;
     text-decoration: none;
@@ -276,11 +282,13 @@ table.list a:hover {
     color: navy;
     text-decoration: underline;
 }
+
 table.list td span.id {
     display: block;
     width: 80%;
     text-align: right;
 }
+
 
 #pbs .pid {
     width: 110px;
