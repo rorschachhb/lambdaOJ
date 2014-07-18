@@ -89,9 +89,6 @@ nav li {
     display: inline;
     margin: 0px 16px;
 }
-nav li.disabled {
-    color: #bbbbbb;
-}
 nav li a {
     color: #bbbbbb;
     text-decoration: none;

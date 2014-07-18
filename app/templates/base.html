@@ -34,7 +34,6 @@
 	  <li><a href="/oj/submit/">Submit</a></li>
 	  <li><a href="/oj/status/">Status</a></li>
 	  {% if user %}
-	  <li class="disabled">Profile</li>
 	  {% if user.role == "admin" %}
 	  <li><a href="/oj/admin/" target="_blank">Admin</a></li>
 	  {% endif %}
