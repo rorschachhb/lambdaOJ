@@ -71,12 +71,12 @@ header img {
 }
 #mainnav a.now {
     background-color: #f0f0f0;
-    color: #000000;
+    color: #404040;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
 }
 #mainnav a.now:hover {
-    color: #000000;
+    color: #404040;
 }
 
 
@@ -123,9 +123,12 @@ nav a.login, nav a.logout {
 }
 nav a.now {
     background-color: #f0f0f0;
-    color: #000000;
+    color: #404040;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
+}
+nav a.now:hover {
+    color: #404040;
 }
 
 
