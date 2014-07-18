@@ -32,6 +32,16 @@ header, article, section, footer, nav {
 
 
 
+header {
+    text-align: center;
+}
+header img {
+    display: inline;
+    vertical-align: middle;
+    padding: 12px 0px;
+}
+
+
 #mainnav {
     background-color: #444444;
     color: #ffffff;
