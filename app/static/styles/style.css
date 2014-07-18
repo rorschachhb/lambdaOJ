@@ -4,20 +4,35 @@
 }
 @font-face {
     font-family: source code pro;
-    src: url('/static/fonts/SourceCodePro-Semibold.otf');
     font-weight: bold;
+    src: url('/static/fonts/SourceCodePro-Semibold.otf');
+}
+@font-face {
+    font-family: opensans;
+    src: url('/static/fonts/OpenSans-Regular.ttf');
+}
+@font-face {
+    font-family: opensans;
+    font-weight: bold;
+    src: url('/static/fonts/OpenSans-Bold.ttf');
 }
 
+
+
 body {
-    background-color: #f0f0f0;
+    background-color: #fbfaf8;
     color: #000000;
     margin: 0px;
     font-size: 16px;
-    font-family: helvetica, sans-serif;
+    font-family: opensans, sans-serif;
 }
-body pre {
+body pre, body .code {
     font-family: source code pro, monospace;
 }
+body .zh {
+    font-family: Microsoft YaHei, 微软雅黑, serif;
+}
+
 
 header, section, footer, aside, nav, article, figure {
     display: block;
@@ -26,25 +41,20 @@ header, article, section, footer, nav {
     position: relative;
 }
 
+
 .wrapper {
     width: 940px;
-    margin: auto;
+    margin: 0px auto;
 }
 
-
-
-header {
-    text-align: center;
-}
-header img {
-    display: inline;
-    vertical-align: middle;
-    padding: 16px 0px;
-}
 
 
 #mainnav {
     background-color: #404040;
+    background: linear-gradient(#606060, #585858,
+				#505050, #404040,
+				#303030, #202020, #101010,
+				#000000, #fbfaf8);
     color: #ffffff;
     font-size: 1.1em;
     font-weight: bold;
@@ -59,6 +69,7 @@ header img {
     padding: 0px 18px;
 }
 #mainnav span.logo {
+    font-size: 1.1em;
     padding-left: 0px;
     margin-left: 0px;
 }
@@ -70,7 +81,7 @@ header img {
     color: #ffffff;
 }
 #mainnav a.now {
-    background-color: #f0f0f0;
+    background-color: #fbfaf8;
     color: #404040;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
@@ -82,37 +93,42 @@ header img {
 
 
 header {
-    margin: 0px;
+    text-align: center;
+}
+header img {
+    display: inline;
+    vertical-align: middle;
+    padding: 17px 0px;
 }
 
-header h1 {
-    text-align: center;
-    margin: 0px;
-    padding: 10px 0px;
-}
 
 nav {
-    color: #ffffff;
-    font-size: 1.1em;
     font-weight: bold;
     margin: 0px;
 }
 nav div.outer {
-    width: 600px;
+    width: 520px;
     margin: 0px auto;
     background-color: #404040;
-    height: 36px;
-    padding: 1px 20px 0px 20px;
+    background: linear-gradient(#606060, #585858,
+				#505050, #404040,
+				#303030, #202020, #101010,
+				#000000, #fbfaf8);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    height: 33px;
+    padding: 1px 10px 0px 10px;
 }
 nav div.inner {
     float: left;
-    height: 36px;
+    height: 33px;
 }
 nav a {
     float: left;
-    line-height: 36px;
-    padding: 0px 20px;
-    color: #bbbbbb;
+    line-height: 33px;
+    margin: 0px 5px;
+    padding: 0px 15px;
+    color: #c0c0c0;
     text-decoration: none;
 }
 nav a:hover {
@@ -122,7 +138,7 @@ nav a.login, nav a.logout {
     float: right;
 }
 nav a.now {
-    background-color: #f0f0f0;
+    background-color: #fbfaf8;
     color: #404040;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
@@ -136,12 +152,12 @@ nav a.now:hover {
 #content {
     position: relative;
     min-height: 300px;
-    padding-top: 35px;
+    padding-top: 17px;
 }
 footer {
-    font-size: 90%;
+    font-size: 0.85em;
     text-align: center;
-    padding-top: 50px;
+    padding-top: 34px;
 }
 
 
@@ -152,15 +168,16 @@ form {
 }
 form fieldset {
     border: 3px solid #aaaaaa;
-    border-radius: 6px;
-    margin-top: 20px;
+    border-radius: 12px;
+    margin-top: 17px;
 }
 form legend {
-    /* font-size: 160%; */
+    font-size: 1.2em;
 }
 form p.message {
     color: red;
-    margin: 0px 0px 20px 0px;
+    font-size: 0.9em;
+    margin: 0px 0px 17px 0px;
 }
 form div {
     margin: 10px 0px 10px 0px;
@@ -169,7 +186,7 @@ form div {
 form p.form-error {
     float: right;
     clear: both;
-    /* font-size: 90%; */
+    font-size: 0.9em;
     color: red;
     margin: 0px 8% 0px 0px;
 }
@@ -179,7 +196,7 @@ form .form-title {
     padding-right: 10px;
 }
 form input[type="submit"] {
-    /* font-size: 95%; */
+    font-size: 1em;
     padding: 3px 8px;
 }
 form div span.submit {
@@ -200,25 +217,33 @@ form div span.submit {
 #submitform .form-title {
     width: 38%;
 }
+
 #loginform lable[for="remember_me"] {
     float: right;
     margin-right: 8%;
     clear: both;
 }
-#submitform input#upload_file{
-    /* font-size: 90%; */
+
+#signupform #role, #submitform #upload_file {
+    font-size: 0.9em;
 }
-#submitform lable[for="upload_file"] {
-    padding-top: 3px;
-}
-#submitform select#language {
-    /* font-size: 90%; */
-    padding: 1px 2px 1px 2px;
-    width: 120px;
+
+#submitform #language {
+    font-size: 0.9em;
+    padding: 2px 3px 2px 3px;
+    width: 100px;
 }
 #submitform lable[for="language"] {
     padding-top: 3px;
 }
+#submitform #upload_file {
+    height: 29px;
+    width: 60%;
+}
+#submitform lable[for="upload_file"] {
+    padding-top: 3px;
+}
+
 
 
 table.list {
@@ -284,10 +309,10 @@ table.list td span.id {
 
 span[class|=status] {
     color: #ffffff;
+    font-size: 0.93em;
     font-weight: bold;
-    /* font-size: 85%; */
     border-radius: 4px;
-    padding: 3px 5px;
+    padding: 1px 5px 2px 5px;
 }
 span.status-waiting {
     background-color: blue;
@@ -342,9 +367,6 @@ span.status-error {
 .pb-title h2 {
     margin: 10px 0px;
 }
-.pb-title .limits {
-    /* font-size: 85%; */
-}
 .pb-details pre, .sub-details pre {
     background-color: #cccccc;
     padding: 8px 5px 8px 12px;
@@ -352,8 +374,9 @@ span.status-error {
 }
 .sub-title div {
     font-weight: bold;
-    /* font-size: 90%; */
+    font-size: 0.9em;
 }
+
 
 .pb-submit {
     margin-top: 32px;
