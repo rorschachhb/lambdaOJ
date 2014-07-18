@@ -1,6 +1,28 @@
+@font-face {
+    font-family: source code pro;
+    src: url('/static/fonts/SourceCodePro-Regular.otf');
+}
+@font-face {
+    font-family: source code pro;
+    src: url('/static/fonts/SourceCodePro-Semibold.otf');
+    font-weight: bold;
+}
+
 body {
     background-color: #ffffff;
     margin: 0px;
+    font-size: 16px;
+    font-family: helvetica, sans-serif;
+}
+body pre {
+    font-family: source code pro, monospace;
+}
+
+header, section, footer, aside, nav, article, figure {
+    display: block;
+}
+header, article, section, footer, nav {
+    position: relative;
 }
 
 .wrapper {
@@ -9,23 +31,28 @@ body {
 }
 
 
+
 #mainnav {
     background-color: #444444;
     color: #ffffff;
-    font-size: 1.05em;
-    height: 40px;
+    font-size: 1.1em;
+    font-weight: bold;
+    height: 36px;
     margin: 0px;
+    padding: 0px;
 }
 #mainnav ul {
+    display: inline;
+    line-height: 36px;
     margin: 0px;
-    padding: 8px 0px 5px 0px;
+    padding: 0px;
 }
 #mainnav li {
     display: inline;
-    margin-right: 40px;
+    margin: 0px 40px 0px 0px;
 }
 #mainnav li a {
-    color: #aaaaaa;
+    color: #c0c0c0;
     text-decoration: none;
 }
 #mainnav li a:hover {
@@ -35,69 +62,56 @@ body {
 
 
 header {
-    background-color: #cccccc;
-    border-bottom-left-radius: 6px;
-    border-bottom-right-radius: 6px;
     margin: 0px;
-    overflow: auto;
 }
-header #userinfo {
-    float: right;
+
+header h1 {
+    text-align: center;
     margin: 0px;
-    padding: 12px 15px 0px 0px;
+    padding: 10px 0px;
 }
-div.header-wrapper {
-    float: left;
-    width: 660px;
-    margin: 0px 0px 0px 0px;
-    padding: 0px;
-}
-div.header-wrapper h1 {
-    float: right;
-    clear: both;
-    width: 380px;
-    text-align: center;
-    margin: 16px 0px;
-    padding: 0px;
-}
-div.nav-wrapper {
-    float: left;
-    clear: both;
-    width: 100%;
-    text-align: center;
-}
+
 nav {
+    color: #ffffff;
     font-size: 1.1em;
+    font-weight: bold;
+    line-height: 36px;
+    text-align: center;
     margin: 0px;
-    height: 30px;
 }
 nav ul {
     display: inline;
-    background: #cccccc;
-    border: 1px solid #666666;
-    border-bottom: none;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-    padding: 7px 10px 7px 10px;
+    background: #505050;
+    border-radius: 6px;
+    padding: 4px 16px;
 }
 nav li {
     display: inline;
-    margin: 0px 20px;
+    margin: 0px 16px;
+}
+nav li.disabled {
+    color: #bbbbbb;
 }
 nav li a {
-    color: #222222;
+    color: #bbbbbb;
     text-decoration: none;
 }
 nav li a:hover {
-    color: #888888;
+    color: #ffffff;
+}
+nav #login-logout {
+    position: absolute;
+    right: 12px;
 }
 
 
 
 #content {
+    position: relative;
     min-height: 350px;
     margin-top: 35px;
 }
+
 
 
 form {
@@ -110,7 +124,7 @@ form fieldset {
     margin-top: 20px;
 }
 form legend {
-    font-size: 160%;
+    /* font-size: 160%; */
 }
 form p.message {
     color: red;
@@ -123,7 +137,7 @@ form div {
 form p.form-error {
     float: right;
     clear: both;
-    font-size: 90%;
+    /* font-size: 90%; */
     color: red;
     margin: 0px 8% 0px 0px;
 }
@@ -133,7 +147,7 @@ form .form-title {
     padding-right: 10px;
 }
 form input[type="submit"] {
-    font-size: 95%;
+    /* font-size: 95%; */
     padding: 3px 8px;
 }
 form div span.submit {
@@ -160,13 +174,13 @@ form div span.submit {
     clear: both;
 }
 #submitform input#upload_file{
-    font-size: 90%;
+    /* font-size: 90%; */
 }
 #submitform lable[for="upload_file"] {
     padding-top: 3px;
 }
 #submitform select#language {
-    font-size: 90%;
+    /* font-size: 90%; */
     padding: 1px 2px 1px 2px;
     width: 120px;
 }
@@ -239,7 +253,7 @@ table.list td span.id {
 span[class|=status] {
     color: #ffffff;
     font-weight: bold;
-    font-size: 85%;
+    /* font-size: 85%; */
     border-radius: 4px;
     padding: 3px 5px;
 }
@@ -297,17 +311,16 @@ span.status-error {
     margin: 10px 0px;
 }
 .pb-title .limits {
-    font-size: 85%;
+    /* font-size: 85%; */
 }
 .pb-details pre, .sub-details pre {
-    font-size: 120%;
     background-color: #cccccc;
     padding: 8px 5px 8px 12px;
     border-radius: 6px;
 }
 .sub-title div {
     font-weight: bold;
-    font-size: 90%;
+    /* font-size: 90%; */
 }
 
 .pb-submit {
@@ -326,7 +339,7 @@ span.status-error {
 
 
 footer {
-    font-size: 90%;
+    /* font-size: 90%; */
     text-align: center;
     margin-top: 50px;
     margin-bottom: 10px;

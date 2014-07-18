@@ -9,11 +9,10 @@
   </head>
 
   <body>
-
     <div id="mainnav">
       <div class="wrapper">
 	<ul>
-	  <li>LAMBDA.COOL</li>
+	  <li class="logo">LAMBDA.COOL</li>
 	  <li><a href="/">Home</a></li>
 	  <li><a href="/oj/">Online Judge</a></li>
 	  <li><a href="/wiki/">λ Wiki</a></li>
@@ -25,31 +24,30 @@
     <div class="wrapper">
       <header>
 	{% block header %}
-	<div id="userinfo">
+	<h1>Online Judge</h1>
+	{% endblock header %}
+      </header>
+
+      <nav>
+	<ul>
+	  <li><a href="/oj/index/">Problems</a></li>
+	  <li><a href="/oj/submit/">Submit</a></li>
+	  <li><a href="/oj/status/">Status</a></li>
 	  {% if user %}
-	  {{ user.nickname }}, 
+	  <li class="disabled">Profile</li>
+	  {% if user.role == "admin" %}
+	  <li><a href="/oj/admin/" target="_blank">Admin</a></li>
+	  {% endif %}
+	  {% endif %}
+	</ul>
+	<span id="login-logout">
+	  {% if user %}
 	  <a href="/oj/logout/">logout</a>
 	  {% else %}
 	  <a href="/oj/login/">login</a>
 	  {% endif %}
-	</div>
-	<div class="header-wrapper">
-	  <h1>Online Judge</h1>
-	</div>
-	<div class="nav-wrapper">
-	  <nav>
-	    <ul>
-	      <li><a href="/oj/index/">Problems</a></li>
-	      <li><a href="/oj/submit/">Submit</a></li>
-	      <li><a href="/oj/status/">Status</a></li>
-	      {% if user.role == "admin" %}
-	      <li><a href="/oj/admin/" target="_blank">Admin</a></li>
-	      {% endif %}
-	    </ul>
-	  </nav>
-	</div>
-	{% endblock header %}
-      </header>
+	</span>
+      </nav>
 
       <div id="content">
 	{% block content %}
