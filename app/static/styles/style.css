@@ -249,8 +249,8 @@ form div span.submit {
 table.list {
     width: 100%;
     border-spacing: 0px;
-    border-radius: 8px;
-    border: 2px solid #b0b0b0;
+    border-radius: 6px;
+    border: 1px solid #b0b0b0;
 }
 table.list th {
     text-align: center;
@@ -259,19 +259,37 @@ table.list th {
 table.list td {
     padding: 6px 0px 6px 0px;
 }
-
+table.list tr th:first-child {
+    border-top-left-radius: 6px;
+}
+table.list tr th:last-child {
+    border-top-right-radius: 6px;
+}
+table.list tr:last-child td:first-child {
+    border-bottom-left-radius: 6px;
+}
+table.list tr:last-child td:last-child {
+    border-bottom-right-radius: 6px;
+}
 table.list tr th, table.list tr:not(:last-child) td {
-    border-bottom: 2px solid #b0b0b0;
+    border-bottom: 1px solid #b0b0b0;
 }
 table.list td:not(:last-child), table.list th:not(:last-child) {
-    border-right: 2px solid #b0b0b0;
+    border-right: 1px solid #b0b0b0;
 }
 
+table.list th {
+    background-color: rgb(226, 224, 230);
+}
+table.list tr:hover td {
+    background-color: rgb(244, 242, 250);
+    background-color: rgba(244, 242, 250, 64);
+}
 table.list tr.odd {
-
+    background-color: rgb(250, 249, 245);
 }
 table.list tr.even {
-
+    background-color: rgb(252, 251, 251);
 }
 
 table.list a {
