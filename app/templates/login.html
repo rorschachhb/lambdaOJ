@@ -5,7 +5,7 @@ Login
 {% endblock %}
 
 {% block navlogin %}
-<a href="/oj/login/" class="login now">Login</a>
+<a href="{{ url_for('login') }}" class="login now">Login</a>
 {% endblock navlogin %}
 
 {% block content %}
@@ -49,7 +49,7 @@ Login
       <span class="submit">
 	<input type="submit" name="login" value="Login">
 	or
-	<a href="/oj/signup/">sign up</a>
+	<a href="{{ url_for('signup') }}">sign up</a>
       </span>
     </div>
   </fieldset>

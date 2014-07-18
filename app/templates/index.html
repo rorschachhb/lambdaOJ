@@ -5,7 +5,7 @@ Problem List
 {% endblock title %}
 
 {% block navindex %}
-<a href="/oj/index/" class="now">Problems</a>
+<a href="{{ url_for('index') }}" class="now">Problems</a>
 {% endblock navindex %}
 
 {% block content %}
@@ -18,7 +18,7 @@ Problem List
   <tr class="{{ loop.cycle('odd', 'even') }}">
     <td class="pid">
       <span class="id">
-	<a href="/oj/problem/{{ pb.problem_id }}">{{ pb.problem_id }}</a>
+	<a href="{{ url_for('problem', problem_id = pb.problem_id) }}">{{ pb.problem_id }}</a>
       </span>
     </td>
     <td class="title zh">{{ pb.title }}</td>

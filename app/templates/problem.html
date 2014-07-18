@@ -5,7 +5,7 @@ Problem {{ problem.problem_id }}
 {% endblock title %}
 
 {% block navindex %}
-<a href="/oj/index/" class="now">Problems</a>
+<a href="{{ url_for('index') }}" class="now">Problems</a>
 {% endblock navindex %}
 
 {% block content %}
@@ -36,6 +36,6 @@ Problem {{ problem.problem_id }}
 </article>
 
 <article class="pb-submit">
-  <span><a  href="/oj/submit/{{ problem.problem_id }}">Submit</a></span>
+  <span><a  href="{{ url_for('submit', pid = problem.problem_id) }}">Submit</a></span>
 </article>
 {% endblock content %}

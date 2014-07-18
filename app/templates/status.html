@@ -5,7 +5,7 @@ Status
 {% endblock title %}
 
 {% block navstatus %}
-<a href="/oj/status/" class="now">Status</a>
+<a href="{{ url_for('status') }}" class="now">Status</a>
 {% endblock navstatus %}
 
 {% block content %}
@@ -23,12 +23,14 @@ Status
   <tr class="{{ loop.cycle('odd', 'even') }}">
     <td class="id">
       <span class="id">
-	<a href="/oj/submit_info/{{ sub.id }}/{{ subs.page }}">{{ sub.id }}</a>
+	<a href="{{ url_for('submit_info', 
+		 sid =  sub.id, page = subs.page) }}">{{ sub.id }}</a>
       </span>
     </td>
     <td class="problem">
       <span class="id">
-	<a href="/oj/problem/{{ sub.problem }}">{{ sub.problem }}</a>
+	<a href="{{ url_for('problem',
+		 problem_id = sub.problem) }}">{{ sub.problem }}</a>
       </span>
     </td>
     <td class="user">{{ sub.user }}</td>

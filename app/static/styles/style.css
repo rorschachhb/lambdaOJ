@@ -291,11 +291,12 @@ table.list td span.id {
 }
 
 #subs td.user {
-    padding-left: 16px;
+    text-align: right;
+    padding-right: 16px;
 }
 #subs td.status {
     text-align: center;
-    width: 180px;
+    width: 188px;
 }
 #subs td.time, #subs td.memory {
     padding-right: 10px;

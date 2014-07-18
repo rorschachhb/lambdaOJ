@@ -32,25 +32,23 @@
 	<div class="outer">
 	  <div class="inner">
 	    {% block navindex %}
-	    <a href="/oj/index/">Problems</a>
+	    <a href="{{ url_for('index') }}">Problems</a>
 	    {% endblock navindex %}
 	    {% block navsubmit %}
-	    <a href="/oj/submit/">Submit</a>
+	    <a href="{{ url_for('submit') }}">Submit</a>
 	    {% endblock navsubmit %}
 	    {% block navstatus %}
-	    <a href="/oj/status/">Status</a>
+	    <a href="{{ url_for('status') }}">Status</a>
 	    {% endblock navstatus %}
-	    {% if user %}
-	    {% if user.role == "admin" %}
+	    {% if user and user.role == "admin" %}
 	    <a href="/oj/admin/" target="_blank">Admin</a>
-	    {% endif %}
 	    {% endif %}
 	  </div>
 	  {% if user %}
-	  <a href="/oj/logout/" class="logout">Logout</a>
+	  <a href="{{ url_for('logout') }}" class="logout">Logout</a>
 	  {% else %}
 	  {% block navlogin %}
-	  <a href="/oj/login/" class="login">Login</a>
+	  <a href="{{ url_for('login') }}" class="login">Login</a>
 	  {% endblock navlogin %}
 	  {% endif %}
 	</div>
