@@ -4,6 +4,10 @@
 Problem {{ problem.problem_id }}
 {% endblock title %}
 
+{% block navindex %}
+<a href="/oj/index/" class="now">Problems</a>
+{% endblock navindex %}
+
 {% block content %}
 <article class="pb-title">
   <h2>Problem {{ problem.problem_id }} : {{ problem.title }}</h2>
