@@ -72,7 +72,6 @@ class User(db.Model):
 
 class Problem(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
-	problem_id = db.Column(db.Integer, unique = True)
 	title = db.Column(db.String(100))
 	time_limit = db.Column(db.Integer)
 	memory_limit = db.Column(db.Integer)
@@ -82,15 +81,13 @@ class Problem(db.Model):
 	input_sample = db.Column(db.Text)
 	output_sample = db.Column(db.Text)
 	hint = db.Column(db.Text)
+	sample_num = db.Column(db.Integer)
 
 class Submit(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	problem = db.Column(db.Integer, db.ForeignKey('problem.id'))
 	user = db.Column(db.Integer, db.ForeignKey('user.id'))
 	results = db.Column(db.Text)
-	time = db.Column(db.Integer)
-	memory = db.Column(db.Integer)
 	language = db.Column(db.SmallInteger)
 	submit_time = db.Column(db.DateTime)
 	code_file = db.Column(db.String(100))
-	error_message = db.Column(db.Text)

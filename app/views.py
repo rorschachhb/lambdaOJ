@@ -95,49 +95,45 @@ def submit(pid = None):
 	if form.validate_on_submit():
 		#rename
 		filename = secure_filename(form.upload_file.data.filename)
-		filepath = 'app/users/%d/%s' % (g.user.id, filename)
+		filepath = 'app/static/users/%d/%s' % (g.user.id, filename)
 		form.upload_file.data.save(filepath)
 		hmd5 = hashlib.md5()
 		fp = open(filepath,"rb")
 		hmd5.update(fp.read())
 		filehash = hmd5.hexdigest()
-		new_filepath = 'app/users/%d/%s' % (g.user.id, filehash + '_' + filename)
+		new_filepath = 'app/static/users/%d/%s%s' % (g.user.id, datetime.now(), '_' + filehash + '_' + filename)
 		os.rename(filepath, new_filepath)
-		
-		#write database
-		time = datetime.utcnow()
-		sub = Submit(problem = form.problem_id.data,
-			user = g.user.id,
-			status = PENDING,
-			language = form.language.data,
-			submit_time = time,
-			code_file = 'app/users/%d/%s' % (g.user.id, filehash + '_' + filename))
-		db.session.add(sub)
-		db.session.commit()
 
-		#create json
-		os.mkdir("app/users/%d/%s" % (g.user.id, filehash))
+		#request
+		p = Problem.query.filter_by(id=pid).first()
+		os.mkdir("app/static/users/%d/%s" % (g.user.id, filehash))
 		request = {
 			"code_path": new_filepath,
 			"lang_flag": form.language.data,
-			"work_dir": "app/users/%d/%s/" % (g.user.id, filehash),
-			"test_dir": "app/statics/problems/%d/" % (form.problem_id.data),
-			"test_sample_num": 3,
-			"time_limit": [2000, 3000, 4000],
-			"mem_limit": [20000, 30000, 40000]
+			"work_dir": "app/static/users/%d/%s/" % (g.user.id, filehash),
+			"test_dir": "app/statics/problems/%d/data/" % (form.problem_id.data),
+			"test_sample_num": p.sample_num,
+			"time_limit": p.time_limit,
+			"mem_limit": p.memory_limit
 		}
-		request_json = json.dumps(d1)
+		request_json = json.dumps(request)
 
 		#connect socket
 		jsocket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 		jsocket.connect(host, port)
 		jsocket.send(request_json)
 		result_json = jsocket.recv()
-		if result_json[0] == '@':
-			pass
-		else:
-			result = json.loads(result_json)
-			#do some parsing
+
+		#write database
+		time = datetime.now()
+		sub = Submit(problem = form.problem_id.data,
+			user = g.user.id,
+			language = form.language.data,
+			results = result_json,
+			submit_time = time,
+			code_file = new_filepath)
+		db.session.add(sub)
+		db.session.commit()
 
 		#return something
 		s = Submit.query.filter_by(user=g.user.id, submit_time=time).first()
