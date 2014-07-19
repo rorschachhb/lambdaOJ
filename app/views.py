@@ -77,6 +77,7 @@ def submit_info(sid, page):
 				sub.user = user_tmp.nickname
 				problem = Problem.query.filter_by(id=sub.problem).first()
 				tuser = modify_user(g.user)
+				sub = parse_json(sub)
 				return render_template('submit_info.html', 
 					problem = problem, 
 					sub = sub, 
@@ -93,6 +94,7 @@ def submit_info(sid, page):
 def submit(pid = None):
 	form = SubmitForm()
 	if form.validate_on_submit():
+		pid = int(form.problem_id.data)
 		#rename
 		filename = secure_filename(form.upload_file.data.filename)
 		filepath = 'app/static/users/%d/%s' % (g.user.id, filename)
@@ -105,14 +107,14 @@ def submit(pid = None):
 		os.rename(filepath, new_filepath)
 
 		#request
-		p = Problem.query.filter_by(id=pid).first()
+		p = Problem.query.get(pid)
 		os.mkdir("app/static/users/%d/%s" % (g.user.id, filehash))
 		request = {
 			"code_path": new_filepath,
 			"lang_flag": form.language.data,
 			"work_dir": "app/static/users/%d/%s/" % (g.user.id, filehash),
-			"test_dir": "app/statics/problems/%d/data/" % (form.problem_id.data),
-			"test_sample_num": p.sample_num,
+			"test_dir": "app/statics/problems/%d/data/" % (pid),
+			"test_sample_num": 1,
 			"time_limit": p.time_limit,
 			"mem_limit": p.memory_limit
 		}
@@ -123,6 +125,7 @@ def submit(pid = None):
 		jsocket.connect(host, port)
 		jsocket.send(request_json)
 		result_json = jsocket.recv()
+		print result_json
 
 		#write database
 		time = datetime.now()
@@ -200,3 +203,6 @@ def modify_user(tuser):
         except AttributeError:
                 tuser = None
         return tuser
+
+def parse_json(sub):
+	pass
