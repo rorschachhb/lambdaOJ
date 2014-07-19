@@ -141,15 +141,11 @@ nav li.now {
 }
 
 
+
 #content {
     position: relative;
     min-height: 300px;
     padding-top: 17px;
-}
-footer {
-    font-size: 0.85em;
-    text-align: center;
-    padding-top: 34px;
 }
 
 
