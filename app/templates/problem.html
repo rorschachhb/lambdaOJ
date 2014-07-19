@@ -4,38 +4,38 @@
 Problem {{ problem.problem_id }}
 {% endblock title %}
 
+{% block navindex %}
+<li class="now"><a href="{{ url_for('index') }}">Problems</a></li>
+{% endblock navindex %}
+
 {% block content %}
 <article class="pb-title">
   <h2>Problem {{ problem.problem_id }} : {{ problem.title }}</h2>
   <div class="limits">
-    <strong>
-      Time Limit:
-      <span class="status-correct">{{ problem.time_limit }}s</span>
-    </strong>
-    &nbsp;&nbsp;&nbsp;
-    <strong>
-      Memory Limit:
-      <span class="status-correct">{{ problem.memory_limit }}K</span>
-    </strong>
+    Time Limit:&nbsp;
+    <span class="status-correct code">{{ problem.time_limit }} s</span>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    Memory Limit:&nbsp;
+    <span class="status-correct code">{{ problem.memory_limit }} KiB</span>
   </div>
 </article>
 
 <article class="pb-details">
-  <h4>Description</h4>
-  <div>{{ problem.description }}</div>
-  <h4>Input Description</h4>
-  <div>{{ problem.input_description }}</div>
-  <h4>Output Description</h4>
-  <div>{{ problem.output_description }}</div>
-  <h4>Input Sample</h4>
+  <h3>Description</h3>
+  <div class="zh">{{ problem.description }}</div>
+  <h3>Input Description</h3>
+  <div class="zh">{{ problem.input_description }}</div>
+  <h3>Output Description</h3>
+  <div class="zh">{{ problem.output_description }}</div>
+  <h3>Input Sample</h3>
   <pre>{{ problem.input_sample }}</pre>
-  <h4>Output Sample</h4>
+  <h3>Output Sample</h3>
   <pre>{{ problem.output_sample }}</pre>
-  <h4>Hint</h4>
-  <div>{{ problem.hint }}</div>
+  <h3>Hint</h3>
+  <div class="zh">{{ problem.hint }}</div>
 </article>
 
-<article class="pb-submit">
-  <span><a  href="/oj/submit/{{ problem.problem_id }}">Submit</a></span>
-</article>
+<div class="pb-submit">
+  <a href="{{ url_for('submit', pid = problem.problem_id) }}">Submit</a>
+</div>
 {% endblock content %}

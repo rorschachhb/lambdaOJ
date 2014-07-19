@@ -3,7 +3,9 @@
 
   <head>
     {% block head %}
-    <link href="/static/styles/style.css" type="text/css" rel="stylesheet" />
+    <meta charset="utf-8">
+    <link href="{{ url_for('static', filename='styles/style.css') }}" type="text/css" rel="stylesheet" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}" />
     <title>{% block title %}{% endblock %} - LambdaOJ</title>
     {% endblock head %}
   </head>
@@ -11,42 +13,48 @@
   <body>
     <div id="mainnav">
       <div class="wrapper">
-	<ul>
-	  <li class="logo">LAMBDA.COOL</li>
-	  <li><a href="/">Home</a></li>
-	  <li><a href="/oj/">Online Judge</a></li>
-	  <li><a href="/wiki/">λ Wiki</a></li>
-	  <li><a href="ftp://lambda.cool/" target="_blank">Download</a></li>
-	</ul>
+	<span class="logo">LAMBDA.COOL</span>
+	<a href="/">Home</a>
+	<a href="/oj/" class="now">Online Judge</a>
+	<a href="/wiki/">Wiki</a>
+	<a href="ftp://lambda.cool/" target="_blank">Download</a>
       </div>
     </div>
 
     <div class="wrapper">
       <header>
 	{% block header %}
-	<img src="/static/images/logo.png" alt="lambda logo"
+	<img src="{{ url_for('static', filename='images/logo.png') }}" alt="LambdaOJ Logo"
 	     width="210" />
 	{% endblock header %}
       </header>
 
       <nav>
 	<ul>
-	  <li><a href="/oj/index/">Problems</a></li>
-	  <li><a href="/oj/submit/">Submit</a></li>
-	  <li><a href="/oj/status/">Status</a></li>
+	  {% block navindex %}
+	  <li><a href="{{ url_for('index') }}">Problems</a></li>
+	  {% endblock navindex %}
+	  
+	  {% block navsubmit %}
+	  <li><a href="{{ url_for('submit') }}">Submit</a></li>
+	  {% endblock navsubmit %}
+	  
+	  {% block navstatus %}
+	  <li><a href="{{ url_for('status') }}">Status</a></li>
+	  {% endblock navstatus %}
+
+	  {% block navprofile %}
+	  <li class="disabled">Profile</li>
+	  {% endblock navprofile %}
+
 	  {% if user %}
-	  {% if user.role == "admin" %}
-	  <li><a href="/oj/admin/" target="_blank">Admin</a></li>
-	  {% endif %}
+	  <li class="last"><a href="{{ url_for('logout') }}">Logout</a></li>
+	  {% else %}
+	  {% block navlogin %}
+	  <li class="last"><a href="{{ url_for('login') }}">Login</a></li>
+	  {% endblock navlogin %}
 	  {% endif %}
 	</ul>
-	<span id="login-logout">
-	  {% if user %}
-	  <a href="/oj/logout/">logout</a>
-	  {% else %}
-	  <a href="/oj/login/">login</a>
-	  {% endif %}
-	</span>
       </nav>
 
       <div id="content">

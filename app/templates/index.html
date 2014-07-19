@@ -4,6 +4,10 @@
 Problem List
 {% endblock title %}
 
+{% block navindex %}
+<li class="now"><a href="{{ url_for('index') }}">Problems</a></li>
+{% endblock navindex %}
+
 {% block content %}
 <table id="pbs" class="list">
   <tr>
@@ -14,10 +18,10 @@ Problem List
   <tr class="{{ loop.cycle('odd', 'even') }}">
     <td class="pid">
       <span class="id">
-	<a href="/oj/problem/{{ pb.problem_id }}">{{ pb.problem_id }}</a>
+	<a href="{{ url_for('problem', problem_id = pb.problem_id) }}">{{ pb.problem_id }}</a>
       </span>
     </td>
-    <td class="title">{{ pb.title }}</td>
+    <td class="title zh">{{ pb.title }}</td>
   </tr>
   {% endfor %}
 </table>
@@ -26,28 +30,28 @@ Problem List
   <ul>
     {% if pbs.has_prev %}
     <li>
-      <a href="{{ url_for('index', page = 1) }}"><strong>&lt;&lt;</strong></a>
+      <a href="{{ url_for('index', page = 1) }}"><strong>&lt;&lt;&lt;</strong></a>
     </li>
     <li>
-      <a href="{{ url_for('index', page = pbs.prev_num) }}"><strong>&lt;</strong></a>
+      <a href="{{ url_for('index', page = pbs.prev_num) }}"><strong>&lt; Prev</strong></a>
     </li>
     {% else %}
-    <li class="disabled"><strong>&lt;&lt;</strong></li>
-    <li class="disabled"><strong>&lt;</strong></li>
+    <li class="disabled"><strong>&lt;&lt;&lt;</strong></li>
+    <li class="disabled"><strong>&lt; Prev</strong></li>
     {% endif %}
 
-    <li>{{ pbs.page }}</li>
+    <li class="page">{{ pbs.page }}</li>
 
     {% if pbs.has_next %}
     <li>
-    <a href="{{ url_for('index', page = pbs.next_num) }}"><strong>&gt;</strong></a>
+    <a href="{{ url_for('index', page = pbs.next_num) }}"><strong>Next &gt;</strong></a>
     </li>
     <li>
-      <a href="{{ url_for('index', page = pbs.pages) }}"><strong>&gt;&gt;</strong></a>
+      <a href="{{ url_for('index', page = pbs.pages) }}"><strong>&gt;&gt;&gt;</strong></a>
     </li>
     {% else %}
-    <li class="disabled"><strong>&gt;&gt;</strong></li>
-    <li class="disabled"><strong>&gt;</strong></li>
+    <li class="disabled"><strong>Next &gt;</strong></li>
+    <li class="disabled"><strong>&gt;&gt;&gt;</strong></li>
     {% endif %}
   </ul>
 </div>

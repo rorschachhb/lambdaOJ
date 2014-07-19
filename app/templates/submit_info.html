@@ -4,6 +4,10 @@
 Submit {{ sub.id }}
 {% endblock title %}
 
+{% block navstatus %}
+<li class="now"><a href="{{ url_for('status') }}">Status</a></li>
+{% endblock navstatus %}
+
 {% block content %}
 <article class="sub-title">
   <hgroup>
@@ -30,9 +34,9 @@ Submit {{ sub.id }}
   </div>
 </article>
 <article class="sub-details">
-  <h4>Error Message</h4>
+  <h3>Error Message</h3>
   <div class="error-message">{{ sub.error_message }}</div>
-  <h4>Code File</h4>
+  <h3>Code File</h3>
   <pre class="code-file">{{ sub.code_file }}</pre>
 </article>
 {% endblock content %}
