@@ -7,3 +7,5 @@ venv/
 README.html
 app.db
 db_repository/
+app/users/*
+app/static/problems/*
