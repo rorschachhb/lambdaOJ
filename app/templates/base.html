@@ -3,8 +3,9 @@
 
   <head>
     {% block head %}
+    <meta charset="utf-8">
     <link href="{{ url_for('static', filename='styles/style.css') }}" type="text/css" rel="stylesheet" />
-    <link rel="shortcut icon" href="{{ url_for('static', filename='images/icon.png') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}" />
     <title>{% block title %}{% endblock %} - LambdaOJ</title>
     {% endblock head %}
   </head>
@@ -15,7 +16,7 @@
 	<span class="logo">LAMBDA.COOL</span>
 	<a href="/">Home</a>
 	<a href="/oj/" class="now">Online Judge</a>
-	<a href="/wiki/">λ Wiki</a>
+	<a href="/wiki/">Wiki</a>
 	<a href="ftp://lambda.cool/" target="_blank">Download</a>
       </div>
     </div>

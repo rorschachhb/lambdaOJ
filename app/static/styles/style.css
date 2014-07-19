@@ -56,7 +56,7 @@ header, article, section, footer, nav {
 				#303030, #202020, #101010,
 				#000000, #fbfaf8);
     color: #ffffff;
-    font-size: 1.1em;
+    font-size: 1em;
     font-weight: bold;
     height: 36px;
     margin: 0px;
@@ -105,6 +105,7 @@ header img {
 nav {
     margin: 0px;
     padding: 0px;
+    font-size: 0.90em;
     font-weight: bold;
 }
 nav ul {
@@ -120,14 +121,15 @@ nav ul {
 }
 nav li {
     float: left;
-    line-height: 33px;
     text-align: center;
     width: 110px;
+    line-height: 33px;
 }
 nav li:not(.last) {
     border-right: 1px solid #c0c0c0;
 }
 nav a, nav li.disabled {
+    display: block;
     color: #707070;
     text-decoration: none;
 }
@@ -135,7 +137,7 @@ nav a:hover, nav li.now a {
     color: #303030;
 }
 nav li.now {
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.13) inset;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.13) inset;
 }
 
 
@@ -347,15 +349,16 @@ span.status-error {
 
 .pagenav {
     width: 36%;
-    margin: 17px auto 0px auto;
-    overflow: auto;
+    background: #f0f0f0;
+    background: linear-gradient(#f6f6f6, rgb(234, 232, 238));
     text-align: center;
-    background: #e0e0e0;
-    background: linear-gradient(#f4f4f4, #e0e0e0);
+    font-size: 0.9em;
+    line-height: 27px;
+    margin: 17px auto 0px auto;
     padding: 0px 8px;
-    line-height: 30px;
-    border: 1px solid #d8d8d8;
-    border-radius: 5px;
+    border: 1px solid #e8e8e8;
+    border-radius: 15px;
+    overflow: auto;
 }
 .pagenav ul {
     margin: 0px;
@@ -372,6 +375,7 @@ span.status-error {
     width: 16%;
 }
 .pagenav li a {
+    display: block;
     color: #303030;
     text-decoration: none;
 }
