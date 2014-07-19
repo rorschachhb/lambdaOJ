@@ -15,7 +15,7 @@ class EditForm(Form):
 	password_confirm =  PasswordField('password_confirm', validators = [InputRequired()])
 
 class SubmitForm(Form):
-	problem_id = TextField('problem_id', validators = [InputRequired()])
+	problem_id = SelectField('problem_id', validators = [InputRequired()], coerce=int)
 	language = SelectField('language', choices = [(C, 'C'), (CPP, 'C++'), (PYTHON, 'Python')], validators = [InputRequired()], coerce=int)
 	upload_file = FileField('upload_file', validators=[FileRequired()])
 

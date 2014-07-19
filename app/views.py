@@ -98,7 +98,7 @@ def submit_info(sid, page):
 def submit(pid = None):
 	form = SubmitForm()
 	if form.validate_on_submit():
-		pid = int(form.problem_id.data)
+		pid = form.problem_id.data
 		#rename
 		filename = secure_filename(form.upload_file.data.filename)
 		filepath = 'app/static/users/%d/%s' % (g.user.id, filename)
@@ -147,6 +147,7 @@ def submit(pid = None):
 		s = Submit.query.filter_by(user=g.user.id, submit_time=time).first()
 		tuser = modify_user(g.user)
 		return redirect(url_for('submit_info', sid = s.id))
+	form.problem_id.choices = [(p.id, p.title) for p in Problem.query.all()]
 	tuser = modify_user(g.user)
 	return render_template('submit.html',
                                form = form,
