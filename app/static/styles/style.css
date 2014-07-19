@@ -60,7 +60,7 @@ header, article, section, footer, nav {
     font-weight: bold;
     height: 36px;
     margin: 0px;
-    padding: 1px 0px 0px 0px;
+    padding: 0px;
 }
 #mainnav span.logo, #mainnav a {
     float: left;
