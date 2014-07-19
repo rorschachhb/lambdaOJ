@@ -5,10 +5,17 @@ from forms import LoginForm, EditForm, SubmitForm, SignupForm, PostForm
 from models import *
 from datetime import datetime, timedelta
 from werkzeug import secure_filename
+import os
+import hashlib
+import json
+import socket
 
 
 PROBLEMS_PER_PAGE = 10
 SUBS_PER_PAGE = 10
+
+host = '127.0.0.1'
+port = 8787
 
 @app.route('/oj/', defaults={'page': 1})
 @app.route('/oj/index/', defaults={'page': 1})
@@ -51,8 +58,8 @@ def status(page):
 	for s in subs.items:
 		s.status = results[s.status]
 		s.language = languages[s.language]
-                user_tmp = User.query.filter_by(id=s.user).first()
-                s.user = user_tmp.nickname
+		user_tmp = User.query.filter_by(id=s.user).first()
+		s.user = user_tmp.nickname
 	tuser = modify_user(g.user)
 	return render_template('status.html', 
 		subs = subs, 
@@ -69,10 +76,10 @@ def submit_info(sid, page):
 			if user.id == g.user.id:
 				sub.status = results[sub.status]
 				sub.language = languages[sub.language]
-                                user_tmp = User.query.filter_by(id=sub.user).first()
-                                sub.user = user_tmp.nickname
-                                problem = Problem.query.filter_by(id=sub.problem).first()
-                                tuser = modify_user(g.user)
+				user_tmp = User.query.filter_by(id=sub.user).first()
+				sub.user = user_tmp.nickname
+				problem = Problem.query.filter_by(id=sub.problem).first()
+				tuser = modify_user(g.user)
 				return render_template('submit_info.html', 
 					problem = problem, 
 					sub = sub, 
@@ -89,8 +96,57 @@ def submit_info(sid, page):
 def submit(pid = None):
 	form = SubmitForm()
 	if form.validate_on_submit():
-		pass
-        tuser = modify_user(g.user)
+		#rename
+		filename = secure_filename(form.upload_file.data.filename)
+		filepath = 'app/users/%d/%s' % (g.user.id, filename)
+		form.upload_file.data.save(filepath)
+		hmd5 = hashlib.md5()
+		fp = open(filepath,"rb")
+		hmd5.update(fp.read())
+		filehash = hmd5.hexdigest()
+		new_filepath = 'app/users/%d/%s' % (g.user.id, filehash + '_' + filename)
+		os.rename(filepath, new_filepath)
+		
+		#write database
+		time = datetime.utcnow()
+		sub = Submit(problem = form.problem_id.data,
+			user = g.user.id,
+			status = PENDING,
+			language = form.language.data,
+			submit_time = time,
+			code_file = 'app/users/%d/%s' % (g.user.id, filehash + '_' + filename))
+		db.session.add(sub)
+		db.session.commit()
+
+		#create json
+		os.mkdir("app/users/%d/%s" % (g.user.id, filehash))
+		request = {
+			"code_path": new_filepath,
+			"lang_flag": form.language.data,
+			"work_dir": "app/users/%d/%s/" % (g.user.id, filehash),
+			"test_dir": "app/statics/problems/%d/" % (form.problem_id.data),
+			"test_sample_num": 3,
+			"time_limit": [2000, 3000, 4000],
+			"mem_limit": [20000, 30000, 40000]
+		}
+		request_json = json.dumps(d1)
+
+		#connect socket
+		jsocket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+		jsocket.connect(host, port)
+		jsocket.send(request_json)
+		result_json = jsocket.recv()
+		if result_json[0] == '@':
+			pass
+		else:
+			result = json.loads(result_json)
+			#do some parsing
+
+		#return something
+		s = Submit.query.filter_by(user=g.user.id, submit_time=time).first()
+		tuser = modify_user(g.user)
+		return redirect(url_for('submit_info', sid = s.id))
+	tuser = modify_user(g.user)
 	return render_template('submit.html',
                                form = form,
                                pid = pid, 
@@ -101,8 +157,8 @@ def submit(pid = None):
 def problem(problem_id):
 	problem = Problem.query.filter_by(problem_id=problem_id).first()
 	if problem:
-                tuser = modify_user(g.user)
-                return render_template('problem.html',
+		tuser = modify_user(g.user)
+		return render_template('problem.html',
 			problem=problem, 
 			user = tuser)
 	else:
@@ -126,6 +182,8 @@ def signup():
 				status=STATUS_NORMAL)
 			db.session.add(user)
 			db.session.commit()
+			u = User.query.filter_by(email=user.email).first()
+			os.mkdir('app/users/%d' % (u.id))
 			flash('Please log in now.')
 			return redirect(url_for('login'))
 		else:
