@@ -30,7 +30,7 @@ body pre, body .code {
     font-family: source code pro, monospace;
 }
 body .zh {
-    font-family: Microsoft YaHei, 微软雅黑, serif;
+    font-family: Microsoft YaHei, 微软雅黑, arial, serif;
 }
 
 
@@ -104,49 +104,44 @@ header img {
 
 nav {
     margin: 0px;
-    text-shadow: 1px 1px 1px #000000;
-    font-size: 1.05em;
+    padding: 0px;
+    font-weight: bold;
 }
-nav div.outer {
-    width: 520px;
+nav ul {
+    background-color: #e0e0e0;
+    background: linear-gradient(#f0f0f0, #d0d0d0);
+    border: 1px solid #c0c0c0;
+    border-radius: 5px;
+    list-style-type: none;
+    overflow: auto;
+    width: 554px;
     margin: 0px auto;
-    background-color: #404040;
-    background: linear-gradient(#606060, #585858,
-				#505050, #404040,
-				#303030, #202020, #101010,
-				#000000, #fbfaf8);
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    height: 33px;
-    padding: 1px 10px 0px 10px;
+    padding: 0px;
 }
-nav div.inner {
-    float: left;
-    height: 33px;
-}
-nav a {
+nav li {
     float: left;
     line-height: 33px;
-    margin: 0px 5px;
-    padding: 0px 15px;
-    color: #c0c0c0;
+    text-align: center;
+    width: 110px;
+}
+nav li:not(.last) {
+    border-right: 1px solid #c0c0c0;
+}
+nav a {
+    color: #606060;
     text-decoration: none;
 }
 nav a:hover {
-    color: #ffffff;
-}
-nav a.login, nav a.logout {
-    float: right;
-}
-nav a.now {
-    background-color: #fbfaf8;
     color: #404040;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    text-shadow: 0px 0px 0px #ffffff;
 }
-nav a.now:hover {
+nav li.now {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.13) inset;
+}
+nav li.now a {
     color: #404040;
+}
+nav li.disabled {
+    color: #606060;
 }
 
 
@@ -285,7 +280,7 @@ table.list th {
 }
 table.list tr:hover td {
     background-color: rgb(244, 242, 250);
-    background-color: rgba(244, 242, 250, 64);
+    background-color: rgba(244, 242, 250, 0.75);
 }
 table.list tr.odd {
     background-color: rgb(250, 249, 245);
@@ -359,13 +354,15 @@ span.status-error {
 
 .pagenav {
     width: 21.28%;
-    margin: 20px auto 0px auto;
+    margin: 17px auto 0px auto;
     overflow: auto;
     text-align: center;
-    background: #cccccc;
-    padding: 7px 20px;
-    border: 1px solid #666666;
-    border-radius: 6px;
+    background: #e0e0e0;
+    background: linear-gradient(#f4f4f4, #e0e0e0);
+    padding: 0px 8px;
+    line-height: 30px;
+    border: 1px solid #d8d8d8;
+    border-radius: 5px;
 }
 .pagenav ul {
     margin: 0px;
@@ -379,14 +376,14 @@ span.status-error {
     padding: 0px;
 }
 .pagenav li a {
-    color: #222222;
+    color: #202020;
     text-decoration: none;
 }
 .pagenav li a:hover {
-    color: #888888;
+    color: #a0a0a0;
 }
 .pagenav li.disabled {
-    color: #888888;
+    color: #a0a0a0;
 }
 
 

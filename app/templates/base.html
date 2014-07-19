@@ -29,29 +29,31 @@
       </header>
 
       <nav>
-	<div class="outer">
-	  <div class="inner">
-	    {% block navindex %}
-	    <a href="{{ url_for('index') }}">Problems</a>
-	    {% endblock navindex %}
-	    {% block navsubmit %}
-	    <a href="{{ url_for('submit') }}">Submit</a>
-	    {% endblock navsubmit %}
-	    {% block navstatus %}
-	    <a href="{{ url_for('status') }}">Status</a>
-	    {% endblock navstatus %}
-	    {% if user and user.role == "admin" %}
-	    <a href="/oj/admin/" target="_blank">Admin</a>
-	    {% endif %}
-	  </div>
+	<ul>
+	  {% block navindex %}
+	  <li><a href="{{ url_for('index') }}">Problems</a></li>
+	  {% endblock navindex %}
+	  
+	  {% block navsubmit %}
+	  <li><a href="{{ url_for('submit') }}">Submit</a></li>
+	  {% endblock navsubmit %}
+	  
+	  {% block navstatus %}
+	  <li><a href="{{ url_for('status') }}">Status</a></li>
+	  {% endblock navstatus %}
+
+	  {% block navprofile %}
+	  <li class="disabled">Profile</li>
+	  {% endblock navprofile %}
+
 	  {% if user %}
-	  <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+	  <li class="last"><a href="{{ url_for('logout') }}">Logout</a></li>
 	  {% else %}
 	  {% block navlogin %}
-	  <a href="{{ url_for('login') }}" class="login">Login</a>
+	  <li class="last"><a href="{{ url_for('login') }}">Login</a></li>
 	  {% endblock navlogin %}
 	  {% endif %}
-	</div>
+	</ul>
       </nav>
 
       <div id="content">

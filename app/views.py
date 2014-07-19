@@ -29,7 +29,6 @@ def login():
 		user = User.query.filter_by(email=form.email.data, password=form.password.data).first()
 		if user:
 			login_user(user, remember = form.remember_me.data)
-			flash('Welcome %s' % user.nickname)
 			return redirect(request.args.get('next') or url_for('index'))
 		else:
 			flash('Wrong name or password!')
