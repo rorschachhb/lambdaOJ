@@ -9,6 +9,7 @@ import os
 import hashlib
 import json
 import socket
+from shutil import rmtree
 
 
 PROBLEMS_PER_PAGE = 10
@@ -122,28 +123,23 @@ def submit(pid = None):
 
 		#connect socket
 		jsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		print 'created'
 		jsocket.connect((host, port))
-		print 'connected'
 		jsocket.send(request_json)
-		print 'sent'
 		result_json = jsocket.recv(1024)
-		print 'result_json: ', result_json
 		jsocket.close()
-		print 'closed'
 
 		#write database
 		time = datetime.now()
-		sub = Submit(problem = form.problem_id.data,
+		sub = Submit(problem = pid,
 			user = g.user.id,
 			language = form.language.data,
-			results = result_json,
+			results = result_json.decode('utf-8'),
 			submit_time = time,
 			code_file = new_filepath)
-#		db.session.add(sub)
-#		db.session.commit()
+		db.session.add(sub)
+		db.session.commit()
 
-		os.rmdir("app/static/users/%d/%s/" % (g.user.id, filehash))
+		rmtree("app/static/users/%d/%s/" % (g.user.id, filehash))
 		#return something
 		s = Submit.query.filter_by(user=g.user.id, submit_time=time).first()
 		tuser = modify_user(g.user)
