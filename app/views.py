@@ -112,8 +112,8 @@ def submit(pid = None):
 		request = {
 			"code_path": new_filepath,
 			"lang_flag": form.language.data,
-			"work_dir": "app/static/users/%d/%s/" % (g.user.id, filehash),
-			"test_dir": "app/statics/problems/%d/data/" % (pid),
+			"work_dir": "/home/Bo/work/oj/app/static/users/%d/%s/" % (g.user.id, filehash),
+			"test_dir": "/home/Bo/work/oj/app/statics/problems/%d/data/" % (pid),
 			"test_sample_num": 1,
 			"time_limit": p.time_limit,
 			"mem_limit": p.memory_limit
@@ -121,11 +121,16 @@ def submit(pid = None):
 		request_json = json.dumps(request)
 
 		#connect socket
-		jsocket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-		jsocket.connect(host, port)
+		jsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		print 'created'
+		jsocket.connect((host, port))
+		print 'connected'
 		jsocket.send(request_json)
-		result_json = jsocket.recv()
-		print result_json
+		print 'sent'
+		result_json = jsocket.recv(1024)
+		print 'result_json: ', result_json
+		jsocket.close()
+		print 'closed'
 
 		#write database
 		time = datetime.now()
@@ -135,9 +140,10 @@ def submit(pid = None):
 			results = result_json,
 			submit_time = time,
 			code_file = new_filepath)
-		db.session.add(sub)
-		db.session.commit()
+#		db.session.add(sub)
+#		db.session.commit()
 
+		os.rmdir("app/static/users/%d/%s/" % (g.user.id, filehash))
 		#return something
 		s = Submit.query.filter_by(user=g.user.id, submit_time=time).first()
 		tuser = modify_user(g.user)
