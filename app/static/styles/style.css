@@ -1,20 +1,20 @@
 @font-face {
     font-family: source code pro;
-    src: url('/static/fonts/SourceCodePro-Regular.otf');
+    src: url('/oj/static/fonts/SourceCodePro-Regular.otf');
 }
 @font-face {
     font-family: source code pro;
     font-weight: bold;
-    src: url('/static/fonts/SourceCodePro-Semibold.otf');
+    src: url('/oj/static/fonts/SourceCodePro-Semibold.otf');
 }
 @font-face {
     font-family: opensans;
-    src: url('/static/fonts/OpenSans-Regular.ttf');
+    src: url('/oj/static/fonts/OpenSans-Regular.ttf');
 }
 @font-face {
     font-family: opensans;
     font-weight: bold;
-    src: url('/static/fonts/OpenSans-Bold.ttf');
+    src: url('/oj/static/fonts/OpenSans-Bold.ttf');
 }
 
 
@@ -103,8 +103,9 @@ header img {
 
 
 nav {
-    font-weight: bold;
     margin: 0px;
+    text-shadow: 1px 1px 1px #000000;
+    font-size: 1.05em;
 }
 nav div.outer {
     width: 520px;
@@ -142,6 +143,7 @@ nav a.now {
     color: #404040;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
+    text-shadow: 0px 0px 0px #ffffff;
 }
 nav a.now:hover {
     color: #404040;

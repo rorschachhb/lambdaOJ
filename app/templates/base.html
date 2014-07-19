@@ -3,8 +3,8 @@
 
   <head>
     {% block head %}
-    <link href="/static/styles/style.css" type="text/css" rel="stylesheet" />
-    <link rel="shortcut icon" href="/static/images/icon.png">
+    <link href="{{ url_for('static', filename='styles/style.css') }}" type="text/css" rel="stylesheet" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/icon.png') }}">
     <title>{% block title %}{% endblock %} - LambdaOJ</title>
     {% endblock head %}
   </head>
@@ -23,7 +23,7 @@
     <div class="wrapper">
       <header>
 	{% block header %}
-	<img src="/static/images/logo.png" alt="LambdaOJ Logo"
+	<img src="{{ url_for('static', filename='images/logo.png') }}" alt="LambdaOJ Logo"
 	     width="210" />
 	{% endblock header %}
       </header>

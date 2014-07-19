@@ -4,7 +4,7 @@ from flask.ext.login import LoginManager
 from flask.ext.admin import Admin
 from flask.ext.admin.contrib.sqla import ModelView
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/oj/static')
 app.config.from_object('config')
 admin = Admin(app, url='/oj/admin/')
 
