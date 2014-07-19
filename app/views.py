@@ -81,7 +81,7 @@ def submit_info(sid, page):
 				sub.user = user_tmp.nickname
 				problem = Problem.query.filter_by(id=sub.problem).first()
 				tuser = modify_user(g.user)
-				sub = parse_json(sub)
+				sub = parse_json(sub.results)
 				return render_template('submit_info.html', 
 					problem = problem, 
 					sub = sub, 
@@ -97,27 +97,29 @@ def submit_info(sid, page):
 @login_required
 def submit(pid = None):
 	form = SubmitForm()
+	form.problem_id.choices = [(p.id, p.title) for p in Problem.query.all()]
 	if form.validate_on_submit():
 		pid = form.problem_id.data
 		#rename
 		filename = secure_filename(form.upload_file.data.filename)
-		filepath = 'app/static/users/%d/%s' % (g.user.id, filename)
+		filepath = basedir + '/static/users/%d/%s' % (g.user.id, filename)
 		form.upload_file.data.save(filepath)
 		hmd5 = hashlib.md5()
 		fp = open(filepath,"rb")
 		hmd5.update(fp.read())
 		filehash = hmd5.hexdigest()
-		new_filepath = 'app/static/users/%d/%s%s' % (g.user.id, datetime.now(), '_' + filehash + '_' + filename)
+		new_filepath = basedir + '/static/users/%d/%s%s' % (g.user.id, datetime.now(), '_' + filehash + '_' + filename)
 		os.rename(filepath, new_filepath)
 
 		#request
 		p = Problem.query.get(pid)
-		os.mkdir("app/static/users/%d/%s" % (g.user.id, filehash))
+		if not os.path.exists(basedir + "/static/users/%d/%s" % (g.user.id, filehash)):
+			os.mkdir(basedir + "/static/users/%d/%s" % (g.user.id, filehash))
 		request = {
 			"code_path": new_filepath,
 			"lang_flag": form.language.data,
-			"work_dir": "/home/Bo/work/oj/app/static/users/%d/%s/" % (g.user.id, filehash),
-			"test_dir": "/home/Bo/work/oj/app/statics/problems/%d/data/" % (pid),
+			"work_dir": basedir + "/static/users/%d/%s/" % (g.user.id, filehash),
+			"test_dir": basedir + "/statics/problems/%d/data/" % (pid),
 			"test_sample_num": 1,
 			"time_limit": p.time_limit,
 			"mem_limit": p.memory_limit
@@ -142,12 +144,11 @@ def submit(pid = None):
 		db.session.add(sub)
 		db.session.commit()
 
-		rmtree("app/static/users/%d/%s/" % (g.user.id, filehash))
+		rmtree( basedir + "/static/users/%d/%s/" % (g.user.id, filehash))
 		#return something
 		s = Submit.query.filter_by(user=g.user.id, submit_time=time).first()
 		tuser = modify_user(g.user)
 		return redirect(url_for('submit_info', sid = s.id))
-	form.problem_id.choices = [(p.id, p.title) for p in Problem.query.all()]
 	tuser = modify_user(g.user)
 	return render_template('submit.html',
                                form = form,
@@ -185,7 +186,7 @@ def signup():
 			db.session.add(user)
 			db.session.commit()
 			u = User.query.filter_by(email=user.email).first()
-			os.mkdir('app/static/users/%d' % (u.id))
+			os.mkdir(basedir + '/static/users/%d' % (u.id))
 			flash('Please log in now.')
 			return redirect(url_for('login'))
 		else:
@@ -210,5 +211,8 @@ def modify_user(tuser):
                 tuser = None
         return tuser
 
-def parse_json(sub):
-	pass
+def parse_json(results):
+	if results[0] is '{':
+		return json.loads(results)
+	else:
+		return results
