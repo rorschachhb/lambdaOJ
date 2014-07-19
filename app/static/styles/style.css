@@ -65,8 +65,8 @@ header, article, section, footer, nav {
 #mainnav span.logo, #mainnav a {
     float: left;
     line-height: 36px;
-    margin: 0px 12px;
-    padding: 0px 18px;
+    margin: 0px 8px;
+    padding: 0px 22px;
 }
 #mainnav span.logo {
     font-size: 1.1em;
@@ -82,9 +82,9 @@ header, article, section, footer, nav {
 }
 #mainnav a.now {
     background-color: #fbfaf8;
+    background: linear-gradient(#a0a0a0, #fbfaf8, #fbfaf8, #fbfaf8, #fbfaf8);
     color: #303030;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+    border-radius: 4px 4px 0px 0px;
 }
 #mainnav a.now:hover {
     color: #303030;
