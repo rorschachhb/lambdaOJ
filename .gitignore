@@ -7,5 +7,6 @@ venv/
 README.html
 app.db
 db_repository/
-app/users/*
+app/static/users/*
 app/static/problems/*
+add_*.py

@@ -55,7 +55,6 @@ def logout():
 def status(page):
 	subs = Submit.query.paginate(page, SUBS_PER_PAGE)
 	for s in subs.items:
-		s.status = results[s.status]
 		s.language = languages[s.language]
 		user_tmp = User.query.filter_by(id=s.user).first()
 		s.user = user_tmp.nickname
@@ -73,7 +72,6 @@ def submit_info(sid, page):
 		if sub:
 			user = User.query.filter_by(id=sub.user).first()
 			if user.id == g.user.id:
-				sub.status = results[sub.status]
 				sub.language = languages[sub.language]
 				user_tmp = User.query.filter_by(id=sub.user).first()
 				sub.user = user_tmp.nickname
@@ -182,7 +180,7 @@ def signup():
 			db.session.add(user)
 			db.session.commit()
 			u = User.query.filter_by(email=user.email).first()
-			os.mkdir('app/users/%d' % (u.id))
+			os.mkdir('app/static/users/%d' % (u.id))
 			flash('Please log in now.')
 			return redirect(url_for('login'))
 		else:
