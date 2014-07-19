@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-Problem {{ problem.problem_id }}
+Problem {{ problem.id }}
 {% endblock title %}
 
 {% block navindex %}
@@ -10,7 +10,7 @@ Problem {{ problem.problem_id }}
 
 {% block content %}
 <article class="pb-title">
-  <h2>Problem {{ problem.problem_id }} : {{ problem.title }}</h2>
+  <h2>Problem {{ problem.id }} : {{ problem.title }}</h2>
   <div class="limits">
     Time Limit:&nbsp;
     <span class="status-correct code">{{ problem.time_limit }} s</span>
@@ -36,6 +36,6 @@ Problem {{ problem.problem_id }}
 </article>
 
 <div class="pb-submit">
-  <a href="{{ url_for('submit', pid = problem.problem_id) }}">Submit</a>
+  <a href="{{ url_for('submit', pid = problem.id) }}">Submit</a>
 </div>
 {% endblock content %}

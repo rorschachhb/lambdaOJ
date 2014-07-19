@@ -18,7 +18,7 @@ Problem List
   <tr class="{{ loop.cycle('odd', 'even') }}">
     <td class="pid">
       <span class="id">
-	<a href="{{ url_for('problem', problem_id = pb.problem_id) }}">{{ pb.problem_id }}</a>
+	<a href="{{ url_for('problem', problem_id = pb.id) }}">{{ pb.id }}</a>
       </span>
     </td>
     <td class="title zh">{{ pb.title }}</td>

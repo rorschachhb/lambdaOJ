@@ -18,10 +18,13 @@ SUBS_PER_PAGE = 10
 host = '127.0.0.1'
 port = 8787
 
+basedir = os.path.abspath(os.path.dirname(__file__))
+
 @app.route('/oj/', defaults={'page': 1})
 @app.route('/oj/index/', defaults={'page': 1})
 @app.route('/oj/index/<int:page>')
 def index(page):
+	print basedir
 	pbs = Problem.query.paginate(page, PROBLEMS_PER_PAGE)
 	tuser = modify_user(g.user)
 	return render_template("index.html",
@@ -153,7 +156,7 @@ def submit(pid = None):
 @app.route('/oj/problem/', defaults={'problem_id':1})
 @app.route('/oj/problem/<int:problem_id>')
 def problem(problem_id):
-	problem = Problem.query.filter_by(problem_id=problem_id).first()
+	problem = Problem.query.filter_by(id=problem_id).first()
 	if problem:
 		tuser = modify_user(g.user)
 		return render_template('problem.html',
