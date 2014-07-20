@@ -82,9 +82,12 @@ def submit_info(sid, page):
 				problem = Problem.query.filter_by(id=sub.problem).first()
 				tuser = modify_user(g.user)
 				sub = parse_json(sub.results)
+				fp = open(sub.code_file, 'r')
+				code = fp.read()
 				return render_template('submit_info.html', 
 					problem = problem, 
 					sub = sub, 
+					code = code,
 					user = tuser)
 			else:
 				flash("you don't have access to this submition record.")
