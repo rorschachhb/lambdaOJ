@@ -20,6 +20,7 @@ port = 8787
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
+@app.route('/', defaults={'page': 1})
 @app.route('/oj/', defaults={'page': 1})
 @app.route('/oj/index/', defaults={'page': 1})
 @app.route('/oj/index/<int:page>')
@@ -27,8 +28,8 @@ def index(page):
 	print basedir
 	pbs = Problem.query.paginate(page, PROBLEMS_PER_PAGE)
 	for problem in pbs.items:
-		subnum = len(Submit.query.filter_by(problem=problem.id))
-		acnum = len(Submit.query.filter_by(problem=problem.id, score=1))
+		subnum = len(Submit.query.filter_by(problem=problem.id).all())
+		acnum = len(Submit.query.filter_by(problem=problem.id, score=1).all())
 		problem.acrate = 1.0 * acnum / subnum
 	tuser = modify_user(g.user)
 	return render_template("index.html",
@@ -108,7 +109,7 @@ def submit(pid = None):
 	form = SubmitForm()
 	form.problem_id.choices = [(p.id, p.title) for p in Problem.query.all()]
 	if form.validate_on_submit():
-		pid = form.problem_id.data
+		pid = int(form.problem_id.data)
 		#rename
 		filename = secure_filename(form.upload_file.data.filename)
 		filepath = basedir + '/static/users/%d/%s' % (g.user.id, filename)
@@ -171,8 +172,8 @@ def submit(pid = None):
 def problem(problem_id):
 	problem = Problem.query.filter_by(id=problem_id).first()
 	if problem:
-		subnum = len(Submit.query.filter_by(problem=problem_id))
-		acnum = len(Submit.query.filter_by(problem=problem_id, score=1))
+		subnum = len(Submit.query.filter_by(problem=problem_id).all())
+		acnum = len(Submit.query.filter_by(problem=problem_id, score=1).all())
 		problem.acrate = 1.0 * acnum / subnum
 		tuser = modify_user(g.user)
 		return render_template('problem.html',
@@ -226,18 +227,19 @@ def modify_user(tuser):
         return tuser
 
 def parse_json(results_json):
-	if results_json[0] is '{':
-		results = json.loads(results_json)
-		right = 0
-		wrong = 0
-		for i in results:
-			if results[i] [state] is not 0:
-				wrong = wrong + 1
-			else:
-				right = right + 1
-		score = 1.0 * right / (right + wrong)
-		return score, results
-	elif results_json[0] is '@':
-		return 0, 'bad syscall: ' + results_json[1:]
+	if len(results_json) > 0:
+		if results_json[0] is '{':
+			results = json.loads(results_json)
+			right = 0
+			wrong = 0
+			for i in results:
+				if results[i] [state] is not 0:
+					wrong = wrong + 1
+				else:
+					right = right + 1
+			score = 1.0 * right / (right + wrong)
+			return score, results
+		elif results_json[0] is '@':
+			return 0, 'bad syscall: ' + results_json[1:]
 	else:
-		return 0, results_json
+		return 0, None
