@@ -87,6 +87,7 @@ class Submit(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	problem = db.Column(db.Integer, db.ForeignKey('problem.id'))
 	user = db.Column(db.Integer, db.ForeignKey('user.id'))
+	score = db.Column(db.Float)
 	results = db.Column(db.Text)
 	language = db.Column(db.SmallInteger)
 	submit_time = db.Column(db.DateTime)

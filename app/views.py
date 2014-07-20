@@ -26,6 +26,10 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 def index(page):
 	print basedir
 	pbs = Problem.query.paginate(page, PROBLEMS_PER_PAGE)
+	for problem in pbs.items:
+		subnum = len(Submit.query.filter_by(problem=problem.id))
+		acnum = len(Submit.query.filter_by(problem=problem.id, score=1))
+		problem.acrate = 1.0 * acnum / subnum
 	tuser = modify_user(g.user)
 	return render_template("index.html",
 		pbs=pbs, 
@@ -81,12 +85,14 @@ def submit_info(sid, page):
 				sub.user = user_tmp.nickname
 				problem = Problem.query.filter_by(id=sub.problem).first()
 				tuser = modify_user(g.user)
-				sub = parse_json(sub.results)
+				score, sub_results = parse_json(sub.results)
 				fp = open(sub.code_file, 'r')
 				code = fp.read()
+				fp.close()
 				return render_template('submit_info.html', 
 					problem = problem, 
-					sub = sub, 
+					sub = sub_results, 
+					score = score,
 					code = code,
 					user = tuser)
 			else:
@@ -137,10 +143,12 @@ def submit(pid = None):
 		jsocket.close()
 
 		#write database
+		score, sub_results = parse_json(result_json)
 		time = datetime.now()
 		sub = Submit(problem = pid,
 			user = g.user.id,
 			language = form.language.data,
+			score = score,
 			results = result_json.decode('utf-8'),
 			submit_time = time,
 			code_file = new_filepath)
@@ -163,6 +171,9 @@ def submit(pid = None):
 def problem(problem_id):
 	problem = Problem.query.filter_by(id=problem_id).first()
 	if problem:
+		subnum = len(Submit.query.filter_by(problem=problem_id))
+		acnum = len(Submit.query.filter_by(problem=problem_id, score=1))
+		problem.acrate = 1.0 * acnum / subnum
 		tuser = modify_user(g.user)
 		return render_template('problem.html',
 			problem=problem, 
@@ -214,8 +225,19 @@ def modify_user(tuser):
                 tuser = None
         return tuser
 
-def parse_json(results):
-	if results[0] is '{':
-		return json.loads(results)
+def parse_json(results_json):
+	if results_json[0] is '{':
+		results = json.loads(results_json)
+		right = 0
+		wrong = 0
+		for i in results:
+			if results[i] [state] is not 0:
+				wrong = wrong + 1
+			else:
+				right = right + 1
+		score = 1.0 * right / (right + wrong)
+		return score, results
+	elif results_json[0] is '@':
+		return 0, 'bad syscall: ' + results_json[1:]
 	else:
-		return results
+		return 0, results_json
