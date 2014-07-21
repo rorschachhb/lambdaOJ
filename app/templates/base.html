@@ -2,12 +2,12 @@
 <html>
 
   <head>
-    {% block head %}
     <meta charset="utf-8">
-    <link href="{{ url_for('static', filename='styles/style.css') }}" type="text/css" rel="stylesheet" />
     <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}" />
+    <link href="{{ url_for('static', filename='styles/style.css') }}" type="text/css" rel="stylesheet" />
     <title>{% block title %}{% endblock %} - LambdaOJ</title>
-    {% endblock head %}
+    {% block head_add %}
+    {% endblock head_add %}
   </head>
 
   <body>

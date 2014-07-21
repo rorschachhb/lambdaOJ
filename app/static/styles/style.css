@@ -402,14 +402,15 @@ span.status-error {
 .pb-title h2 {
     margin: 10px 0px;
 }
-.pb-details pre, .sub-details pre {
-    background-color: #cccccc;
-    padding: 8px 5px 8px 12px;
-    border-radius: 6px;
-}
 .sub-title div {
     font-weight: bold;
     font-size: 0.9em;
+}
+.sub-details pre code {
+    font-family: source code pro;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 1px 2px 2px 1px rgba(0, 0, 0, 0.15);
 }
 
 

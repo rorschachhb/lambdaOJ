@@ -4,6 +4,12 @@
 Submit {{ sub.id }}
 {% endblock title %}
 
+{% block head_add %}
+<link href="{{ url_for('static', filename='styles/hl.css') }}" type="text/css" rel="stylesheet" />
+<script src="{{ url_for('static', filename='scripts/highlight.pack.js') }}"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+{% endblock head_add %}
+
 {% block navstatus %}
 <li class="now"><a href="{{ url_for('status') }}">Status</a></li>
 {% endblock navstatus %}
@@ -37,6 +43,7 @@ Submit {{ sub.id }}
   <h3>Error Message</h3>
   <div class="error-message">{{ sub.error_message }}</div>
   <h3>Code File</h3>
-  <pre class="code-file">{{ sub.code_file }}</pre>
+  <pre><code>{{ code }}</code>
+  </pre>
 </article>
 {% endblock content %}
