@@ -30,7 +30,10 @@ def index(page):
 	for problem in pbs.items:
 		subnum = len(Submit.query.filter_by(problem=problem.id).all())
 		acnum = len(Submit.query.filter_by(problem=problem.id, score=1).all())
-		problem.acrate = 1.0 * acnum / subnum
+		if subnum == 0:
+                        problem.acrate = 0.0
+                else:
+                        problem.acrate = 1.0 * acnum / subnum
 	tuser = modify_user(g.user)
 	return render_template("index.html",
 		pbs=pbs, 
@@ -174,7 +177,10 @@ def problem(problem_id):
 	if problem:
 		subnum = len(Submit.query.filter_by(problem=problem_id).all())
 		acnum = len(Submit.query.filter_by(problem=problem_id, score=1).all())
-		problem.acrate = 1.0 * acnum / subnum
+		if subnum == 0:
+                        problem.acrate = 0.0
+                else:
+                        problem.acrate = 1.0 * acnum / subnum
 		tuser = modify_user(g.user)
 		return render_template('problem.html',
 			problem=problem, 
