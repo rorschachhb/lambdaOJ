@@ -31,9 +31,9 @@ def index(page):
 		subnum = len(Submit.query.filter_by(problem=problem.id).all())
 		acnum = len(Submit.query.filter_by(problem=problem.id, score=1).all())
 		if subnum == 0:
-                        problem.acrate = 0.0
+                        problem.avg = 0.0
                 else:
-                        problem.acrate = 1.0 * acnum / subnum
+                        problem.avg = (1000 * acnum / subnum ) / 10.0
 	tuser = modify_user(g.user)
 	return render_template("index.html",
 		pbs=pbs, 
@@ -175,12 +175,6 @@ def submit(pid = None):
 def problem(problem_id):
 	problem = Problem.query.filter_by(id=problem_id).first()
 	if problem:
-		subnum = len(Submit.query.filter_by(problem=problem_id).all())
-		acnum = len(Submit.query.filter_by(problem=problem_id, score=1).all())
-		if subnum == 0:
-                        problem.acrate = 0.0
-                else:
-                        problem.acrate = 1.0 * acnum / subnum
 		tuser = modify_user(g.user)
 		return render_template('problem.html',
 			problem=problem, 

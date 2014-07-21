@@ -13,6 +13,7 @@ Problem List
   <tr>
     <th class="pid">Problem</th>
     <th class="title">Title</th>
+    <th class="avg">Average</th>
   </tr>
   {% for pb in pbs.items %}
   <tr class="{{ loop.cycle('odd', 'even') }}">
@@ -22,6 +23,7 @@ Problem List
       </span>
     </td>
     <td class="title zh">{{ pb.title }}</td>
+    <td class="avg">{{ pb.avg }} %</td>
   </tr>
   {% endfor %}
 </table>
