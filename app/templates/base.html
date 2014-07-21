@@ -55,6 +55,11 @@
 	  {% endblock navlogin %}
 	  {% endif %}
 	</ul>
+	{% if user.role == "admin" %}
+	<span class="admin">
+	  <a href="/oj/admin/">Admin</a>
+	</span>
+	{% endif %}
       </nav>
 
       <div id="content">

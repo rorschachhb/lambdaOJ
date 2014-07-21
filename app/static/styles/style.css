@@ -139,6 +139,12 @@ nav a:hover, nav li.now a {
 nav li.now {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.13) inset;
 }
+nav span.admin a {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    color: purple;
+}
 
 
 

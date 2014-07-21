@@ -17,7 +17,7 @@ lm.login_view = 'login'
 
 import views, models
 
-admin = Admin(app, name='lambdaOJ')
+admin = Admin(app, name='lambdaOJ', url='/oj/admin')
 
 path = op.join(op.dirname(__file__), 'static')
 admin.add_view(FileAdmin(path, '/static/', name='Static Files'))
