@@ -138,7 +138,7 @@ def submit(pid = None):
 				user = g.user.id,
 				language = form.language.data,
 				score = 0,
-				results = 'Pending...',
+				results = 'Pending',
 				submit_time = time,
 				code_file = new_filepath)
 			print 'sub.score is ', sub.score
@@ -147,8 +147,13 @@ def submit(pid = None):
 
 			#return something
 			s = Submit.query.filter_by(user=g.user.id, submit_time=time).first()
-			tuser = modify_user(g.user)
-			return redirect(url_for('submit_info', sid = s.id))
+			if s:
+				s.results = 'Pending...'
+				db.session.commit()
+				tuser = modify_user(g.user)
+				return redirect(url_for('submit_info', sid = s.id))
+			else:
+				return redirect(url_for('status'))
 	tuser = modify_user(g.user)
 	return render_template('submit.html',
                                form = form,
@@ -271,4 +276,4 @@ def judge_on_commit(mapper, connection, model):
 
 	#remove work dir
 	rmtree( basedir + "/static/users/%d/%s/" % (g.user.id, filehash))
-event.listen(Submit, 'before_insert', judge_on_commit)
+event.listen(Submit, 'before_update', judge_on_commit)
