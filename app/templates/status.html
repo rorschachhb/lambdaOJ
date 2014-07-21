@@ -15,8 +15,6 @@ Status
     <th class="problem">Problem</th>
     <th class="user">User</th>
     <th class="status">Result</th>
-    <th class="time">Time</th>
-    <th class="memory">Memory</th>
     <th class="language">Language</th>
   </tr>
   {% for sub in subs.items %}
@@ -45,8 +43,6 @@ Status
       <span class="status-error">{{ sub.status }}</span>
       {% endif %}
     </td>
-    <td class="time"><span class="code">{{ sub.time }}</span> s</td>
-    <td class="memory"><span class="code">{{ sub.memory }}</span> KiB</td>
     <td class="language">{{ sub.language }}</td>
   </tr>
   {% endfor %}

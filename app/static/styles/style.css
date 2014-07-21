@@ -325,10 +325,6 @@ table.list td span.id {
     text-align: center;
     width: 188px;
 }
-#subs td.time, #subs td.memory {
-    padding-right: 10px;
-    text-align: right;
-}
 #subs td.language {
     text-align: center;
     width: 110px;
