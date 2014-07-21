@@ -1,6 +1,6 @@
 from flask_wtf import Form
 from wtforms import TextField, PasswordField, BooleanField, SelectField, IntegerField, TextAreaField
-from wtforms.validators import InputRequired, Length, Email, EqualTo, Optional
+from wtforms.validators import InputRequired, Length, Email, EqualTo, Optional, NumberRange
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from flask.ext.wtf.recaptcha import RecaptchaField
 from models import *
@@ -15,7 +15,7 @@ class EditForm(Form):
 	password_confirm =  PasswordField('password_confirm', validators = [InputRequired()])
 
 class SubmitForm(Form):
-	problem_id = TextField('problem_id', validators = [InputRequired()])
+	problem_id = IntegerField('problem_id', validators = [InputRequired(), NumberRange(min=1)])
 	language = SelectField('language', choices = [(C, 'C'), (CPP, 'C++'), (PYTHON, 'Python')], validators = [InputRequired()], coerce=int)
 	upload_file = FileField('upload_file', validators=[FileRequired()])
 
