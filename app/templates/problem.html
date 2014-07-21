@@ -20,6 +20,10 @@ Problem {{ problem.id }}
   </div>
 </article>
 
+<div class="pb-submit">
+  <a href="{{ url_for('submit', pid = problem.id) }}">Submit</a>
+</div>
+
 <article class="pb-details">
   <h3>Description</h3>
   <div class="zh">{{ problem.description }}</div>
@@ -34,8 +38,4 @@ Problem {{ problem.id }}
   <h3>Hint</h3>
   <div class="zh">{{ problem.hint }}</div>
 </article>
-
-<div class="pb-submit">
-  <a href="{{ url_for('submit', pid = problem.id) }}">Submit</a>
-</div>
 {% endblock content %}

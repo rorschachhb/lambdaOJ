@@ -412,18 +412,18 @@ span.status-error {
 
 .pb-submit {
     text-align: center;
-    margin-top: 30px;
+    margin-top: 24px;
 }
 .pb-submit a {
     color: #ffffff;
     background-color: #0000ff;
-    background: linear-gradient(#4040ff, #10108b);
+    background: linear-gradient(#6060ff, #18188b);
     font-size: 1.1em;
     text-decoration: none;
     text-shadow: 1px 1px 2px #000000;
     padding: 6px 10px;
-    border-radius: 6px;
-    box-shadow: 1px 1px 0px #10108b;
+    border-radius: 8px;
+    box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.15);
 }
 .pb-submit a:hover {
     text-shadow: 0px 0px 0px #000000;
