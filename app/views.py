@@ -10,6 +10,7 @@ import hashlib
 import json
 import socket
 from shutil import rmtree
+from sqlalchemy import event
 
 
 PROBLEMS_PER_PAGE = 10
@@ -131,42 +132,19 @@ def submit(pid = None):
 			new_filepath = basedir + '/static/users/%d/%s%s' % (g.user.id, datetime.now(), '_' + filehash + '_' + filename)
 			os.rename(filepath, new_filepath)
 
-			if not os.path.exists(basedir + "/static/users/%d/%s" % (g.user.id, filehash)):
-				os.mkdir(basedir + "/static/users/%d/%s" % (g.user.id, filehash))
-
-			#request
-			request = {
-				"code_path": new_filepath,
-				"lang_flag": form.language.data,
-				"work_dir": basedir + "/static/users/%d/%s/" % (g.user.id, filehash),
-				"test_dir": basedir + "/statics/problems/%d/data/" % (pid),
-				"test_sample_num": 1,
-				"time_limit": p.time_limit,
-				"mem_limit": p.memory_limit
-			}
-			request_json = json.dumps(request)
-
-			#connect socket
-			jsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-			jsocket.connect((host, port))
-			jsocket.send(request_json)
-			result_json = jsocket.recv(1024)
-			jsocket.close()
-
 			#write database
-			score, sub_results = parse_json(result_json)
 			time = datetime.now()
 			sub = Submit(problem = pid,
 				user = g.user.id,
 				language = form.language.data,
-				score = score,
-				results = result_json.decode('utf-8'),
+				score = 0,
+				results = 'Pending...',
 				submit_time = time,
 				code_file = new_filepath)
+			print 'sub.score is ', sub.score
 			db.session.add(sub)
 			db.session.commit()
 
-			rmtree( basedir + "/static/users/%d/%s/" % (g.user.id, filehash))
 			#return something
 			s = Submit.query.filter_by(user=g.user.id, submit_time=time).first()
 			tuser = modify_user(g.user)
@@ -248,5 +226,49 @@ def parse_json(results_json):
 			return score, results
 		elif results_json[0] is '@':
 			return 0, 'bad syscall: ' + results_json[1:]
+		else:
+			return 0, None
 	else:
 		return 0, None
+
+def judge_on_commit(mapper, connection, model):
+	#create work dir
+	filepath = model.code_file
+	hmd5 = hashlib.md5()
+	fp = open(filepath,"rb")
+	hmd5.update(fp.read())
+	filehash = hmd5.hexdigest()
+	user_id = model.user
+	if not os.path.exists(basedir + "/static/users/%d/%s" % (user_id, filehash)):
+		os.mkdir(basedir + "/static/users/%d/%s" % (user_id, filehash))
+	#request
+	pid = model.problem
+	p = Problem.query.get(pid)
+	request = []
+	for i in range(1, p.sample_num + 1):
+		request.append({
+			"code_path": model.code_file,
+			"lang_flag": model.language,
+			"work_dir": basedir + "/static/users/%d/%s/" % (user_id, filehash),
+			"test_dir": basedir + "/statics/problems/%d/data/" % (pid),
+			"test_sample_num": p.sample_num,
+			"time_limit": p.time_limit,
+			"mem_limit": p.memory_limit
+		})
+	request_json = json.dumps(request)
+
+	#connect socket
+	jsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	jsocket.connect((host, port))
+	jsocket.send(request_json)
+	result_json = jsocket.recv(1024)
+	jsocket.close()
+
+	#write database
+	score, sub_results = parse_json(result_json)
+	model.score = score
+	model.results = result_json.decode('utf-8')
+
+	#remove work dir
+	rmtree( basedir + "/static/users/%d/%s/" % (g.user.id, filehash))
+event.listen(Submit, 'before_insert', judge_on_commit)
