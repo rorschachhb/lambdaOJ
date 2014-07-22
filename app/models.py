@@ -22,16 +22,18 @@ RUNTIME_ERROR = 4
 COMPILE_ERROR = 5
 BANNED_SYSCALL = 6
 ACCEPTED = 7
+OUTPUT_LIMIT_EXCEEDED = 8
 
-results = {
+oj_states = {
 	PENDING: 'Pending...',
-	TIME_LIMIT_EXCEEDED: 'Timeout',
-	MEM_LIMIT_EXCEEDED: 'Memory Exceeded',
+	TIME_LIMIT_EXCEEDED: 'Time Limit Exceeded',
+	MEM_LIMIT_EXCEEDED: 'Memory Limit Exceeded',
 	WRONG_ANSWER: 'Wrong Answer',
 	RUNTIME_ERROR: 'Runtime Error',
 	COMPILE_ERROR: 'Compilation Error',
 	BANNED_SYSCALL: 'Banned Syscall',
-	ACCEPTED: 'Accepted'
+	ACCEPTED: 'Accepted',
+	OUTPUT_LIMIT_EXCEEDED: 'Output Limit Exceeded'
 }
 
 C = 0

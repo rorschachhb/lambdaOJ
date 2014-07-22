@@ -98,7 +98,8 @@ def submit_info(sid, page):
 				fp.close()
 				return render_template('submit_info.html', 
 					problem = problem, 
-					sub = sub_results, 
+					sub = sub,
+					sub_results = sub_results, 
 					score = score,
 					code = code,
 					user = tuser)
@@ -222,17 +223,18 @@ def parse_json(results_json):
 			results = json.loads(results_json)
 			right = 0
 			wrong = 0
-			for i in results:
-				if results[i] [state] is not 0:
+			for r in results:
+				if r.state is not 0:
 					wrong = wrong + 1
 				else:
 					right = right + 1
+				r.state = oj_states[r.state]
 			score = 1.0 * right / (right + wrong)
 			return score, results
 		elif results_json[0] is '@':
 			return 0, 'bad syscall: ' + results_json[1:]
 		else:
-			return 0, None
+			return 0, results_json
 	else:
 		return 0, None
 
@@ -252,6 +254,7 @@ def judge_on_commit(mapper, connection, model):
 	request = []
 	for i in range(1, p.sample_num + 1):
 		request.append({
+			"submit_id": model.id,
 			"code_path": model.code_file,
 			"lang_flag": model.language,
 			"work_dir": basedir + "/static/users/%d/%s/" % (user_id, filehash),
