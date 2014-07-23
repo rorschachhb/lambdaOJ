@@ -11,6 +11,7 @@ import json
 import socket
 from shutil import rmtree
 from sqlalchemy import event
+from app import validate_code
 
 
 PROBLEMS_PER_PAGE = 10
@@ -115,6 +116,9 @@ def submit_info(sid, page):
 def submit(pid = None):
 	form = SubmitForm()
 	form.problem_id.choices = [(p.id, p.title) for p in Problem.query.all()]
+	vimg, vstr = validate_code.create_validate_code(font_type="app/static/fonts/WishfulWaves.ttf")
+	form.vimg = vimg
+	form.vstr = vstr
 	if form.validate_on_submit():
 		pid = form.problem_id.data
 		p = Problem.query.get(pid)

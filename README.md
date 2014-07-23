@@ -22,7 +22,33 @@ sudo pip install uwsgi
 
 ## Installation
 
-First, `cd` into the `lambdaOJ` directory,
+First, install build requirements,
+```
+sudo apt-get build-dep python-imaging
+sudo apt-get install python-dev
+```
+
+For Ubuntu users, make sure that PIL's setup.py can find JPEG/ZLIB, by creating find-able links to the libraries,
+
+for Ubuntu x64:
+```
+sudo ln -s /usr/lib/i386-linux-gnu/libfreetype.so /usr/lib/
+
+sudo ln -s /usr/lib/i386-linux-gnu/libz.so /usr/lib/
+
+sudo ln -s /usr/lib/i386-linux-gnu/libjpeg.so /usr/lib/
+```
+
+for Ubuntu x86:
+```
+sudo ln -s /usr/lib/x86_64-linux-gnu/libfreetype.so /usr/lib/
+
+sudo ln -s /usr/lib/x86_64-linux-gnu/libz.so /usr/lib/
+
+sudo ln -s /usr/lib/x86_64-linux-gnu/libjpeg.so /usr/lib/
+```
+
+ Second, `cd` into the `lambdaOJ` directory,
 create and activate virtual environment:
 
 ```
