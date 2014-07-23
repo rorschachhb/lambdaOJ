@@ -9,4 +9,5 @@ app.db
 db_repository/
 app/static/users/*
 app/static/problems/*
+app/static/tmp/*
 add_*.py

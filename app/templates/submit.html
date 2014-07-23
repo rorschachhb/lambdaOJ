@@ -45,7 +45,16 @@ Submit
     </div>
 
     <div>
-      {{ form.vimg }}
+      <lable for="validate_code" class="form-title">Validate Code :</lable>
+      {{ form.validate_code }}
+      {% for error in form.errors.validate_code %}
+      <p class="form-error">[{{ error }}]</p>
+      {% endfor %}
+    </div>
+
+    <div>
+      <lable for="validate_code" class="form-title">_</lable>
+      <img src="{{ url_for('static', filename='tmp/%s.gif' % (validate_img)) }}" alt="Validate Code" />
     </div>
 
     <div>

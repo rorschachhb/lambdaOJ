@@ -117,9 +117,13 @@ def submit(pid = None):
 	form = SubmitForm()
 	form.problem_id.choices = [(p.id, p.title) for p in Problem.query.all()]
 	vimg, vstr = validate_code.create_validate_code(font_type="app/static/fonts/WishfulWaves.ttf")
-	form.vimg = vimg
-	form.vstr = vstr
+	form.validate_code_ans = vstr
+	hmd5 = hashlib.md5()
+	hmd5.update(vstr)
+	vhash = hmd5.hexdigest()
+	vimg.save(basedir + '/static/tmp/%s.gif' % (vhash), "GIF")
 	if form.validate_on_submit():
+		os.remove(basedir + '/static/tmp/%s.gif' % (vhash))
 		pid = form.problem_id.data
 		p = Problem.query.get(pid)
 		if p is None:
@@ -160,8 +164,12 @@ def submit(pid = None):
 			else:
 				return redirect(url_for('status'))
 	tuser = modify_user(g.user)
+	# response = app.make_response(validate_img)
+	# response.headers['Content-Type'] = 'image/GIF'  
+	# return response
 	return render_template('submit.html',
                                form = form,
+                               validate_img = vhash,
                                pid = pid, 
                                user = tuser)
 
