@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, session, url_for, request, g 
 from flask.ext.login import login_user, logout_user, current_user, login_required, login_fresh, confirm_login, fresh_login_required
-from app import app, db, lm
+from app import app, db, lm, rds
 from forms import LoginForm, EditForm, SubmitForm, SignupForm, PostForm
 from models import *
 from datetime import datetime, timedelta
@@ -72,8 +72,7 @@ def status(page):
 		s.language = languages[s.language]
 		user_tmp = User.query.filter_by(id=s.user).first()
 		s.user = user_tmp.nickname
-		score, sub_results = parse_json(s.results)
-		s.score = score
+		s.status = rds.hget('lambda:%d:head' % (s.id), 'state')
 	tuser = modify_user(g.user)
 	return render_template('status.html', 
 		subs = subs, 
@@ -87,16 +86,23 @@ def submit_info(sid, page):
 		sub = Submit.query.filter_by(id=sid).first()
 		if sub:
 			user = User.query.filter_by(id=sub.user).first()
-			if user.id == g.user.id:
+			if ( user.id == g.user.id ) or ( g.user.role is ROLE_ADMIN ):
 				sub.language = languages[sub.language]
-				user_tmp = User.query.filter_by(id=sub.user).first()
-				sub.user = user_tmp.nickname
+				sub.user = user.nickname
 				problem = Problem.query.filter_by(id=sub.problem).first()
 				tuser = modify_user(g.user)
-				score, sub_results = parse_json(sub.results)
 				fp = open(sub.code_file, 'r')
 				code = fp.read()
 				fp.close()
+				status = rds.hget('lambda:%d:head' % (sub.id), 'state')
+				if status is 'Pending' or status is 'Compilation Error':
+					score = 0
+					sub_results = status
+				else:
+					score = float(status)
+					sub_results = []
+					for i in range(0, problem.sample_num):
+						sub_results.append(rds.hgetall('lambda:%d:result:%d' % (sub.id, i)))
 				return render_template('submit_info.html', 
 					problem = problem, 
 					sub = sub,
@@ -146,27 +152,15 @@ def submit(pid = None):
 			sub = Submit(problem = pid,
 				user = g.user.id,
 				language = form.language.data,
-				score = 0,
-				results = 'Pending',
 				submit_time = time,
 				code_file = new_filepath)
-			print 'sub.score is ', sub.score
 			db.session.add(sub)
 			db.session.commit()
 
 			#return something
 			s = Submit.query.filter_by(user=g.user.id, submit_time=time).first()
-			if s:
-				s.results = 'Pending...'
-				db.session.commit()
-				tuser = modify_user(g.user)
-				return redirect(url_for('submit_info', sid = s.id))
-			else:
-				return redirect(url_for('status'))
+			return redirect(url_for('problem', problem_id = pid))
 	tuser = modify_user(g.user)
-	# response = app.make_response(validate_img)
-	# response.headers['Content-Type'] = 'image/GIF'  
-	# return response
 	return render_template('submit.html',
                                form = form,
                                validate_img = vhash,
@@ -281,14 +275,8 @@ def judge_on_commit(mapper, connection, model):
 	jsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	jsocket.connect((host, port))
 	jsocket.send(request_json)
-	result_json = jsocket.recv(1024)
 	jsocket.close()
 
-	#write database
-	score, sub_results = parse_json(result_json)
-	model.score = score
-	model.results = result_json.decode('utf-8')
-
 	#remove work dir
-	rmtree( basedir + "/static/users/%d/%s/" % (g.user.id, filehash))
-event.listen(Submit, 'before_update', judge_on_commit)
+	#rmtree( basedir + "/static/users/%d/%s/" % (g.user.id, filehash))
+event.listen(Submit, 'after_insert', judge_on_commit)

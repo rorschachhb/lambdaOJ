@@ -5,6 +5,7 @@ from flask.ext.admin import Admin, BaseView, expose
 from flask.ext.admin.contrib.sqla import ModelView
 from flask.ext.admin.contrib.fileadmin import FileAdmin
 import os.path as op
+import redis
 
 app = Flask(__name__, static_url_path='/oj/static')
 app.config.from_object('config')
@@ -14,6 +15,8 @@ db = SQLAlchemy(app)
 lm = LoginManager()
 lm.init_app(app)
 lm.login_view = 'login'
+
+rds = redis.Redis(host='127.0.0.1', port=6379, db=0)
 
 import views, models
 
