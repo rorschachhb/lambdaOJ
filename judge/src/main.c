@@ -5,6 +5,11 @@
 #define PORT 8787
 #define MAX_JSON_REQ_SIZE 4096
 
+redisReply* compiler[PY+1] ; //
+redisReply* execute[PY+1] ;
+redisReply* compile_args[PY+1] ;
+redisReply* execute_args[PY+1] ;
+
 void reap() 
 {
     while (waitpid(-1,0,WNOHANG) > 0) ;
@@ -45,20 +50,19 @@ int main() {
 	    submit_id = cJSON_GetObjectItem(request,"submit_id")->valueint;
 	    test_num = cJSON_GetObjectItem(request,"test_sample_num")->valueint;
 	    lang_flag = cJSON_GetObjectItem(request,"lang_flag")->valueint;
-	    submit_id = cJSON_GetObjectItem(request,"submit_id")->valueint;
 	    char *code_path = cJSON_GetObjectItem(request,"code_path")->valuestring ;
 	    char *work_dir = cJSON_GetObjectItem(request,"work_dir")->valuestring ;
 	    char *test_dir = cJSON_GetObjectItem(request,"test_dir")->valuestring ;
 	    cJSON* time_limit_arr = cJSON_GetObjectItem(request,"time_limit") ;
 	    cJSON* mem_limit_arr = cJSON_GetObjectItem(request,"mem_limit") ;
-	    redisCommand(c,"HMSET lambda:%d:head state Pending", submit_id) ;
+
 	    chdir(work_dir) ;//change current working directory
+	    
 	    struct lang_config *lc ;
 	    lc = (struct lang_config*)calloc(1,sizeof(struct lang_config));
 	    set_lang_option(lc,lang_flag,code_path) ;
 	    char err_file[128] = {0} ;
 	    sprintf(err_file,"%s/err",work_dir) ;
-
 	    compile_code(lc->compile_cmd,
 			 lc->compile_args,
 			 err_file) ;
@@ -76,12 +80,13 @@ int main() {
 	        execlp("/usr/bin/rm","rm","-rf",work_dir,NULL);
 		exit(0) ;
 	    }
+
 	    char output[128] = {0} ;
 	    sprintf(output,"%s/output",work_dir) ;
 	    int i ; int ac_num = 0 ;
 	    for(i=0;i<test_num;i++) {
 		struct judge_result* jr ;
-		jr = (struct judge_result*)malloc(sizeof(struct judge_result)) ;
+		jr = (struct judge_result*)calloc(1,sizeof(struct judge_result)) ;
 		char test_in[128] = {0} ; 
 		sprintf(test_in,"%s/%d.in",test_dir,i) ;
 		char test_ans[128] = {0} ;

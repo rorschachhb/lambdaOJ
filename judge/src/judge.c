@@ -11,10 +11,10 @@ static int max_output_size = 1024;
 static char* support_language[]={"C","C++","Python2.7"};//match enum order
 char* state_string[]={"Accepted","Wrong Answer","Time Limit Exceeded","Memory Limit Exceeded","Runtime Error","Compilation Error","Banned Syscall","Output Limit Exceeded"}; //match enum
 
-redisReply* compiler[PY+1] ; //
-redisReply* execute[PY+1] ;
-redisReply* compile_args[PY+1] ;
-redisReply* execute_args[PY+1] ;
+extern redisReply* compiler[] ; //
+extern redisReply* execute[] ;
+extern redisReply* compile_args[] ;
+extern redisReply* execute_args[] ;
 
 void init_lang_config()
 {
