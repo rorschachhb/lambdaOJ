@@ -14,7 +14,7 @@ Status
     <th class="id">Submit</th>
     <th class="problem">Problem</th>
     <th class="user">User</th>
-    <th class="status">Result</th>
+    <th class="status">Rank</th>
     <th class="language">Language</th>
   </tr>
   {% for sub in subs.items %}
@@ -33,14 +33,22 @@ Status
     </td>
     <td class="user">{{ sub.user }}</td>
     <td class="status">
-      {% if sub.status == "Pending..." %}
-      <span class="status-waiting">{{ sub.status }}</span>
-      {% elif sub.status == "Accepted" %}
-      <span class="status-correct">{{ sub.status }}</span>
-      {% elif sub.status in ["Timeout", "Memory Exceeded", "Banned Syscall"] %}
-      <span class="status-warning">{{ sub.status }}</span>
+      {% if sub.status == "Pending" %}
+      <span class="status-waiting">Pending...</span>
+      {% elif sub.status == "Compilation Error" %}
+      <span class="status-worst">WORST</span>
       {% else %}
-      <span class="status-error">{{ sub.status }}</span>
+      {% if sub.status == 1 %}
+      <span class="status-cool">COOL</span>
+      {% elif sub.status >= 0.80 %}
+      <span class="status-fine">FINE</span>
+      {% elif sub.status >= 0.60 %}
+      <span class="status-safe">SAFE</span>
+      {% elif sub.status >= 0 %}
+      <span class="status-sad">SAD</span>
+      {% else %}
+      <span class="status-worst">WORST</span>
+      {% endif %}      
       {% endif %}
     </td>
     <td class="language">{{ sub.language }}</td>

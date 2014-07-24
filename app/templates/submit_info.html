@@ -20,30 +20,40 @@ Submit {{ sub.id }}
     <h2>Submit {{ sub.id }} ({{ sub.user }})</h2>
     <h3>Problem {{ problem.id }} : {{ problem.title }}</h3>
   </hgroup>
-  <div>
-    Status:&nbsp;
-    {% if sub.status == "Pending..." %}
-    <span class="status-waiting">{{ sub.status }}</span>
-    {% elif sub.status == "Accepted" %}
-    <span class="status-correct">{{ sub.status }}</span>
-    {% elif sub.status in ["Timeout", "Memory Exceeded", "Banned Syscall"] %}
-    <span class="status-warning">{{ sub.status }}</span>
-    {% else %}
-    <span class="status-error">{{ sub.status }}</span>
-    {% endif %}
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    Time:&nbsp; {{ sub.time }} s
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    Memory:&nbsp; {{ sub.memory }} KiB
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    Language:&nbsp; {{ sub.language }}
-  </div>
 </article>
+
 <article class="sub-details">
-  <h3>Error Message</h3>
-  <div class="error-message">{{ sub.error_message }}</div>
+  <h3>Status</h3>
+  {% if sub_results == "Pending" %}
+  <p>
+    <span class="status-waiting">Pending</span>
+    ...... Please refresh this page [F5]
+  </p>
+  {% elif sub_results == "Compilation Error" %}
+  <p>Compilation Error, here are the error messages:</p>
+  <pre class="error_message">{{ sub.error_message }}</pre>
+  {% elif %}
+  <table id="sps" class="list">
+    <tr>
+      <th class="sample">Sample</th>
+      <th class="state">State</th>
+      <th class="time">Time</th>
+      <th class="memory">Memory</th>
+    </tr>
+    {% for sp in sub_results %}
+    <tr>
+      <td class="sample">{{ loop.index }}</td>
+      <td class="state">{{ sp[state] }}</td>
+      <td class="time"><span class="code">{{ sp[time] }}</span> ms</td>
+      <td class="memory"><span class="code">{{ sp[memory] }}</span> KiB</td>
+    </tr>
+    {% endfor %}
+  </table>
+      
+
+  {% endif %}
+
   <h3>Code File</h3>
-  <pre><code>{{ code }}</code>
-  </pre>
+  <pre><code>{{ code }}</code></pre>
 </article>
 {% endblock content %}

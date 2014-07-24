@@ -37,7 +37,7 @@ Submit
     </div>
 
     <div>
-      <lable for="upload_file" class="form-title">Code File :</lable>
+      <lable for="upload_file" class="form-title">File :</lable>
       {{ form.upload_file }}
       {% for error in form.errors.upload_file %}
       <p class="form-error">[{{ error }}]</p>
@@ -45,16 +45,14 @@ Submit
     </div>
 
     <div>
-      <lable for="validate_code" class="form-title">Validate Code :</lable>
-      {{ form.validate_code }}
+      <lable for="validate_code" class="form-title">Captcha :</lable>
+      <span class="validate">
+	{{ form.validate_code }}
+	<img src="{{ url_for('static', filename='tmp/%s.gif' % (validate_img)) }}" alt="Validate Code" />
+      </span>
       {% for error in form.errors.validate_code %}
       <p class="form-error">[{{ error }}]</p>
       {% endfor %}
-    </div>
-
-    <div>
-      <lable for="validate_code" class="form-title">_</lable>
-      <img src="{{ url_for('static', filename='tmp/%s.gif' % (validate_img)) }}" alt="Validate Code" />
     </div>
 
     <div>

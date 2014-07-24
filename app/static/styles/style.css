@@ -237,11 +237,18 @@ form div span.submit {
 #submitform lable[for="upload_file"] {
     padding-top: 3px;
 }
+#submitform #validate_code {
+    width: 60px;
+}
+#submitform .validate img {
+    vertical-align: top;
+}
 
 
 
 table.list {
     width: 100%;
+    margin: 0px auto;
     border-spacing: 0px;
     border-radius: 6px;
     border: 1px solid #b0b0b0;
@@ -317,38 +324,46 @@ table.list td span.id {
     padding-right: 16px;
 }
 
+#subs {
+    width: 80%;
+}
 #subs td.user {
     text-align: right;
     padding-right: 16px;
 }
 #subs td.status {
     text-align: center;
-    width: 188px;
 }
 #subs td.language {
     text-align: center;
-    width: 110px;
 }
+
+#sps {
+    width: 80%;
+}
+
 
 
 span[class|=status] {
-    color: #ffffff;
-    font-size: 0.93em;
-    font-weight: bold;
-    border-radius: 4px;
-    padding: 1px 5px 2px 5px;
+
 }
 span.status-waiting {
-    background-color: blue;
+    color: blue;
 }
-span.status-correct {
-    background-color: darkgreen;
+span.status-cool {
+
 }
-span.status-warning {
-    background-color: darkorange;
+span.status-fine {
+
 }
-span.status-error {
-    background-color: darkred;
+span.status-safe {
+
+}
+span.status-sad {
+
+}
+span.status-worst {
+
 }
 
 
@@ -393,14 +408,24 @@ span.status-error {
 
 
 .pb-title, .sub-title {
-    text-align: center;
+
 }
 .pb-title h2 {
     margin: 10px 0px;
 }
-.sub-title div {
+.pb-title div.limits span {
+    color: #ffffff;
+    font-size: 0.93em;
     font-weight: bold;
-    font-size: 0.9em;
+    border-radius: 4px;
+    padding: 1px 5px 2px 5px;
+    background-color: darkgreen;
+}
+.sub-details pre.error_message {
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 1px 2px 2px 1px rgba(0, 0, 0, 0.15);
+    background-color: #f0f0f0;
 }
 .sub-details pre code {
     font-family: source code pro;
