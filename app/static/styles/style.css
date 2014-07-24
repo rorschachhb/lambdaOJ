@@ -312,9 +312,6 @@ table.list td span.id {
 #pbs .pid {
     width: 110px;
 }
-#pbs .avg {
-    width: 80px;
-}
 #pbs td.title {
     text-align: left;
     padding: 0px 20px;
