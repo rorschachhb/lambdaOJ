@@ -264,8 +264,8 @@ def judge_on_commit(mapper, connection, model):
 			"work_dir": basedir + "/users/%d/%s/" % (user_id, filehash),
 			"test_dir": basedir + "/problems/%d/data/" % (pid),
 			"test_sample_num": p.sample_num,
-			"time_limit": p.time_limit,
-			"mem_limit": p.memory_limit
+			"time_limit": [p.time_limit]*p.sample_num,
+			"mem_limit": [p.memory_limit]*p.sample_num
 		})
 	request_json = json.dumps(request)
 
