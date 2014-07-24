@@ -29,13 +29,6 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 def index(page):
 	print basedir
 	pbs = Problem.query.paginate(page, PROBLEMS_PER_PAGE)
-	for problem in pbs.items:
-		subnum = len(Submit.query.filter_by(problem=problem.id).all())
-		acnum = len(Submit.query.filter_by(problem=problem.id, score=1).all())
-		if subnum == 0:
-                        problem.avg = 0.0
-                else:
-                        problem.avg = (1000 * acnum / subnum ) / 10.0
 	tuser = modify_user(g.user)
 	return render_template("index.html",
 		pbs=pbs, 
@@ -122,44 +115,44 @@ def submit_info(sid, page):
 def submit(pid = None):
 	form = SubmitForm()
 	form.problem_id.choices = [(p.id, p.title) for p in Problem.query.all()]
-	vimg, vstr = validate_code.create_validate_code(font_type="app/static/fonts/WishfulWaves.ttf")
-	form.validate_code_ans = vstr
+	if request.method == 'POST':
+		if form.validate_on_submit():
+			pid = form.problem_id.data
+			p = Problem.query.get(pid)
+			if p is None:
+				flash("Problem %d doesn't exist!" % (pid))
+				return redirect(url_for('submit'))
+			else:
+				#rename
+				filename = secure_filename(form.upload_file.data.filename)
+				filepath = basedir + '/users/%d/%s' % (g.user.id, filename)
+				form.upload_file.data.save(filepath)
+				hmd5 = hashlib.md5()
+				fp = open(filepath,"rb")
+				hmd5.update(fp.read())
+				filehash = hmd5.hexdigest()
+				new_filepath = basedir + '/users/%d/%s%s' % (g.user.id, datetime.now(), '_' + filehash + '_' + filename)
+				os.rename(filepath, new_filepath)
+
+				#write database
+				time = datetime.now()
+				sub = Submit(problem = pid,
+					user = g.user.id,
+					language = form.language.data,
+					submit_time = time,
+					code_file = new_filepath)
+				db.session.add(sub)
+				db.session.commit()
+
+				#return something
+				s = Submit.query.filter_by(user=g.user.id, submit_time=time).first()
+				return redirect(url_for('problem', problem_id = pid))
+	vimg, vstr = validate_code.create_validate_code(font_type="app/static/fonts/OpenSans-Bold.ttf")
+	form.validate_code_ans.data = vstr
 	hmd5 = hashlib.md5()
 	hmd5.update(vstr)
 	vhash = hmd5.hexdigest()
 	vimg.save(basedir + '/static/tmp/%s.gif' % (vhash), "GIF")
-	if form.validate_on_submit():
-		os.remove(basedir + '/static/tmp/%s.gif' % (vhash))
-		pid = form.problem_id.data
-		p = Problem.query.get(pid)
-		if p is None:
-			flash("Problem %d doesn't exist!" % (pid))
-			return redirect(url_for('submit'))
-		else:
-			#rename
-			filename = secure_filename(form.upload_file.data.filename)
-			filepath = basedir + '/static/users/%d/%s' % (g.user.id, filename)
-			form.upload_file.data.save(filepath)
-			hmd5 = hashlib.md5()
-			fp = open(filepath,"rb")
-			hmd5.update(fp.read())
-			filehash = hmd5.hexdigest()
-			new_filepath = basedir + '/static/users/%d/%s%s' % (g.user.id, datetime.now(), '_' + filehash + '_' + filename)
-			os.rename(filepath, new_filepath)
-
-			#write database
-			time = datetime.now()
-			sub = Submit(problem = pid,
-				user = g.user.id,
-				language = form.language.data,
-				submit_time = time,
-				code_file = new_filepath)
-			db.session.add(sub)
-			db.session.commit()
-
-			#return something
-			s = Submit.query.filter_by(user=g.user.id, submit_time=time).first()
-			return redirect(url_for('problem', problem_id = pid))
 	tuser = modify_user(g.user)
 	return render_template('submit.html',
                                form = form,
@@ -198,7 +191,8 @@ def signup():
 			db.session.add(user)
 			db.session.commit()
 			u = User.query.filter_by(email=user.email).first()
-			os.mkdir(basedir + '/static/users/%d' % (u.id))
+			if not os.path.exists(basedir + '/users/%d' % (u.id)):
+				os.makedirs(basedir + '/users/%d' % (u.id))
 			flash('Please log in now.')
 			return redirect(url_for('login'))
 		else:
@@ -252,8 +246,8 @@ def judge_on_commit(mapper, connection, model):
 	hmd5.update(fp.read())
 	filehash = hmd5.hexdigest()
 	user_id = model.user
-	if not os.path.exists(basedir + "/static/users/%d/%s" % (user_id, filehash)):
-		os.mkdir(basedir + "/static/users/%d/%s" % (user_id, filehash))
+	if not os.path.exists(basedir + "/users/%d/%s" % (user_id, filehash)):
+		os.makedirs(basedir + "/users/%d/%s" % (user_id, filehash))
 	#request
 	pid = model.problem
 	p = Problem.query.get(pid)
@@ -263,8 +257,8 @@ def judge_on_commit(mapper, connection, model):
 			"submit_id": model.id,
 			"code_path": model.code_file,
 			"lang_flag": model.language,
-			"work_dir": basedir + "/static/users/%d/%s/" % (user_id, filehash),
-			"test_dir": basedir + "/statics/problems/%d/data/" % (pid),
+			"work_dir": basedir + "/users/%d/%s/" % (user_id, filehash),
+			"test_dir": basedir + "/problems/%d/data/" % (pid),
 			"test_sample_num": p.sample_num,
 			"time_limit": p.time_limit,
 			"mem_limit": p.memory_limit
@@ -278,5 +272,5 @@ def judge_on_commit(mapper, connection, model):
 	jsocket.close()
 
 	#remove work dir
-	#rmtree( basedir + "/static/users/%d/%s/" % (g.user.id, filehash))
+	#rmtree( basedir + "/users/%d/%s/" % (g.user.id, filehash))
 event.listen(Submit, 'after_insert', judge_on_commit)

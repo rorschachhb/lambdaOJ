@@ -9,7 +9,7 @@ venv/
 README.html
 app.db
 db_repository/
-app/static/users/*
-app/static/problems/*
+app/users/*
+app/problems/*
 app/static/tmp/*
 add_*.py
