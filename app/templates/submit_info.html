@@ -32,7 +32,7 @@ Submit {{ sub.id }}
   {% elif sub_results == "Compilation Error" %}
   <p>Compilation Error, here are the error messages:</p>
   <pre class="error_message">{{ sub.error_message }}</pre>
-  {% elif %}
+  {% else %}
   <table id="sps" class="list">
     <tr>
       <th class="sample">Sample</th>

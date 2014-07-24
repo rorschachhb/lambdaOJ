@@ -88,10 +88,11 @@ def submit_info(sid, page):
 				code = fp.read()
 				fp.close()
 				status = rds.hget('lambda:%d:head' % (sub.id), 'state')
-				if status is 'Pending' or status is 'Compilation Error':
+				if status == 'Pending' or status == 'Compilation Error':
 					score = 0
 					sub_results = status
 				else:
+					print status
 					score = float(status)
 					sub_results = []
 					for i in range(0, problem.sample_num):
@@ -146,7 +147,7 @@ def submit(pid = None):
 
 				#return something
 				s = Submit.query.filter_by(user=g.user.id, submit_time=time).first()
-				return redirect(url_for('problem', problem_id = pid))
+				return redirect(url_for('submit_info', sid = s.id))
 	vimg, vstr = validate_code.create_validate_code(font_type="app/static/fonts/OpenSans-Bold.ttf")
 	form.validate_code_ans.data = vstr
 	hmd5 = hashlib.md5()
@@ -239,6 +240,9 @@ def parse_json(results_json):
 		return 0, None
 
 def judge_on_commit(mapper, connection, model):
+	#write redis
+	rds.hset('lambda:%d:head' % (model.id), 'state', 'Pending')
+
 	#create work dir
 	filepath = model.code_file
 	hmd5 = hashlib.md5()
