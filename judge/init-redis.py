@@ -1,4 +1,4 @@
-#!venv/bin/python
+#!/usr/bin/env python
 
 import redis
 r = redis.Redis('localhost',6379,db=0)
