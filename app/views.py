@@ -210,6 +210,14 @@ def signup():
 	return render_template('signup.html',
                                form = form, user = tuser)
 
+@app.errorhandler(404)
+def page_not_found(e):
+	return render_template('404.html'), 404
+
+@app.errorhandler(413)
+def request_entity_too_large(e):
+	return render_template('413.html'), 413
+
 @app.before_request
 def before_request():
 	g.user = current_user
