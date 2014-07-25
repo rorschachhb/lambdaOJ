@@ -31,7 +31,7 @@ Submit {{ sub.id }}
   </p>
   {% elif sub_results == "Compilation Error" %}
   <p>Compilation Error, here are the error messages:</p>
-  <pre class="error_message">{{ sub.error_message }}</pre>
+  <pre class="error_message">{{ error_message }}</pre>
   {% else %}
   <table id="sps" class="list">
     <tr>
@@ -43,9 +43,9 @@ Submit {{ sub.id }}
     {% for sp in sub_results %}
     <tr>
       <td class="sample">{{ loop.index }}</td>
-      <td class="state">{{ sp[state] }}</td>
-      <td class="time"><span class="code">{{ sp[time] }}</span> ms</td>
-      <td class="memory"><span class="code">{{ sp[memory] }}</span> KiB</td>
+      <td class="state">{{ sp['state'] }}</td>
+      <td class="time"><span class="code">{{ sp['time'] }}</span> ms</td>
+      <td class="memory"><span class="code">{{ sp['memory'] }}</span> KiB</td>
     </tr>
     {% endfor %}
   </table>

@@ -87,13 +87,14 @@ def submit_info(sid, page):
 				fp = open(sub.code_file, 'r')
 				code = fp.read()
 				fp.close()
+                                error_message = None
 				status = rds.hget('lambda:%d:head' % (sub.id), 'state')
-				if status == 'Pending' or status == 'Compilation Error':
-					score = 0
+				if status == 'Pending':
 					sub_results = status
+                                elif status == 'Compilation Error':
+                                        sub_results = status
+                                        error_message = rds.hget('lambda:%d:head' % (sub.id), 'err_message')
 				else:
-					print status
-					score = float(status)
 					sub_results = []
 					for i in range(0, problem.sample_num):
 						sub_results.append(rds.hgetall('lambda:%d:result:%d' % (sub.id, i)))
@@ -101,7 +102,7 @@ def submit_info(sid, page):
 					problem = problem, 
 					sub = sub,
 					sub_results = sub_results, 
-					score = score,
+                                        error_message = error_message,
 					code = code,
 					user = tuser)
 			else:
@@ -255,19 +256,15 @@ def judge_on_commit(mapper, connection, model):
 	#request
 	pid = model.problem
 	p = Problem.query.get(pid)
-	request = []
-	for i in range(1, p.sample_num + 1):
-		request.append({
-			"submit_id": model.id,
-			"code_path": model.code_file,
-			"lang_flag": model.language,
-			"work_dir": basedir + "/users/%d/%s/" % (user_id, filehash),
-			"test_dir": basedir + "/problems/%d/data/" % (pid),
-			"test_sample_num": p.sample_num,
-			"time_limit": [p.time_limit]*p.sample_num,
-			"mem_limit": [p.memory_limit]*p.sample_num
-		})
-	request_json = json.dumps(request)
+        json_req = {"submit_id": model.id,
+                    "code_path": model.code_file,
+                    "test_sample_num": p.sample_num,
+                    "lang_flag": model.language,
+                    "work_dir": basedir + "/users/%d/%s/" % (user_id, filehash),
+                    "test_dir": basedir + "/problems/%d/data/" % (pid),
+                    "time_limit": [p.time_limit]*p.sample_num,
+                    "mem_limit": [p.memory_limit]*p.sample_num}
+	request_json = json.dumps(json_req)
 
 	#connect socket
 	jsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

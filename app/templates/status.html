@@ -38,7 +38,7 @@ Status
       {% elif sub.status == "Compilation Error" %}
       <span class="status-worst">WORST</span>
       {% else %}
-      {% if sub.status == 1 %}
+      {% if sub.status >= 1.0 %}
       <span class="status-cool">COOL</span>
       {% elif sub.status >= 0.80 %}
       <span class="status-fine">FINE</span>
