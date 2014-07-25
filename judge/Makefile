@@ -1,8 +1,9 @@
-lambdajudge: src/lambdajudge
-	cp src/lambdajudge .
-src/lambdajudge:
+.PHONY: lambdajudge clean
+
+lambdajudge:
 	make -C src
+	mv src/lambdajudge .
 
 clean:
 	make -C src clean
-	rm lambdajudge
+	rm -f lambdajudge

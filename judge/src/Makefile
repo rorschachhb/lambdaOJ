@@ -9,4 +9,4 @@ cJSON.o : cJSON.h cJSON.c
 main.o : main.c csapp.h judge.h cJSON.h
 	gcc -c main.c
 clean : 
-	rm ./*.o lambdajudge
+	rm -f *.o lambdajudge
