@@ -3,7 +3,6 @@ from flask.ext.login import login_user, logout_user, current_user, login_require
 from app import app, db, lm, rds
 from forms import LoginForm, EditForm, SubmitForm, SignupForm, PostForm
 from models import *
-from datetime import datetime, timedelta
 from werkzeug import secure_filename
 import os
 import hashlib
@@ -12,6 +11,7 @@ import socket
 from shutil import rmtree
 from sqlalchemy import event
 from app import validate_code
+from time import time
 
 
 PROBLEMS_PER_PAGE = 10
@@ -60,12 +60,16 @@ def logout():
 @app.route('/oj/status/<int:page>')
 @login_required
 def status(page):
-	subs = Submit.query.paginate(page, SUBS_PER_PAGE)
+	subs = Submit.query.order_by(Submit.submit_time).paginate(page, SUBS_PER_PAGE)
 	for s in subs.items:
 		s.language = languages[s.language]
 		user_tmp = User.query.filter_by(id=s.user).first()
 		s.user = user_tmp.nickname
-		s.status = rds.hget('lambda:%d:head' % (s.id), 'state')
+		status_tmp = rds.hget('lambda:%d:head' % (s.id), 'state')
+		if status_tmp is None:
+			s.status = 'Pending'
+		else:
+			s.status = status_tmp
 	tuser = modify_user(g.user)
 	return render_template('status.html', 
 		subs = subs, 
@@ -87,13 +91,15 @@ def submit_info(sid, page):
 				fp = open(sub.code_file, 'r')
 				code = fp.read()
 				fp.close()
-                                error_message = None
+				error_message = None
 				status = rds.hget('lambda:%d:head' % (sub.id), 'state')
+				if status is None:
+					status = 'Pending'
 				if status == 'Pending':
 					sub_results = status
-                                elif status == 'Compilation Error':
-                                        sub_results = status
-                                        error_message = rds.hget('lambda:%d:head' % (sub.id), 'err_message')
+				elif status == 'Compilation Error':
+					sub_results = status
+					error_message = rds.hget('lambda:%d:head' % (sub.id), 'err_message')
 				else:
 					sub_results = []
 					for i in range(0, problem.sample_num):
@@ -102,10 +108,14 @@ def submit_info(sid, page):
 					problem = problem, 
 					sub = sub,
 					sub_results = sub_results, 
-                                        error_message = error_message,
+					error_message = error_message,
 					code = code,
 					user = tuser)
 	return redirect(url_for('status', page=page))
+
+ALLOWED_EXTENSIONS = set(['c', 'C', 'cpp', 'CPP', 'py'])
+def allowed_file(filename):
+	return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 @app.route('/oj/submit/', methods = ['GET', 'POST'])
 @app.route('/oj/submit/<int:pid>', methods = ['GET', 'POST'])
@@ -114,6 +124,8 @@ def submit(pid = None):
 	form = SubmitForm()
 	form.problem_id.choices = [(p.id, p.title) for p in Problem.query.all()]
 	if request.method == 'POST':
+		for i in form:
+			print i.data
 		if form.validate_on_submit():
 			pid = form.problem_id.data
 			p = Problem.query.get(pid)
@@ -129,21 +141,21 @@ def submit(pid = None):
 				fp = open(filepath,"rb")
 				hmd5.update(fp.read())
 				filehash = hmd5.hexdigest()
-				new_filepath = basedir + '/users/%d/%s%s' % (g.user.id, datetime.now(), '_' + filehash + '_' + filename)
+				new_filepath = basedir + '/users/%d/%s%s' % (g.user.id, datetime.now().strftime('%Y-%m-%d-%H:%M:%S'), '_' + filehash + '_' + filename)
 				os.rename(filepath, new_filepath)
 
 				#write database
-				time = datetime.now()
+				timenow = -1.0 * time()
 				sub = Submit(problem = pid,
 					user = g.user.id,
 					language = form.language.data,
-					submit_time = time,
+					submit_time = timenow,
 					code_file = new_filepath)
 				db.session.add(sub)
 				db.session.commit()
 
 				#return something
-				s = Submit.query.filter_by(user=g.user.id, submit_time=time).first()
+				s = Submit.query.filter_by(user=g.user.id, submit_time=timenow).first()
 				return redirect(url_for('submit_info', sid = s.id))
 	vimg, vstr = validate_code.create_validate_code(font_type="app/static/fonts/SourceCodePro-Bold.otf")
 	form.validate_code_ans.data = vstr
@@ -235,7 +247,7 @@ def parse_json(results_json):
 	else:
 		return 0, None
 
-def judge_on_commit(mapper, connection, model):
+def judge_on_commit(model):
 	#write redis
 	rds.hset('lambda:%d:head' % (model.id), 'state', 'Pending')
 
@@ -251,14 +263,14 @@ def judge_on_commit(mapper, connection, model):
 	#request
 	pid = model.problem
 	p = Problem.query.get(pid)
-        json_req = {"submit_id": model.id,
-                    "code_path": model.code_file,
-                    "test_sample_num": p.sample_num,
-                    "lang_flag": model.language,
-                    "work_dir": basedir + "/users/%d/%s/" % (user_id, filehash),
-                    "test_dir": basedir + "/problems/%d/data/" % (pid),
-                    "time_limit": [p.time_limit]*p.sample_num,
-                    "mem_limit": [p.memory_limit]*p.sample_num}
+	json_req = {"submit_id": model.id,
+	            "code_path": model.code_file,
+	            "test_sample_num": p.sample_num,
+	            "lang_flag": model.language,
+	            "work_dir": basedir + "/users/%d/%s/" % (user_id, filehash),
+	            "test_dir": basedir + "/problems/%d/data/" % (pid),
+	            "time_limit": [p.time_limit]*p.sample_num,
+	            "mem_limit": [p.memory_limit]*p.sample_num}
 	request_json = json.dumps(json_req)
 
 	#connect socket
@@ -269,4 +281,4 @@ def judge_on_commit(mapper, connection, model):
 
 	#remove work dir
 	#rmtree( basedir + "/users/%d/%s/" % (g.user.id, filehash))
-event.listen(Submit, 'after_insert', judge_on_commit)
+#event.listen(Submit, 'after_insert', judge_on_commit)

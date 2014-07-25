@@ -9,6 +9,7 @@ import redis
 
 app = Flask(__name__, static_url_path='/oj/static')
 app.config.from_object('config')
+app.config['MAX_CONTENT_LENGTH'] = 100 * 1024
 
 db = SQLAlchemy(app)
 
