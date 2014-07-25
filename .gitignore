@@ -13,3 +13,4 @@ app/users/*
 app/problems/*
 app/static/tmp/*
 add_*.py
+dump.rdb

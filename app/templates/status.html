@@ -14,43 +14,39 @@ Status
     <th class="id">Submit</th>
     <th class="problem">Problem</th>
     <th class="user">User</th>
-    <th class="status">Rank</th>
     <th class="language">Language</th>
   </tr>
   {% for sub in subs.items %}
   <tr class="{{ loop.cycle('odd', 'even') }}">
     <td class="id">
-      <span class="id">
-	<a href="{{ url_for('submit_info', 
-		 sid =  sub.id, page = subs.page) }}">{{ sub.id }}</a>
-      </span>
+      <a href="{{ url_for('submit_info', 
+	       sid =  sub.id, page = subs.page) }}">
+	<span class="id">
+	{{ sub.id }}
+	</span>
+
+	{% if sub.status == "Pending" %}
+	<span class="status-waiting">-</span>
+	{% elif sub.status == "Compilation Error" %}
+	<span class="status-worst">WORST</span>
+	{% elif sub.status|float() == 1.00 %}
+	<span class="status-cool">COOL</span>
+	{% elif sub.status|float() >= 0.80 %}
+	<span class="status-fine">FINE</span>
+	{% elif sub.status|float() >= 0.60 %}
+	<span class="status-safe">SAFE</span>
+	{% elif sub.status|float() > 0.00 %}
+	<span class="status-sad">SAD</span>
+	{% else %}
+	<span class="status-worst">WORST</span>
+	{% endif %}
+      </a>
     </td>
     <td class="problem">
-      <span class="id">
-	<a href="{{ url_for('problem',
-		 problem_id = sub.problem) }}">{{ sub.problem }}</a>
-      </span>
+      <a class="id" href="{{ url_for('problem',
+			  problem_id = sub.problem) }}">{{ sub.problem }}</a>
     </td>
     <td class="user">{{ sub.user }}</td>
-    <td class="status">
-      {% if sub.status == "Pending" %}
-      <span class="status-waiting">Pending...</span>
-      {% elif sub.status == "Compilation Error" %}
-      <span class="status-worst">WORST</span>
-      {% else %}
-      {% if sub.status >= 1.0 %}
-      <span class="status-cool">COOL</span>
-      {% elif sub.status >= 0.80 %}
-      <span class="status-fine">FINE</span>
-      {% elif sub.status >= 0.60 %}
-      <span class="status-safe">SAFE</span>
-      {% elif sub.status >= 0 %}
-      <span class="status-sad">SAD</span>
-      {% else %}
-      <span class="status-worst">WORST</span>
-      {% endif %}      
-      {% endif %}
-    </td>
     <td class="language">{{ sub.language }}</td>
   </tr>
   {% endfor %}

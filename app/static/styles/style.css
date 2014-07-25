@@ -247,7 +247,6 @@ form div span.submit {
 
 
 table.list {
-    width: 100%;
     margin: 0px auto;
     border-spacing: 0px;
     border-radius: 6px;
@@ -296,19 +295,18 @@ table.list tr.even {
 table.list a {
     color: blue;
     text-decoration: none;
+    display: block;
+    text-align: center;
 }
 table.list a:hover {
-    color: navy;
+    color: darkmagenta;
     text-decoration: underline;
 }
 
-table.list td span.id {
-    display: block;
+
+#pbs {
     width: 80%;
-    text-align: right;
 }
-
-
 #pbs .pid {
     width: 110px;
 }
@@ -322,46 +320,99 @@ table.list td span.id {
 }
 
 #subs {
-    width: 80%;
+    width: 61.8%;
+}
+#subs td.id a {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+}
+#subs td.id a span.id {
+    float: left;
+    display: block;
+    width: 42%;
+    text-align: right;
+}
+#subs td.id a:hover span.id {
+    text-decoration: underline;
+}
+
+#subs td.id a span[class|=status] {
+    font-weight: bold;
+    font-style: oblique;
+    color: #ffffff;
+    padding: 1px 6px 1px 5px;
+    border-radius: 5px;
+    box-shadow: 1px 2px 1px 0px rgba(0, 0, 0, 0.1);
+}
+#subs td.id a span.status-waiting {
+    color: blue;
+}
+#subs td.id a span.status-cool {
+    color: #585858;
+    background-color: rgb(250, 245, 50);
+    background: linear-gradient(rgb(250, 245, 50),
+				rgb(255, 250, 230));
+}
+#subs td.id a span.status-fine {
+    color: #585858;
+    background-color: rgb(200, 200, 190);
+    background: linear-gradient(rgb(200, 200, 190),
+				rgb(243, 243, 238));
+}
+#subs td.id a span.status-safe {
+    color: #585858;
+    background-color: rgb(128, 255, 73);
+    background: linear-gradient(rgb(128, 255, 73),
+				rgb(220, 255, 225));
+}
+#subs td.id a span.status-sad {
+    color: #f0f0f0;
+    background-color: rgb(6, 150, 220);
+    background: linear-gradient(rgb(6, 150, 220),
+				rgb(146, 253, 255));
+}
+#subs td.id a span.status-worst {
+    color: #f0f0f0;
+    background-color: rgb(200, 48, 240);
+    background: linear-gradient(rgb(200, 48, 240),
+				rgb(220, 185, 244));
+}
+
+#subs .problem {
+    width: 110px;
 }
 #subs td.user {
+    width: 150px;
     text-align: right;
     padding-right: 16px;
 }
-#subs td.status {
-    text-align: center;
-}
 #subs td.language {
+    width: 120px;
     text-align: center;
 }
 
 #sps {
-    width: 80%;
+    width: 66%;
+}
+#sps .id {
+    width: 96px;
+    text-align: center;
+}
+#sps td.status {
+    text-align: center;
+}
+#sps td.time {
+    width: 110px;
+    text-align: right;
+    padding-right: 10px;
+}
+#sps td.memory {
+    width: 120px;
+    text-align: right;
+    padding-right: 10px;
 }
 
-
-
-span[class|=status] {
-
-}
-span.status-waiting {
-    color: blue;
-}
-span.status-cool {
-
-}
-span.status-fine {
-
-}
-span.status-safe {
-
-}
-span.status-sad {
-
-}
-span.status-worst {
-
-}
 
 
 .pagenav {
@@ -404,37 +455,29 @@ span.status-worst {
 }
 
 
-.pb-title, .sub-title {
-
-}
-.pb-title h2 {
-    margin: 10px 0px;
+.pb-title {
+    text-align: center;
 }
 .pb-title div.limits span {
     color: #ffffff;
     font-size: 0.93em;
     font-weight: bold;
     border-radius: 4px;
-    padding: 1px 5px 2px 5px;
+    padding: 1px 7px 2px 7px;
     background-color: darkgreen;
 }
-.sub-details pre.error_message {
-    border-radius: 8px;
+.pb-details pre {
+    border-radius: 4px;
     border: 1px solid #e0e0e0;
-    box-shadow: 1px 2px 2px 1px rgba(0, 0, 0, 0.15);
     background-color: #f0f0f0;
-}
-.sub-details pre code {
-    font-family: source code pro;
-    border-radius: 8px;
-    border: 1px solid #e0e0e0;
+    overflow-x: auto;
+    padding: 0.3em;
+    font-size: 0.96em;
     box-shadow: 1px 2px 2px 1px rgba(0, 0, 0, 0.15);
 }
-
-
 .pb-submit {
     text-align: center;
-    margin-top: 24px;
+    margin-top: 30px;
 }
 .pb-submit a {
     color: #ffffff;
@@ -454,4 +497,45 @@ span.status-worst {
 .pb-submit a:active {
     text-shadow: 0px 0px 0px #000000;
     background: #6060ff;
+}
+
+
+.sub-title {
+    text-align: center;
+}
+.sub-details pre.error_message {
+    border-radius: 4px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 1px 2px 2px 1px rgba(0, 0, 0, 0.15);
+    background-color: #f0f0f0;
+    overflow-x: auto;
+    padding: 0.3em;
+    font-size: 0.96em;
+}
+.sub-details pre code {
+    font-family: source code pro;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 1px 2px 2px 1px rgba(0, 0, 0, 0.15);
+}
+
+.sub-details span[class|=status] {
+    color: white;
+    border-radius: 5px;
+    padding: 2px 7px 2px 6px;
+    font-style: oblique;
+    font-weight: bold;
+    box-shadow: 1px 2px 1px 0px rgba(0, 0, 0, 0.15);
+}
+.sub-details span.status-waiting {
+    background-color: rgb(0, 100, 255);
+}
+.sub-details span.status-correct {
+    background-color: rgb(0, 128, 0);
+}
+.sub-details span.status-warning {
+    background-color: rgb(236, 140, 17);
+}
+.sub-details span.status-error {
+    background-color: rgb(164, 52, 52);
 }
