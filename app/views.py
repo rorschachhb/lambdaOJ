@@ -105,10 +105,6 @@ def submit_info(sid, page):
                                         error_message = error_message,
 					code = code,
 					user = tuser)
-			else:
-				flash("you don't have access to this submition record.")
-		else:
-			flash("submition record doesn't exist.")
 	return redirect(url_for('status', page=page))
 
 @app.route('/oj/submit/', methods = ['GET', 'POST'])
@@ -149,7 +145,7 @@ def submit(pid = None):
 				#return something
 				s = Submit.query.filter_by(user=g.user.id, submit_time=time).first()
 				return redirect(url_for('submit_info', sid = s.id))
-	vimg, vstr = validate_code.create_validate_code(font_type="app/static/fonts/OpenSans-Bold.ttf")
+	vimg, vstr = validate_code.create_validate_code(font_type="app/static/fonts/SourceCodePro-Bold.otf")
 	form.validate_code_ans.data = vstr
 	hmd5 = hashlib.md5()
 	hmd5.update(vstr)
@@ -172,7 +168,6 @@ def problem(problem_id):
 			problem=problem, 
 			user = tuser)
 	else:
-		flash("problem doesn't exit.")
 		return redirect(url_for('index'))
 
 

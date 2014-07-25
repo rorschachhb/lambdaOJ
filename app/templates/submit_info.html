@@ -8,6 +8,9 @@ Submit {{ sub.id }}
 <link href="{{ url_for('static', filename='styles/hl.css') }}" type="text/css" rel="stylesheet" />
 <script src="{{ url_for('static', filename='scripts/highlight.pack.js') }}"></script>
 <script>hljs.initHighlightingOnLoad();</script>
+{% if sub_results == "Pending" %}
+<meta http-equiv="refresh" content="3">
+{% endif %}
 {% endblock head_add %}
 
 {% block navstatus %}
@@ -30,6 +33,10 @@ Submit {{ sub.id }}
   <h3>Status</h3>
   {% if sub_results == "Pending" %}
   <span class="status-waiting">Pending...</span>
+  &nbsp;&nbsp;&nbsp;
+  <a href="">
+    This page will refresh in 3 seconds automatically...
+  </a>
   {% elif sub_results == "Compilation Error" %}
   <span class="status-error">Compilation Error</span>
   <pre class="error_message">{{ error_message }}</pre>
@@ -62,6 +69,9 @@ Submit {{ sub.id }}
   {% endif %}
 
   <h3>Code File</h3>
-  <pre><code class="">{{ code }}</code></pre>
+  <pre><code class="{% if sub.language == "C" %} c
+                    {% elif sub.language == "C++" %} cpp
+                    {% elif sub.language == "Python" %} python
+		    {% endif %}">{{ code }}</code></pre>
 </article>
 {% endblock content %}

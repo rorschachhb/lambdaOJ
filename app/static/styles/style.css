@@ -98,7 +98,7 @@ header {
 header img {
     display: inline;
     vertical-align: middle;
-    padding: 17px 0px;
+    padding: 24px 0px;
 }
 
 
@@ -151,7 +151,7 @@ nav span.admin a {
 #content {
     position: relative;
     min-height: 300px;
-    padding-top: 17px;
+    padding-top: 24px;
 }
 
 
@@ -466,6 +466,11 @@ table.list a:hover {
     padding: 1px 7px 2px 7px;
     background-color: darkgreen;
 }
+.pb-details h3 {
+    color: rgb(20, 0, 48);
+    color: rgba(20, 0, 48, 0.8);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
+}
 .pb-details pre {
     border-radius: 4px;
     border: 1px solid #e0e0e0;
@@ -503,6 +508,11 @@ table.list a:hover {
 .sub-title {
     text-align: center;
 }
+.sub-details h3 {
+    color: rgb(20, 0, 48);
+    color: rgba(20, 0, 48, 0.8);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
+}
 .sub-details pre.error_message {
     border-radius: 4px;
     border: 1px solid #e0e0e0;
@@ -538,4 +548,9 @@ table.list a:hover {
 }
 .sub-details span.status-error {
     background-color: rgb(164, 52, 52);
+}
+
+
+footer {
+    min-height: 17px;
 }

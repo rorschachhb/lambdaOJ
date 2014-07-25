@@ -16,6 +16,16 @@ Submit
   <fieldset>
     <legend>Submit</legend>
 
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    {% if loop.last %}
+    <p class="message">[{{ message }}]</p>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
     <div>
       <lable for="problem_id" class="form-title">Problem ID :</lable>
       {% if pid %}
