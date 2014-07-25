@@ -68,10 +68,12 @@ Submit {{ sub.id }}
   </table>
   {% endif %}
 
+  {% if sub_results != "Compilation Error" %}
   <h3>Code File</h3>
   <pre><code class="{% if sub.language == "C" %} c
                     {% elif sub.language == "C++" %} cpp
                     {% elif sub.language == "Python" %} python
 		    {% endif %}">{{ code }}</code></pre>
+  {% endif %}
 </article>
 {% endblock content %}
