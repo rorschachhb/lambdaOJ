@@ -129,37 +129,30 @@ def submit(pid = None):
 				flash("Problem %d doesn't exist!" % (pid))
 				return redirect(url_for('submit'))
 			else:
+				#rename
+				filename = secure_filename(form.upload_file.data.filename)
+				filepath = basedir + '/users/%d/%s' % (g.user.id, filename)
+				form.upload_file.data.save(filepath)
 				hmd5 = hashlib.md5()
-				hmd5.update(form.validate_code.data)
-				vhash = hmd5.hexdigest()
-				if vhash != form.validate_code_hash.data:
-					flash("Validate code incorrect!")
-					return redirect(url_for('submit'))
-				else:
-					#rename
-					filename = secure_filename(form.upload_file.data.filename)
-					filepath = basedir + '/users/%d/%s' % (g.user.id, filename)
-					form.upload_file.data.save(filepath)
-					hmd5 = hashlib.md5()
-					fp = open(filepath,"rb")
-					hmd5.update(fp.read())
-					filehash = hmd5.hexdigest()
-					new_filepath = os.path.join(basedir, 'users/%d/%s%s' % (g.user.id, datetime.now().strftime('%Y-%m-%d-%H:%M:%S'), '_' + filehash + '_' + filename))
-					os.rename(filepath, new_filepath)
+				fp = open(filepath,"rb")
+				hmd5.update(fp.read())
+				filehash = hmd5.hexdigest()
+				new_filepath = os.path.join(basedir, 'users/%d/%s%s' % (g.user.id, datetime.now().strftime('%Y-%m-%d-%H:%M:%S'), '_' + filehash + '_' + filename))
+				os.rename(filepath, new_filepath)
 
-					#write database
-					timenow = -1.0 * time()
-					sub = Submit(problem = pid,
-						user = g.user.id,
-						language = form.language.data,
-						submit_time = timenow,
-						code_file = new_filepath)
-					db.session.add(sub)
-					db.session.commit()
+				#write database
+				timenow = -1.0 * time()
+				sub = Submit(problem = pid,
+					user = g.user.id,
+					language = form.language.data,
+					submit_time = timenow,
+					code_file = new_filepath)
+				db.session.add(sub)
+				db.session.commit()
 
-					#return something
-					s = Submit.query.filter_by(user=g.user.id, submit_time=timenow).first()
-					return redirect(url_for('submit_info', sid = s.id))
+				#return something
+				s = Submit.query.filter_by(user=g.user.id, submit_time=timenow).first()
+				return redirect(url_for('submit_info', sid = s.id))
 	vimg, vstr = validate_code.create_validate_code(font_type="app/static/fonts/SourceCodePro-Bold.otf")
 	hmd5 = hashlib.md5()
 	hmd5.update(vstr)
