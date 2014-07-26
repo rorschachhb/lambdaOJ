@@ -125,6 +125,8 @@ def submit(pid = None):
 	form = SubmitForm()
 	form.problem_id.choices = [(p.id, p.title) for p in Problem.query.all()]
 	if request.method == 'POST':
+		if os.path.isfile(basedir + '/static/tmp/%s.gif' % (form.validate_code_ans.data)):
+			os.remove(basedir + '/static/tmp/%s.gif' % (form.validate_code_ans.data))
 		for i in form:
 			print i.data
 		if form.validate_on_submit():
@@ -225,6 +227,7 @@ def page_not_found(e):
 @app.errorhandler(413)
 def request_entity_too_large(e):
 	# return render_template('413.html'), 413
+	print e
 	flash('Object file too large.')
 	return redirect(url_for('submit')), 413
 
