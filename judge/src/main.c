@@ -5,11 +5,6 @@
 #define PORT 8787
 #define MAX_JSON_REQ_SIZE 4096
 
-redisReply* compiler[PY+1] ; //
-redisReply* execute[PY+1] ;
-redisReply* compile_args[PY+1] ;
-redisReply* execute_args[PY+1] ;
-
 void reap() 
 {
     while (waitpid(-1,0,WNOHANG) > 0) ;
@@ -18,6 +13,7 @@ void reap()
 
 int main() {
     init_lang_config() ;
+    init_banned_syscall();
     int listenfd, connfd, port, clientlen ;
     struct sockaddr_in clientaddr;
     listenfd = Open_listenfd(PORT) ;

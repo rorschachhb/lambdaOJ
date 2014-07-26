@@ -2,8 +2,9 @@
 
 #define REDIS_IP "127.0.0.1"
 #define REDIS_PORT 6379
+#define BUF_SIZE 128
 
-int syscall_white_list[512] ; 
+static int syscall_white_list[512] ; 
 static sigjmp_buf buf ;
 static int max_compile_time = 5;
 static int max_output_size = 1024;
@@ -11,10 +12,30 @@ static int max_output_size = 1024;
 static char* support_language[]={"C","C++","Python2.7"};//match enum order
 char* state_string[]={"Accepted","Wrong Answer","Time Limit Exceeded","Memory Limit Exceeded","Runtime Error","Compilation Error","Banned Syscall","Output Limit Exceeded"}; //match enum
 
-extern redisReply* compiler[] ; //
-extern redisReply* execute[] ;
-extern redisReply* compile_args[] ;
-extern redisReply* execute_args[] ;
+static redisReply* compiler[PY+1] ; //
+static redisReply* execute[PY+1] ;
+static redisReply* compile_args[PY+1] ;
+static redisReply* execute_args[PY+1] ;
+
+void init_banned_syscall(){
+    redisContext* r= redisConnect(REDIS_IP,REDIS_PORT) ;
+    if(r==NULL){
+	unix_error("redis connect error!") ;
+	exit(127) ;
+    }
+    redisReply *re = redisCommand(r,"lrange lambda:banned_syscall 0 -1") ;
+    if (re==NULL) {
+	unix_error("redis error,get syscall failed") ;
+	exit(127) ;
+    }
+    int i ;
+    for(i=0;i<re->elements;i++){
+	int curr_sysnum = atoi(re->element[i]->str) ;
+	syscall_white_list[curr_sysnum] = 1 ;
+    }
+    freeReplyObject(re);
+    redisFree(r) ;
+}
 
 void init_lang_config()
 {
@@ -96,14 +117,60 @@ void set_cost_time(struct judge_result* jr, struct rusage* usage)
     jr->time_ms = cost_time ;
 }
 
-int check_answer(char *f1, char *f2)
+int next_word(char *s, int size, FILE* fin) 
 {
-    
-    return 1 ;
+    //read one word, at most (size-1) bytes from stream fin, saved in s
+    //first we throw away the '\t' and ' ' and '\n' and '\r' these blank char
+    while(1) {
+	char tmp ;
+	int flag = fread(&tmp,1,1,fin) ;
+	if (flag<=0) {
+	    return flag ;
+	}
+	if (tmp==' ' || tmp=='\n' || tmp=='\r' || tmp == '\t') 
+	    continue ;
+	else {
+	    s[0] = tmp ;
+	    break ;
+	}
+    }
+    int k = 1 ;
+    while (1) {
+	if(k == (size-1)) {
+	    s[k] = '\0' ;
+	    break ;
+	}
+	int flag = fread(s+k,1,1,fin) ;
+	if(flag<=0) {
+	    s[k] = '\0' ; 
+	    return k ;
+	}
+	if(s[k]==' ' || s[k]=='\n' || s[k]=='\r' || s[k]=='\t'){
+	    s[k] = '\0' ;
+	    return k ;
+	}else k++;
+    }
+}
+
+int check_answer(char *user_out, char *ans)
+{
+    FILE* fout = fopen(user_out,"r");
+    FILE* fans = fopen(ans,"r");
+    if(fout==NULL || fans==NULL) return 0 ;
+    char word_out[BUF_SIZE] = {0} ;
+    char word_ans[BUF_SIZE] = {0} ;
+    while (1) {
+	int out_flag = next_word(word_out,BUF_SIZE,fout) ;
+	int ans_flag = next_word(word_ans,BUF_SIZE,fans) ;
+	if (out_flag!=ans_flag) return 0 ;
+	if (out_flag <= 0) return 1 ;
+	if (strcmp(word_out,word_ans)!=0) return 0;
+    }
 }
 
 int check_syscall_ok(struct user_regs_struct *uregs) 
 {
+    printf("%d\n",uregs->orig_rax) ;
     extern int syscall_white_list[] ;
     #ifdef __x86_64__
 	int sys_call = uregs->orig_rax ;
@@ -121,7 +188,7 @@ int check_syscall_ok(struct user_regs_struct *uregs)
 	    if ( ((open_flag & O_WRONLY) == 1) ||
 		 ((open_flag & O_RDWR) == 1) ) {
 		return 0 ;
-	    }else return 1;		
+	    }else return 1;	       
 	}else {
 	    return 0 ;
 	}
@@ -139,7 +206,8 @@ void judge_exe(char *input_file,
 {
     pid_t pid ;
     int insyscall = 0 ;
-    struct user_regs_struct uregs ;
+    //struct user_regs_struct uregs ;
+    struct user context ;
     
     pid = fork() ;
 
@@ -169,15 +237,15 @@ void judge_exe(char *input_file,
 	    if (WIFEXITED(status))  //normally terminated
 		break;
 	    else if (WIFSTOPPED(status)) {
-		if (WSTOPSIG(status) == SIGTRAP) {
+		if (WSTOPSIG(status)==SIGTRAP) {
 		    if (!insyscall) {
 			insyscall = 1 ;
-			ptrace(PTRACE_GETREGS,pid,NULL,&uregs) ;
-			if (!check_syscall_ok(&uregs)) {
+			ptrace(PTRACE_GETREGS,pid,NULL,&context.regs) ;
+			if (!check_syscall_ok(&context.regs)) {
 			    //bad system call
 			    jr->state = BAD_SYSCALL ;
                             #ifdef __x86_64__
-			    jr->bad_syscall_number = uregs.orig_rax ;
+			    jr->bad_syscall_number = context.regs.orig_rax ;
 			    #elif __i386__
 			    jr->bad_syscall_number = uregs.orig_eax ;
 			    #endif
