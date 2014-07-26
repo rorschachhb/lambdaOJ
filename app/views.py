@@ -28,7 +28,6 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 @app.route('/oj/index/', defaults={'page': 1})
 @app.route('/oj/index/<int:page>')
 def index(page):
-	print basedir
 	pbs = Problem.query.paginate(page, PROBLEMS_PER_PAGE)
 	tuser = modify_user(g.user)
 	return render_template("index.html",
@@ -127,8 +126,6 @@ def submit(pid = None):
 	if request.method == 'POST':
 		if os.path.isfile(basedir + '/static/tmp/%s.gif' % (form.validate_code_ans.data)):
 			os.remove(basedir + '/static/tmp/%s.gif' % (form.validate_code_ans.data))
-		for i in form:
-			print i.data
 		if form.validate_on_submit():
 			pid = form.problem_id.data
 			p = Problem.query.get(pid)
@@ -199,7 +196,6 @@ def signup():
 		return redirect(url_for('index'))
 	form = SignupForm()
 	if form.validate_on_submit():
-		print form.role.data
 		user = User.query.filter_by(email=form.email.data).first()
 		if user is None:
 			user = User(email=form.email.data, 
@@ -227,7 +223,6 @@ def page_not_found(e):
 @app.errorhandler(413)
 def request_entity_too_large(e):
 	# return render_template('413.html'), 413
-	print e
 	flash('Object file too large.')
 	return redirect(url_for('submit')), 413
 
