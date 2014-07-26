@@ -29,12 +29,11 @@ struct lang_config {
     char* exe_args[16] ;
 } ;
 
-extern int syscall_white_list[] ;
 extern char* state_string[];
-extern redisReply* compiler[];
 
 void init_lang_config();
 int copy_string_array(redisReply*,char*[]);
+int next_word(char *s, int size, FILE* fin) ;
 void set_compile_option(struct lang_config*,enum lang,char*) ;
 void set_exe_option(struct lang_config*,enum lang,char *);
 void compile_term(int sig) ;
