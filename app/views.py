@@ -16,7 +16,7 @@ from datetime import datetime
 
 
 PROBLEMS_PER_PAGE = 10
-SUBS_PER_PAGE = 10
+SUBS_PER_PAGE = 50
 
 host = '127.0.0.1'
 port = 8787
@@ -256,6 +256,7 @@ def judge_on_commit(mapper, connection, model):
 	            "time_limit": [p.time_limit]*p.sample_num,
 	            "mem_limit": [p.memory_limit]*p.sample_num}
 	request_json = json.dumps(json_req)
+        print request_json
 
 	#connect socket
 	jsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
