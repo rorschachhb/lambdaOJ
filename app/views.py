@@ -231,7 +231,7 @@ def modify_user(tuser):
                 tuser = None
         return tuser
 
-def judge_on_commit(model):
+def judge_on_commit(mapper, connection, model):
 	#write redis
 	rds.hset('lambda:%d:head' % (model.id), 'state', 'Pending')
 
@@ -265,4 +265,4 @@ def judge_on_commit(model):
 
 	#remove work dir
 	#rmtree( basedir + "/users/%d/%s/" % (g.user.id, filehash))
-#event.listen(Submit, 'after_insert', judge_on_commit)
+event.listen(Submit, 'after_insert', judge_on_commit)
