@@ -224,7 +224,9 @@ def page_not_found(e):
 
 @app.errorhandler(413)
 def request_entity_too_large(e):
-	return render_template('413.html'), 413
+	# return render_template('413.html'), 413
+	flash('Object file too large.')
+	return redirect(url_for('submit')), 413
 
 @app.before_request
 def before_request():
