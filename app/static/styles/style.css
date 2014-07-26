@@ -243,7 +243,9 @@ form div span.submit {
 #submitform .validate img {
     vertical-align: top;
 }
-
+#submitform #validate_code_hash {
+    display: none;
+}
 
 
 table.list {
