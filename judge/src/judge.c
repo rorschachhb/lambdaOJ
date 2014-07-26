@@ -170,7 +170,6 @@ int check_answer(char *user_out, char *ans)
 
 int check_syscall_ok(struct user_regs_struct *uregs) 
 {
-    printf("%d\n",uregs->orig_rax) ;
     extern int syscall_white_list[] ;
     #ifdef __x86_64__
 	int sys_call = uregs->orig_rax ;
@@ -180,7 +179,7 @@ int check_syscall_ok(struct user_regs_struct *uregs)
     if (syscall_white_list[sys_call] == 1) {
 	if(sys_call == SYS_open){
 	    #ifdef __x86_64__
-	    int open_flag = uregs->rbx ;
+	    int open_flag = uregs->rsi ;
 	    #elif __i386__
 	    int open_flag = uregs->ebx ;
 	    #endif
