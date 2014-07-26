@@ -18,7 +18,7 @@ class SubmitForm(Form):
 	language = SelectField('language', choices = [(C, 'C'), (CPP, 'C++'), (PYTHON, 'Python')], validators = [InputRequired()], coerce=int)
 	upload_file = FileField('upload_file', validators = [FileRequired(), FileAllowed(['c', 'C', 'cpp', 'CPP', 'py'], 'C/C++ and Python codes only!')])
 	validate_code = TextField('validate_code', validators = [InputRequired()])
-	validate_code_ans = TextField('validate_code_ans')
+	validate_code_hash = TextField('validate_code_ans')
 
 class SignupForm(Form):
 	email = TextField('email', validators = [InputRequired(), Email()])

@@ -113,10 +113,6 @@ def submit_info(sid, page):
 					user = tuser)
 	return redirect(url_for('status', page=page))
 
-ALLOWED_EXTENSIONS = set(['c', 'C', 'cpp', 'CPP', 'py'])
-def allowed_file(filename):
-	return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
-
 @app.route('/oj/submit/', methods = ['GET', 'POST'])
 @app.route('/oj/submit/<int:pid>', methods = ['GET', 'POST'])
 @login_required
@@ -124,8 +120,8 @@ def submit(pid = None):
 	form = SubmitForm()
 	form.problem_id.choices = [(p.id, p.title) for p in Problem.query.all()]
 	if request.method == 'POST':
-		if os.path.isfile(basedir + '/static/tmp/%s.gif' % (form.validate_code_ans.data)):
-			os.remove(basedir + '/static/tmp/%s.gif' % (form.validate_code_ans.data))
+		if os.path.isfile(os.path.join(basedir, 'static/tmp/%s.gif' % (form.validate_code_hash.data))):
+			os.remove(os.path.join(basedir, 'static/tmp/%s.gif' % (form.validate_code_hash.data)))
 		if form.validate_on_submit():
 			pid = form.problem_id.data
 			p = Problem.query.get(pid)
@@ -136,7 +132,7 @@ def submit(pid = None):
 				hmd5 = hashlib.md5()
 				hmd5.update(form.validate_code.data)
 				vhash = hmd5.hexdigest()
-				if vhash != form.validate_code_ans.data:
+				if vhash != form.validate_code_hash.data:
 					flash("Validate code incorrect!")
 					return redirect(url_for('submit'))
 				else:
@@ -148,7 +144,7 @@ def submit(pid = None):
 					fp = open(filepath,"rb")
 					hmd5.update(fp.read())
 					filehash = hmd5.hexdigest()
-					new_filepath = basedir + '/users/%d/%s%s' % (g.user.id, datetime.now().strftime('%Y-%m-%d-%H:%M:%S'), '_' + filehash + '_' + filename)
+					new_filepath = os.path.join(basedir, 'users/%d/%s%s' % (g.user.id, datetime.now().strftime('%Y-%m-%d-%H:%M:%S'), '_' + filehash + '_' + filename))
 					os.rename(filepath, new_filepath)
 
 					#write database
@@ -168,8 +164,8 @@ def submit(pid = None):
 	hmd5 = hashlib.md5()
 	hmd5.update(vstr)
 	vhash = hmd5.hexdigest()
-	vimg.save(basedir + '/static/tmp/%s.gif' % (vhash), "GIF")
-	form.validate_code_ans.data = vhash
+	vimg.save(os.path.join(basedir, 'static/tmp/%s.gif' % (vhash)), "GIF")
+	form.validate_code_hash.data = vhash
 	tuser = modify_user(g.user)
 	return render_template('submit.html',
                                form = form,
@@ -206,8 +202,8 @@ def signup():
 			db.session.add(user)
 			db.session.commit()
 			u = User.query.filter_by(email=user.email).first()
-			if not os.path.exists(basedir + '/users/%d' % (u.id)):
-				os.makedirs(basedir + '/users/%d' % (u.id))
+			if not os.path.exists(os.path.join(basedir, 'users/%d' % (u.id))):
+				os.makedirs(os.path.join(basedir, 'users/%d' % (u.id)))
 			flash('Please log in now.')
 			return redirect(url_for('login'))
 		else:
@@ -242,27 +238,6 @@ def modify_user(tuser):
                 tuser = None
         return tuser
 
-def parse_json(results_json):
-	if len(results_json) > 0:
-		if results_json[0] is '{':
-			results = json.loads(results_json)
-			right = 0
-			wrong = 0
-			for r in results:
-				if r.state is not 0:
-					wrong = wrong + 1
-				else:
-					right = right + 1
-				r.state = oj_states[r.state]
-			score = 1.0 * right / (right + wrong)
-			return score, results
-		elif results_json[0] is '@':
-			return 0, 'bad syscall: ' + results_json[1:]
-		else:
-			return 0, results_json
-	else:
-		return 0, None
-
 def judge_on_commit(model):
 	#write redis
 	rds.hset('lambda:%d:head' % (model.id), 'state', 'Pending')
@@ -283,8 +258,8 @@ def judge_on_commit(model):
 	            "code_path": model.code_file,
 	            "test_sample_num": p.sample_num,
 	            "lang_flag": model.language,
-	            "work_dir": basedir + "/users/%d/%s/" % (user_id, filehash),
-	            "test_dir": basedir + "/problems/%d/data/" % (pid),
+	            "work_dir": os.path.join(basedir, "users/%d/%s/" % (user_id, filehash)),
+	            "test_dir": os.path.join(basedir, "problems/%d/data/" % (pid)),
 	            "time_limit": [p.time_limit]*p.sample_num,
 	            "mem_limit": [p.memory_limit]*p.sample_num}
 	request_json = json.dumps(json_req)
