@@ -28,7 +28,7 @@ class Captcha(object):
 		hmd5.update(field.data)
 		vhash = hmd5.hexdigest()
 		if vhash != other.data:
-			raise ValidationError('Validate code incorrect! (raised by my validator)')
+			raise ValidationError('Validate code incorrect!')
 
 class SubmitForm(Form):
 	problem_id = IntegerField('problem_id', validators = [InputRequired(), NumberRange(min=1)])
