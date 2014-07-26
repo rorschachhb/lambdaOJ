@@ -17,7 +17,7 @@ import ldap
 import crypt
 
 PROBLEMS_PER_PAGE = 10
-SUBS_PER_PAGE = 10
+SUBS_PER_PAGE = 50
 
 host = '127.0.0.1'
 port = 8787
@@ -282,6 +282,7 @@ def judge_on_commit(mapper, connection, model):
 	print json_req['work_dir']
 	print json_req['test_dir']
 	request_json = json.dumps(json_req)
+        print request_json
 
 	#connect socket
 	jsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
