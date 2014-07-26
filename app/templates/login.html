@@ -26,7 +26,7 @@ Login
     {% endwith %}
 
     <div>
-      <lable for="email" class="form-title">Username :</lable>
+      <lable for="username" class="form-title">Username :</lable>
       {{ form.username }}
       {% for error in form.errors.username %}
       <p class="form-error">[{{ error }}]</p>
@@ -48,8 +48,6 @@ Login
     <div>
       <span class="submit">
 	<input type="submit" name="login" value="Login">
-	or
-	<a href="{{ url_for('signup') }}">sign up</a>
       </span>
     </div>
   </fieldset>
