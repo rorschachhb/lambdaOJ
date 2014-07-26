@@ -15,30 +15,20 @@ class EditForm(Form):
 	password_confirm =  PasswordField('password_confirm', validators = [InputRequired()])
 
 class Captcha(object):
-    """
-    Compares the values of two fields.
+	def __init__(self, fieldname, message=None):
+		self.fieldname = fieldname
+		self.message = message
 
-    :param fieldname:
-        The name of the other field to compare to.
-    :param message:
-        Error message to raise in case of a validation error. Can be
-        interpolated with `%(other_label)s` and `%(other_name)s` to provide a
-        more helpful error.
-    """
-    def __init__(self, fieldname, message=None):
-        self.fieldname = fieldname
-        self.message = message
-
-    def __call__(self, form, field):
-        try:
-            other = form[self.fieldname]
-        except KeyError:
-            raise ValidationError(field.gettext("Invalid field name '%s'.") % self.fieldname)
-        hmd5 = hashlib.md5()
-        hmd5.update(field.data)
-        vhash = hmd5.hexdigest()
-        if vhash != other.data:
-            raise ValidationError('Validate code incorrect! (raised by my validator)')
+	def __call__(self, form, field):
+		try:
+			other = form[self.fieldname]
+		except KeyError:
+			raise ValidationError(field.gettext("Invalid field name '%s'.") % self.fieldname)
+		hmd5 = hashlib.md5()
+		hmd5.update(field.data)
+		vhash = hmd5.hexdigest()
+		if vhash != other.data:
+			raise ValidationError('Validate code incorrect! (raised by my validator)')
 
 class SubmitForm(Form):
 	problem_id = IntegerField('problem_id', validators = [InputRequired(), NumberRange(min=1)])

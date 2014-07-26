@@ -178,6 +178,19 @@ def problem(problem_id):
 	else:
 		return redirect(url_for('index'))
 
+@app.route('/oj/profile/', defaults={'user_id': None})
+@app.route('/oj/profile/<int:user_id>')
+def profile(user_id):
+	if user_id is None:
+		user_id = g.user.id
+	u = User.query.get(user_id)
+	if u is None:
+		flash("User %d doesn't exit." % (user_id))
+		return redirect(url_for('index'))
+	else:
+		return render_template('profile.html',
+			user = u)
+
 
 @app.route('/oj/signup/', methods = ['GET', 'POST'])
 def signup():
@@ -205,15 +218,11 @@ def signup():
 	return render_template('signup.html',
                                form = form, user = tuser)
 
-@app.errorhandler(404)
-def page_not_found(e):
-	return render_template('404.html'), 404
-
 @app.errorhandler(413)
 def request_entity_too_large(e):
 	# return render_template('413.html'), 413
 	flash('Object file too large.')
-	return redirect(url_for('submit')), 413
+	return redirect(url_for('submit'))
 
 @app.before_request
 def before_request():
@@ -242,8 +251,8 @@ def judge_on_commit(mapper, connection, model):
 	hmd5.update(fp.read())
 	filehash = hmd5.hexdigest()
 	user_id = model.user
-	if not os.path.exists(basedir + "/users/%d/%s" % (user_id, filehash)):
-		os.makedirs(basedir + "/users/%d/%s" % (user_id, filehash))
+	if not os.path.exists(os.path.join(basedir, "users/%d/%s" % (user_id, filehash))):
+		os.makedirs(os.path.join(basedir, "users/%d/%s" % (user_id, filehash)))
 	#request
 	pid = model.problem
 	p = Problem.query.get(pid)
@@ -255,6 +264,9 @@ def judge_on_commit(mapper, connection, model):
 	            "test_dir": os.path.join(basedir, "problems/%d/data/" % (pid)),
 	            "time_limit": [p.time_limit]*p.sample_num,
 	            "mem_limit": [p.memory_limit]*p.sample_num}
+	print json_req['code_path']
+	print json_req['work_dir']
+	print json_req['test_dir']
 	request_json = json.dumps(json_req)
 
 	#connect socket
