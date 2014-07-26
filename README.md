@@ -62,7 +62,7 @@ Then, install requirements:
 pip install -r requirements.txt
 ```
 
-Create local database
+`cd` into `db` directory, create local database:
 ```
 ./db_create.py  
 ./db_migrate.py

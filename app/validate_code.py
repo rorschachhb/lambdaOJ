@@ -5,7 +5,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 _letter_cases = "abcdefghjkmnpqrstuvwxy" # 小写字母，去除可能干扰的i，l，o，z
 _upper_cases = _letter_cases.upper() # 大写字母
 _numbers = ''.join(map(str, range(3, 10))) # 数字
-init_chars = ''.join((_letter_cases, _upper_cases, _numbers))
+init_chars = ''.join(( _upper_cases, _numbers))
 def create_validate_code(size=(120, 30),
                          chars=init_chars,
                          img_type="GIF",

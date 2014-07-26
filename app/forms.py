@@ -2,7 +2,6 @@ from flask_wtf import Form
 from wtforms import TextField, PasswordField, BooleanField, SelectField, IntegerField, TextAreaField
 from wtforms.validators import InputRequired, Length, Email, EqualTo, Optional, NumberRange
 from flask_wtf.file import FileField, FileRequired, FileAllowed
-from flask.ext.wtf.recaptcha import RecaptchaField
 from models import *
 
 class LoginForm(Form):
@@ -17,9 +16,9 @@ class EditForm(Form):
 class SubmitForm(Form):
 	problem_id = IntegerField('problem_id', validators = [InputRequired(), NumberRange(min=1)])
 	language = SelectField('language', choices = [(C, 'C'), (CPP, 'C++'), (PYTHON, 'Python')], validators = [InputRequired()], coerce=int)
-	upload_file = FileField('upload_file', validators = [FileRequired()])
-	validate_code = TextField('validate_code', validators = [InputRequired(), EqualTo('validate_code_ans', message='Validate code incorrect!')])
-	validate_code_ans = TextField('validate_code_ans')
+	upload_file = FileField('upload_file', validators = [FileRequired(), FileAllowed(['c', 'C', 'cpp', 'CPP', 'py'], 'C/C++ and Python codes only!')])
+	validate_code = TextField('validate_code', validators = [InputRequired()])
+	validate_code_hash = TextField('validate_code_ans')
 
 class SignupForm(Form):
 	email = TextField('email', validators = [InputRequired(), Email()])
