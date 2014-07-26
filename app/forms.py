@@ -17,7 +17,7 @@ class SubmitForm(Form):
 	problem_id = IntegerField('problem_id', validators = [InputRequired(), NumberRange(min=1)])
 	language = SelectField('language', choices = [(C, 'C'), (CPP, 'C++'), (PYTHON, 'Python')], validators = [InputRequired()], coerce=int)
 	upload_file = FileField('upload_file', validators = [FileRequired(), FileAllowed(['c', 'C', 'cpp', 'CPP', 'py'], 'C/C++ and Python codes only!')])
-	validate_code = TextField('validate_code', validators = [InputRequired(), EqualTo('validate_code_ans', message='Validate code incorrect!')])
+	validate_code = TextField('validate_code', validators = [InputRequired()])
 	validate_code_ans = TextField('validate_code_ans')
 
 class SignupForm(Form):
