@@ -6,6 +6,8 @@ from flask.ext.admin.contrib.sqla import ModelView
 from flask.ext.admin.contrib.fileadmin import FileAdmin
 import os.path as op
 import redis
+import ldap
+import crypt
 
 app = Flask(__name__, static_url_path='/oj/static')
 app.config['MAX_CONTENT_LENGTH'] = 100 * 1024
@@ -19,6 +21,12 @@ lm.init_app(app)
 lm.login_view = 'login'
 
 rds = redis.Redis(host='127.0.0.1', port=6379, db=0)
+
+l = ldap.initialize("ldap://lambda.cool:389")
+l.simple_bind_s('ou=oj, ou=services, dc=lambda, dc=cool', 'aoeirtnsqwertoj')
+
+people_basedn = 'ou=people,dc=lambda,dc=cool'
+groups_basedn = 'ou=groups,dc=lambda,dc=cool'
 
 import views, models
 

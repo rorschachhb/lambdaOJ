@@ -6,7 +6,7 @@ from models import *
 import hashlib
 
 class LoginForm(Form):
-	email = TextField('email', validators = [InputRequired(), Email()])
+	username = TextField('username', validators = [InputRequired()])
 	password =  PasswordField('password', validators = [InputRequired()])
 	remember_me = BooleanField('remember_me', default = True)
 

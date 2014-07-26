@@ -26,9 +26,9 @@ Login
     {% endwith %}
 
     <div>
-      <lable for="email" class="form-title">Email :</lable>
-      {{ form.email }}
-      {% for error in form.errors.email %}
+      <lable for="email" class="form-title">Username :</lable>
+      {{ form.username }}
+      {% for error in form.errors.username %}
       <p class="form-error">[{{ error }}]</p>
       {% endfor %}
     </div>

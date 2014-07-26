@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, session, url_for, request, g 
 from flask.ext.login import login_user, logout_user, current_user, login_required, login_fresh, confirm_login, fresh_login_required
-from app import app, db, lm, rds
+from app import app, db, lm, rds, l, people_basedn, groups_basedn
 from forms import LoginForm, EditForm, SubmitForm, SignupForm, PostForm
 from models import *
 from werkzeug import secure_filename
@@ -13,7 +13,8 @@ from sqlalchemy import event
 from app import validate_code
 from time import time
 from datetime import datetime
-
+import ldap
+import crypt
 
 PROBLEMS_PER_PAGE = 10
 SUBS_PER_PAGE = 10
@@ -40,11 +41,22 @@ def login():
 		return redirect(url_for('index'))
 	form = LoginForm()
 	if form.validate_on_submit():
-		user = User.query.filter_by(email=form.email.data, password=form.password.data).first()
-		if user:
-			login_user(user, remember = form.remember_me.data)
-			return redirect(request.args.get('next') or url_for('index'))
-		else:
+		user_ldap = l.search_s(people_basedn, ldap.SCOPE_ONELEVEL, '(uid=%s)' % (form.username.data), None)
+		if user_ldap: # if user exists
+			passwd_list = user_ldap[0][1]['userPassword'][0].split('$')
+			if '{CRYPT}' + crypt.crypt(form.password.data, '$' + passwd_list[1] + '$' + passwd_list[2] + '$') == user_ldap[0][1]['userPassword'][0]: # if passwd is right
+				print 'password is right'
+				user_sql = User.query.filter_by(username=user_ldap[0][1]['uid'][0]).first()
+				if user_sql is None: # if user is not in sql database
+					user = User(username=user_ldap[0][1]['uid'][0])
+					db.session.add(user)
+					db.session.commit()
+					user_sql = User.query.filter_by(username=user_ldap[0][1]['uid'][0]).first()
+				login_user(user_sql, remember = form.remember_me.data) # login user
+				return redirect(request.args.get('next') or url_for('index'))
+			else: # if passwd is wrong
+				flash('Wrong name or password!')
+		else: # if user doesn't exist
 			flash('Wrong name or password!')
 	tuser = modify_user(g.user)
 	return render_template('login.html',
@@ -64,7 +76,7 @@ def status(page):
 	for s in subs.items:
 		s.language = languages[s.language]
 		user_tmp = User.query.filter_by(id=s.user).first()
-		s.user = user_tmp.nickname
+		s.user = user_tmp.username
 		status_tmp = rds.hget('lambda:%d:head' % (s.id), 'state')
 		if status_tmp is None:
 			s.status = 'Pending'
@@ -85,7 +97,7 @@ def submit_info(sid, page):
 			user = User.query.filter_by(id=sub.user).first()
 			if ( user.id == g.user.id ) or ( g.user.role is ROLE_ADMIN ):
 				sub.language = languages[sub.language]
-				sub.user = user.nickname
+				sub.user = user.username
 				problem = Problem.query.filter_by(id=sub.problem).first()
 				tuser = modify_user(g.user)
 				fp = open(sub.code_file, 'r')
@@ -131,7 +143,9 @@ def submit(pid = None):
 			else:
 				#rename
 				filename = secure_filename(form.upload_file.data.filename)
-				filepath = basedir + '/users/%d/%s' % (g.user.id, filename)
+				filepath = os.path.join(basedir, 'users/%d/%s' % (g.user.id, filename))
+				if not os.path.exists(os.path.join(basedir, 'users/%d/' % (g.user.id))):
+					os.makedirs(os.path.join(basedir, 'users/%d/' % (g.user.id)))
 				form.upload_file.data.save(filepath)
 				hmd5 = hashlib.md5()
 				fp = open(filepath,"rb")
