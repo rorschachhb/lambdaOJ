@@ -8,6 +8,7 @@ static int syscall_white_list[512] ;
 static sigjmp_buf buf ;
 static int max_compile_time = 5;
 static int max_output_size = 1024;
+static int max_as = 1024*1024*60 ;
 
 static char* support_language[]={"C","C++","Python2.7"};//match enum order
 char* state_string[]={"Accepted","Wrong Answer","Time Limit Exceeded","Memory Limit Exceeded","Runtime Error","Compilation Error","Banned Syscall","Output Limit Exceeded"}; //match enum
@@ -209,6 +210,11 @@ void judge_exe(char *input_file,
 	rl_fsize.rlim_cur = max_output_size;
 	setrlimit(RLIMIT_FSIZE, &rl_fsize) ;
 	
+	struct rlimit rl_as ;
+	getrlimit(RLIMIT_AS, &rl_as) ;
+	rl_as.rlim_cur = max_as ;
+	setrlimit(RLIMIT_AS, &rl_as) ;
+
 	freopen(input_file,"r",stdin) ;
 	freopen(output_file,"w",stdout) ;
 
