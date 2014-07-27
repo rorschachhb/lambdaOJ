@@ -1,13 +1,9 @@
-from flask import Flask, url_for
+from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
-from flask.ext.admin import Admin, BaseView, expose
-from flask.ext.admin.contrib.sqla import ModelView
-from flask.ext.admin.contrib.fileadmin import FileAdmin
+from flask.ext.admin import Admin
 import os.path as op
 import redis
-import ldap
-import crypt
 from config import CSRF_SECRET_KEY, SQLALCHEMY_DATABASE_URI
 
 app = Flask(__name__, static_url_path='/oj/static')
@@ -29,18 +25,13 @@ lm.login_view = 'login'
 
 rds = redis.Redis(host='127.0.0.1', port=6379, db=0)
 
-# l = ldap.initialize(LDAP_SERVER)
-# l.simple_bind_s(LDAP_BINDDN, LDAP_BINDPW)
-
-people_basedn = 'ou=people,dc=lambda,dc=cool'
-groups_basedn = 'ou=groups,dc=lambda,dc=cool'
-
 import views, models
 
-admin = Admin(app, name='lambdaOJ', url='/oj/admin')
+from lambda_admin import *
+admin = Admin(app, index_view=lambdaIndexView(name='lambdaOJ', url='/oj/admin/'))
 
 path = op.join(op.dirname(__file__), 'static')
-admin.add_view(FileAdmin(path, '/static/', name='Static Files'))
-admin.add_view(ModelView(models.User, db.session))
-admin.add_view(ModelView(models.Problem, db.session))
-admin.add_view(ModelView(models.Submit, db.session))
+admin.add_view(lambdaFileAdmin(path, name='Static Files'))
+admin.add_view(lambdaModelView(models.User, db.session))
+admin.add_view(lambdaModelView(models.Problem, db.session))
+admin.add_view(lambdaModelView(models.Submit, db.session))

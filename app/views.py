@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, session, url_for, request, g 
 from flask.ext.login import login_user, logout_user, current_user, login_required, login_fresh, confirm_login, fresh_login_required
-from app import app, db, lm, rds, people_basedn, groups_basedn
+from app import app, db, lm, rds
 from forms import LoginForm, EditForm, SubmitForm
 from models import *
 from werkzeug import secure_filename
@@ -18,9 +18,7 @@ import ldap.modlist as modlist
 import crypt
 import random
 import string
-from config import LDAP_BINDDN, LDAP_BINDPW
-
-LDAP_SERVER = 'ldap://106.186.122.64:389'
+from config import LDAP_BINDDN, LDAP_BINDPW, LDAP_SERVER, people_basedn, groups_basedn
 
 PROBLEMS_PER_PAGE = 10
 SUBS_PER_PAGE = 50
