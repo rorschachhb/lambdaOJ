@@ -221,30 +221,10 @@ def profile(page):
 
 	subs = Submit.query.filter_by(user=g.user.id).order_by(Submit.submit_time).paginate(page, SUBS_PER_PAGE)
 
-	subs_all = Submit.query.filter_by(user=g.user.id).all()
-
-	transcript = {}
-	for s in subs_all:
-		p = Problem.query.get(s.problem)
-		if p:
-			
-			status = rds.hget('lambda:%d:head' % (s.id), 'state')
-			if status is None or status == 'Pending' or status == 'Compilation Error':
-				score = 0
-			else:
-				score = float(status)
-			try:
-				if transcript[s.problem] < score:
-					transcript[s.problem] = score
-			except KeyError:
-				transcript[s.problem] = { 'title': p.title, 'score': score }
-	sorted_trans = sorted(transcript.items(), key=lambda x:x[0])
-
 	return render_template('profile.html', 
 		user_attrs = user_attrs[0][1],
 		user = g.user, 
-		subs = subs,
-		transcript = sorted_trans)
+		subs = subs)
 
 @app.errorhandler(413)
 def request_entity_too_large(e):
