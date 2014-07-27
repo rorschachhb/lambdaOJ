@@ -11,6 +11,7 @@
   </head>
 
   <body>
+    {% block mainnav %}
     <div id="mainnav">
       <div class="wrapper">
 	<span class="logo">LAMBDA.COOL</span>
@@ -20,15 +21,17 @@
 	<a href="http://git.lambda.cool/" target="_blank">GitLab</a>
       </div>
     </div>
+    {% endblock mainnav %}
 
     <div class="wrapper">
+      {% block header %}
       <header>
-	{% block header %}
 	<img src="{{ url_for('static', filename='images/logo.png') }}" alt="LambdaOJ Logo"
 	     width="210" />
-	{% endblock header %}
       </header>
-
+      {% endblock header %}
+      
+      {% block nav %}
       <nav>
 	<ul>
 	  {% block navindex %}
@@ -61,6 +64,7 @@
 	</span>
 	{% endif %}
       </nav>
+      {% endblock nav %}
 
       <div id="content">
 	{% block content %}

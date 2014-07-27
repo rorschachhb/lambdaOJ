@@ -90,6 +90,14 @@ header, article, section, footer, nav {
     color: #303030;
 }
 
+#mainnav a.notice {
+    color: rgb(60, 255, 120);
+    border-bottom: 4px solid rgb(60, 200, 120);
+}
+header.notice {
+    margin: 24px 0px 0px 0px;
+    font-size: 1.08em;
+}
 
 
 header {
@@ -254,7 +262,7 @@ form div span.submit {
     width: 45%;
 }
 #passwdform div.separator {
-    height: 17px;
+    height: 7px;
 }
 
 

@@ -27,7 +27,6 @@ port = 8787
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-@app.route('/', defaults={'page': 1})
 @app.route('/oj/', defaults={'page': 1})
 @app.route('/oj/index/', defaults={'page': 1})
 @app.route('/oj/index/<int:page>')
@@ -259,7 +258,7 @@ def passwd():
 				logout_user()
 				flash('Your password has been reset, please login now.')
 				return redirect(url_for('login'))
-			else: # if passwd is wrong
+                        else: # if passwd is wrong
 				flash('Password incorrect!')
 				return render_template('passwd.html',
 						form = form,
