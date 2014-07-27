@@ -19,15 +19,7 @@ static redisReply* execute_args[PY+1] ;
 
 void init_banned_syscall(){
     redisContext* r= redisConnect(REDIS_IP,REDIS_PORT) ;
-    if(r==NULL){
-	unix_error("redis connect error!") ;
-	exit(127) ;
-    }
     redisReply *re = redisCommand(r,"lrange lambda:banned_syscall 0 -1") ;
-    if (re==NULL) {
-	unix_error("redis error,get syscall failed") ;
-	exit(127) ;
-    }
     int i ;
     for(i=0;i<re->elements;i++){
 	int curr_sysnum = atoi(re->element[i]->str) ;
@@ -40,10 +32,6 @@ void init_banned_syscall(){
 void init_lang_config()
 {
     redisContext *r = redisConnect(REDIS_IP,REDIS_PORT) ;
-    if (r==NULL) {
-	unix_error("redis connect error!") ;
-	exit(127) ;
-    }
     int i ;
     for(i=0;i<=PY;i++){
 	compiler[i] = redisCommand(r,"get lambda:%s:compiler",support_language[i]);

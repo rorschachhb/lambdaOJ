@@ -5,19 +5,25 @@
 #define PORT 8787
 #define MAX_JSON_REQ_SIZE 4096
 
+static char curr_time[32] ;
+struct tm *ct;
+
 void reap() 
 {
     while (waitpid(-1,0,WNOHANG) > 0) ;
     return ;
 }
 
-int main() {
+int main() 
+{
+    openlog("lambdaoj",LOG_PID,LOG_USER);
     init_lang_config() ;
+    syslog(LOG_INFO,"%s","language config loaded successfully from redis") ;
     init_banned_syscall();
+    syslog(LOG_INFO,"%s","system call black list loaded successfully from redis") ;
     int listenfd, connfd, port, clientlen ;
     struct sockaddr_in clientaddr;
     listenfd = Open_listenfd(PORT) ;
-    
     redisContext *c = redisConnect("127.0.0.1",6379) ;
     
     while (1) {
@@ -25,18 +31,20 @@ int main() {
 	connfd = Accept(listenfd,(SA*)&clientaddr,&clientlen) ;
 	reap() ;
 	if (Fork() == 0) {
+	    syslog(LOG_INFO,"%s","new process for juding user code");
 	    Close(listenfd) ;
 	    char json_req[MAX_JSON_REQ_SIZE]={0} ;
 	    int nbytes ;
 	    nbytes = recv(connfd,json_req,MAX_JSON_REQ_SIZE,0) ;
 	    if (nbytes < 0) {
-		unix_error("recv json error!");
+		syslog(LOG_ERR,"%s","recv json error!") ;
 		exit(127) ;
 	    }
+	    syslog(LOG_INFO,"recv %d bytes json data",nbytes) ;
 	    cJSON *request ;
 	    request = cJSON_Parse(json_req) ;
 	    if(!request) {
-		unix_error("Json parse error!") ;
+		syslog(LOG_ERR,"parse json error!");
 		exit(127) ;
 	    }
 	    close(connfd) ;
@@ -51,6 +59,13 @@ int main() {
 	    char *test_dir = cJSON_GetObjectItem(request,"test_dir")->valuestring ;
 	    cJSON* time_limit_arr = cJSON_GetObjectItem(request,"time_limit") ;
 	    cJSON* mem_limit_arr = cJSON_GetObjectItem(request,"mem_limit") ;
+	    
+	    syslog(LOG_INFO,"submit_id : %d", submit_id) ;
+	    syslog(LOG_INFO,"test_sample_num : %d",test_num) ;
+	    syslog(LOG_INFO,"lang_flag : %d", lang_flag); 
+	    syslog(LOG_INFO,"code_path : %s", code_path) ;
+	    syslog(LOG_INFO,"work_dir : %s", work_dir) ;
+	    syslog(LOG_INFO,"test_dir : %s", test_dir) ;
 
 	    chdir(work_dir) ;//change current working directory
 	    
@@ -102,5 +117,6 @@ int main() {
 	}
 	Close(connfd) ;
     }
+    closelog();
     return 0 ;
 }
