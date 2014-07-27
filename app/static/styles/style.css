@@ -415,6 +415,17 @@ table.sub td.id a span.status-worst {
     padding-right: 10px;
 }
 
+#history {
+    width: 45%;
+}
+#history .problem {
+    width: 110px;
+}
+#history .language {
+    width: 120px;
+    text-align: center;
+}
+
 
 .pagenav {
     width: 36%;
@@ -558,6 +569,16 @@ table.sub td.id a span.status-worst {
 }
 .pf-details {
     width: 100%;
+}
+.pf-details h3 {
+    color: rgb(20, 0, 48);
+    color: rgba(20, 0, 48, 0.8);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
+}
+.pf-details p.email span {
+    padding: 2px 7px;
+    border-radius: 6px;
+    background-color: #e0e0e0;
 }
 
 

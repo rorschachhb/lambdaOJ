@@ -235,7 +235,8 @@ def profile(page):
 
 @app.route('/oj/passwd/')
 @fresh_login_required
-def 
+def passwd():
+        pass
 
 @app.errorhandler(413)
 def request_entity_too_large(e):

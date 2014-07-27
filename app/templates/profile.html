@@ -15,11 +15,21 @@ Profile
     ({{ user_attrs['employeeNumber'][0] }})
     {% endif %}
   </h2>
-  <p class="email">Email Address: {{ user_attrs['mail'][0] }}</p>
-  <p class="passwd"><a href="">Change Password</a></p>
 </article>
 
 <article class="pf-details">
+  <h3>Account Information</h3>
+  <p class="email">
+    Email &nbsp;: &nbsp; <span>{{ user_attrs['mail'][0] }}</span> &nbsp;&nbsp;&nbsp;
+    ( If you want to change your email, please
+    <a href="mailto:admin@lambda.cool">contact us</a> .
+    )
+  </p>
+  <p class="passwd">
+    <a href="{{ url_for('passwd') }}">Change Password</a>
+  </p>
+
+  <h3>Submit History</h3>
   <table id="history" class="list sub">
     <tr>
       <th class="id">Submit</th>
