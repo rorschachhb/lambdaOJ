@@ -247,6 +247,15 @@ form div span.submit {
     display: none;
 }
 
+#passwdform {
+    width: 70%;
+}
+#passwdform div.separator {
+    height: 20px;
+}
+
+
+
 
 table.list {
     margin: 0px auto;
