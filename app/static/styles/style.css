@@ -586,13 +586,8 @@ table.sub td.id a span.status-worst {
     color: rgba(20, 0, 48, 0.8);
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
 }
-.pf-details p.email span {
-    padding: 2px 9px;
-    border-radius: 5px;
-    background-color: #e0e0e0;
-}
-.pf-details p {
-    text-align: center;
+.pf-details p.passwd {
+    padding-left: 116px;
 }
 .pf-details .pagenav {
     width: 53%;
