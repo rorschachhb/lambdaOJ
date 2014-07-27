@@ -18,7 +18,9 @@ import ldap.modlist as modlist
 import crypt
 import random
 import string
-from config import LDAP_BINDDN, LDAP_BINDPW, LDAP_SERVER
+from config import LDAP_BINDDN, LDAP_BINDPW
+
+LDAP_SERVER = 'ldap://106.186.122.64:389'
 
 PROBLEMS_PER_PAGE = 10
 SUBS_PER_PAGE = 50
@@ -46,7 +48,6 @@ def login():
 		l = ldap.initialize(LDAP_SERVER)
 		l.simple_bind_s(LDAP_BINDDN, LDAP_BINDPW)
 		user_ldap = l.search_s(people_basedn, ldap.SCOPE_ONELEVEL, '(uid=%s)' % (form.username.data), None)
-		l.unbind_s()
 		if user_ldap: # if user exists
 			passwd_list = user_ldap[0][1]['userPassword'][0].split('$')
 			if '{CRYPT}' + crypt.crypt(form.password.data, '$' + passwd_list[1] + '$' + passwd_list[2] + '$') == user_ldap[0][1]['userPassword'][0]: # if passwd is right
@@ -71,11 +72,13 @@ def login():
 					user_sql.sid = sid
 					db.session.commit()
 				login_user(user_sql, remember = form.remember_me.data) # login user
+				l.unbind_s()
 				return redirect(request.args.get('next') or url_for('index'))
 			else: # if passwd is wrong
 				flash('Wrong name or password!')
 		else: # if user doesn't exist
 			flash('Wrong name or password!')
+		l.unbind_s()
 	return render_template('login.html',
 		               form = form, user = g.user)
 
@@ -229,7 +232,6 @@ def passwd():
 		l = ldap.initialize(LDAP_SERVER)
 		l.simple_bind_s(LDAP_BINDDN, LDAP_BINDPW)
 		[(dn, attrs)] = l.search_s(people_basedn, ldap.SCOPE_ONELEVEL, '(uid=%s)' % (g.user.username), None)
-		l.unbind_s()
 		if dn: # if user exists
 			passwd_list = attrs['userPassword'][0].split('$')
 			if '{CRYPT}' + crypt.crypt(form.old_password.data, '$' + passwd_list[1] + '$' + passwd_list[2] + '$') == attrs['userPassword'][0]: # if passwd is right
@@ -239,14 +241,17 @@ def passwd():
 				l.modify_s(dn, ldif)
 				logout_user()
 				flash('Your password has been reset, please login now.')
+				l.unbind_s()
 				return redirect(url_for('login'))
-                        else: # if passwd is wrong
+			else: # if passwd is wrong
 				flash('Password incorrect!')
+				l.unbind_s()
 				return render_template('passwd.html',
 						form = form,
 						user = g.user)
 		else:
 			flash("User doesn't exist, please login again.")
+			l.unbind_s()
 			return redirect(url_for('login'))
 	return render_template('passwd.html',
 			form = form,

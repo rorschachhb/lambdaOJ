@@ -30,8 +30,6 @@ class EditForm(Form):
 	old_password = PasswordField('old_password', validators = [InputRequired()])
 	new_password =  PasswordField('new_password', validators = [InputRequired()])
 	confirm_password =  PasswordField('confirm_password', validators = [InputRequired(), EqualTo(fieldname='new_password', message='Password must match!')])
-	validate_code = TextField('validate_code', validators = [InputRequired(), Captcha(fieldname='validate_code_hash')])
-	validate_code_hash = TextField('validate_code_ans')
 
 class SubmitForm(Form):
 	problem_id = IntegerField('problem_id', validators = [InputRequired(), NumberRange(min=1)])
