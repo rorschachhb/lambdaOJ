@@ -28,7 +28,7 @@ rds = redis.Redis(host='127.0.0.1', port=6379, db=0)
 import views, models
 
 from lambda_admin import *
-admin = Admin(app, index_view=lambdaIndexView(name='lambdaOJ', url='/oj/admin/'))
+admin = Admin(app, index_view=lambdaIndexView(name='lambdaOJ', url='/oj/admin'))
 
 path = op.join(op.dirname(__file__), 'static')
 admin.add_view(lambdaFileAdmin(path, name='Static Files'))
