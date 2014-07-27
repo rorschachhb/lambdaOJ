@@ -54,7 +54,6 @@ def login():
 		if user_ldap: # if user exists
 			passwd_list = user_ldap[0][1]['userPassword'][0].split('$')
 			if '{CRYPT}' + crypt.crypt(form.password.data, '$' + passwd_list[1] + '$' + passwd_list[2] + '$') == user_ldap[0][1]['userPassword'][0]: # if passwd is right
-				print 'password is right'
 				user_sql = User.query.filter_by(username=user_ldap[0][1]['uid'][0]).first()
 				if l.search_s(groups_basedn, ldap.SCOPE_ONELEVEL, '(&(cn=admin)(member=uid=%s, ou=people, dc=lambda, dc=cool))' % (user_ldap[0][1]['uid'][0]), None):
 					role = 'admin'

@@ -38,7 +38,9 @@ rds = redis.Redis(host='127.0.0.1', port=6379, db=0)
 
 print "4"
 
-l = ldap.initialize("ldap://106.186.122.64:389")
+LDAP_SERVER = config.LDAP_SERVER
+print LDAP_SERVER
+l = ldap.initialize(LDAP_SERVER)
 l.simple_bind_s(LDAP_BINDDN, LDAP_BINDPW)
 
 print "5"
