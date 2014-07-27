@@ -48,8 +48,8 @@ def login():
 			l.whoami_s()
 		except ldap.LDAPError, e:
 			l.unbind_s()
-			l = ldap.initialize("ldap://lambda.cool:389")
-			l.simple_bind_s('ou=oj, ou=services, dc=lambda, dc=cool', 'aoeirtnsqwertoj')
+			l = ldap.initialize(LDAP_SERVER)
+			l.simple_bind_s(LDAP_BINDDN, LDAP_PINDPW)
 		user_ldap = l.search_s(people_basedn, ldap.SCOPE_ONELEVEL, '(uid=%s)' % (form.username.data), None)
 		if user_ldap: # if user exists
 			passwd_list = user_ldap[0][1]['userPassword'][0].split('$')
@@ -218,8 +218,8 @@ def profile(page):
 		l.whoami_s()
 	except ldap.LDAPError, e:
 		l.unbind_s()
-		l = ldap.initialize("ldap://lambda.cool:389")
-		l.simple_bind_s('ou=oj, ou=services, dc=lambda, dc=cool', 'aoeirtnsqwertoj')
+		l = ldap.initialize(LDAP_SERVER)
+		l.simple_bind_s(LDAP_BINDDN, LDAP_BINDPW)
 	user_attrs = l.search_s(people_basedn, ldap.SCOPE_ONELEVEL, '(uid=%s)' % (g.user.username), None)
 
 	subs = Submit.query.filter_by(user=g.user.id).order_by(Submit.submit_time).paginate(page, SUBS_PER_PAGE)
@@ -246,8 +246,8 @@ def passwd():
 			l.whoami_s()
 		except ldap.LDAPError, e:
 			l.unbind_s()
-			l = ldap.initialize("ldap://lambda.cool:389")
-			l.simple_bind_s('ou=oj, ou=services, dc=lambda, dc=cool', 'aoeirtnsqwertoj')
+			l = ldap.initialize(LDAP_SERVER)
+			l.simple_bind_s(LDAP_BINDDN, LDAP_BINDPW)
 		[(dn, attrs)] = l.search_s(people_basedn, ldap.SCOPE_ONELEVEL, '(uid=%s)' % (g.user.username), None)
 		if dn: # if user exists
 			passwd_list = attrs['userPassword'][0].split('$')

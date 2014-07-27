@@ -8,7 +8,7 @@ import os.path as op
 import redis
 import ldap
 import crypt
-from config import CSRF_SECRET_KEY, LDAP_BINDDN, LDAP_BINDPW
+from config import CSRF_SECRET_KEY, LDAP_BINDDN, LDAP_BINDPW, LDAP_SERVER
 
 app = Flask(__name__, static_url_path='/oj/static')
 app.config['MAX_CONTENT_LENGTH'] = 100 * 1024
@@ -38,7 +38,7 @@ rds = redis.Redis(host='127.0.0.1', port=6379, db=0)
 
 print "4"
 
-l = ldap.initialize("ldap://106.186.122.64:389")
+l = ldap.initialize(LDAP_SERVER)
 l.simple_bind_s(LDAP_BINDDN, LDAP_BINDPW)
 
 print "5"
