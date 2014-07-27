@@ -14,6 +14,11 @@ app.config['MAX_CONTENT_LENGTH'] = 100 * 1024
 app.config['CSRF_ENABLED'] = True
 app.config['SECRET_KEY'] = 'you-will-never-guess'
 
+parent_dir = op.split(op.dirname(__file__))[0]
+db_dir = op.join(parent_dir, 'db')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + op.join(db_dir, 'app.db')
+app.config['SQLALCHEMY_MIGRATE_REPO'] = op.join(db_dir, 'db_repository')
+
 db = SQLAlchemy(app)
 
 lm = LoginManager()
@@ -35,13 +40,6 @@ admin = Admin(app, name='lambdaOJ', url='/oj/admin')
 
 path = op.join(op.dirname(__file__), 'static')
 admin.add_view(FileAdmin(path, '/static/', name='Static Files'))
-
-parent_dir = op.split(op.dirname(__file__))[0]
-db_dir = op.join(parent_dir, 'db')
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + op.join(db_dir, 'app.db')
-app.config['SQLALCHEMY_MIGRATE_REPO'] = op.join(db_dir, 'db_repository')
-
 admin.add_view(ModelView(models.User, db.session))
 admin.add_view(ModelView(models.Problem, db.session))
 admin.add_view(ModelView(models.Submit, db.session))

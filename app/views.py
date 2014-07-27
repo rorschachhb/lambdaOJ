@@ -207,18 +207,44 @@ def problem(problem_id):
 	else:
 		return redirect(url_for('index'))
 
-@app.route('/oj/profile/', defaults={'user_id': None})
-@app.route('/oj/profile/<int:user_id>')
-def profile(user_id):
-	if user_id is None:
-		user_id = g.user.id
-	u = User.query.get(user_id)
-	if u is None:
-		flash("User %d doesn't exit." % (user_id))
-		return redirect(url_for('index'))
-	else:
-		return render_template('profile.html',
-			user = u)
+@app.route('/oj/profile/', defaults={'page': 1})
+@login_required
+def profile(page):
+	try:
+		global l
+		l.whoami_s()
+	except ldap.LDAPError, e:
+		l.unbind_s()
+		l = ldap.initialize("ldap://lambda.cool:389")
+		l.simple_bind_s('ou=oj, ou=services, dc=lambda, dc=cool', 'aoeirtnsqwertoj')
+	user_attrs = l.search_s(people_basedn, ldap.SCOPE_ONELEVEL, '(uid=%s)' % (g.user.username), None)
+
+	subs = Submit.query.filter_by(user=g.user.id).order_by(Submit.submit_time).paginate(page, SUBS_PER_PAGE)
+
+	subs_all = Submit.query.filter_by(user=g.user.id).all()
+
+	transcript = {}
+	for s in subs_all:
+		p = Problem.query.get(s.problem)
+		if p:
+			
+			status = rds.hget('lambda:%d:head' % (s.id), 'state')
+			if status is None or status == 'Pending' or status == 'Compilation Error':
+				score = 0
+			else:
+				score = float(status)
+			try:
+				if transcript[s.problem] < score:
+					transcript[s.problem] = score
+			except KeyError:
+				transcript[s.problem] = { 'title': p.title, 'score': score }
+	sorted_trans = sorted(transcript.items(), key=lambda x:x[0])
+
+	return render_template('profile.html', 
+		user_attrs = user_attrs[0][1],
+		user = g.user, 
+		subs = subs,
+		transcript = sorted_trans)
 
 @app.errorhandler(413)
 def request_entity_too_large(e):
@@ -268,4 +294,4 @@ def judge_on_commit(mapper, connection, model):
 
 	#remove work dir
 	#rmtree( basedir + "/users/%d/%s/" % (g.user.id, filehash))
-event.listen(Submit, 'after_insert', judge_on_commit)
+# event.listen(Submit, 'after_insert', judge_on_commit)

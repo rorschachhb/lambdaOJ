@@ -44,7 +44,7 @@
 	  {% endblock navstatus %}
 
 	  {% block navprofile %}
-	  <li class="disabled">Profile</li>
+	  <li><a href="{{ url_for('profile') }}">Profile</li>
 	  {% endblock navprofile %}
 
 	  {% if user %}
