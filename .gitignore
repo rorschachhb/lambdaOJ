@@ -12,5 +12,6 @@ db_repository/
 app/users/*
 app/problems/*
 app/static/tmp/*
+config.py
 add_*.py
 dump.rdb
