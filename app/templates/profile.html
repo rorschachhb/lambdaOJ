@@ -10,24 +10,18 @@ Profile
 
 {% block content %}
 <article class="pf-title">
-  <h2>{{ user_attrs['uid'][0] }}
-    {% if user_attrs['employeeNumber'] %}
-    ({{ user_attrs['employeeNumber'][0] }})
+  <h2>{{ user.username }}
+    {% if user.sid %}
+    ({{ user.sid }})
     {% endif %}
   </h2>
 </article>
 
 <article class="pf-details">
-  <h3>Account Information</h3>
-  <p class="email">
-    Email : &nbsp; <span>{{ user_attrs['mail'][0] }}</span> 
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <h3>Account Managment</h3>
+  <p class="passwd">
     Password : &nbsp;
     <a href="{{ url_for('passwd') }}">Change Password</a>
-  <p class="contact">
-    ( If you want to change your email, please
-    <a href="mailto:admin@lambda.cool">contact us</a> .
-    )
   </p>
 
   <h3>Personal History</h3>

@@ -90,6 +90,14 @@ header, article, section, footer, nav {
     color: #303030;
 }
 
+#mainnav a.notice {
+    color: rgb(60, 255, 120);
+    border-bottom: 4px solid rgb(60, 200, 120);
+}
+header.notice {
+    margin: 24px 0px 0px 0px;
+    font-size: 1.08em;
+}
 
 
 header {
@@ -254,7 +262,7 @@ form div span.submit {
     width: 45%;
 }
 #passwdform div.separator {
-    height: 17px;
+    height: 7px;
 }
 
 
@@ -578,13 +586,8 @@ table.sub td.id a span.status-worst {
     color: rgba(20, 0, 48, 0.8);
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
 }
-.pf-details p.email span {
-    padding: 2px 9px;
-    border-radius: 5px;
-    background-color: #e0e0e0;
-}
-.pf-details p {
-    text-align: center;
+.pf-details p.passwd {
+    padding-left: 116px;
 }
 .pf-details .pagenav {
     width: 53%;

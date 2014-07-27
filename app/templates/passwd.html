@@ -4,7 +4,31 @@
 Change Password
 {% endblock %}
 
+{% block mainnav %}
+<div id="mainnav">
+  <div class="wrapper">
+    <span class="logo">LAMBDA.COOL</span>
+    <a href="/">Home</a>
+    <a href="/oj/" class="notice">Online Judge</a>
+    <a href="/wiki/" class="notice">Wiki</a>
+    <a href="http://git.lambda.cool/" target="_blank" class="notice">GitLab</a>
+  </div>
+</div>
+{% endblock mainnav %}
+
+{% block header %}
+<header class="notice">
+<p>
+  The password will be used by <b>ALL WEB SERVICES</b> provided by LAMBDA.COOL
+</p>
+</header>
+{% endblock header %}
+
+{% block nav %}
+{% endblock nav %}
+
 {% block content %}
+
 <form action="" method="post" name="passwd" id="passwdform">
   {{ form.hidden_tag() }}
 

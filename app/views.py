@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, session, url_for, request, g 
 from flask.ext.login import login_user, logout_user, current_user, login_required, login_fresh, confirm_login, fresh_login_required
-from app import app, db, lm, rds, l, people_basedn, groups_basedn
+from app import app, db, lm, rds, people_basedn, groups_basedn
 from forms import LoginForm, EditForm, SubmitForm
 from models import *
 from werkzeug import secure_filename
@@ -18,6 +18,7 @@ import ldap.modlist as modlist
 import crypt
 import random
 import string
+from config import LDAP_BINDDN, LDAP_BINDPW, LDAP_SERVER
 
 PROBLEMS_PER_PAGE = 10
 SUBS_PER_PAGE = 50
@@ -27,7 +28,6 @@ port = 8787
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-@app.route('/', defaults={'page': 1})
 @app.route('/oj/', defaults={'page': 1})
 @app.route('/oj/index/', defaults={'page': 1})
 @app.route('/oj/index/<int:page>')
@@ -43,14 +43,10 @@ def login():
 		return redirect(url_for('index'))
 	form = LoginForm()
 	if form.validate_on_submit():
-		try:
-			global l
-			l.whoami_s()
-		except ldap.LDAPError, e:
-			l.unbind_s()
-			l = ldap.initialize("ldap://lambda.cool:389")
-			l.simple_bind_s('ou=oj, ou=services, dc=lambda, dc=cool', 'aoeirtnsqwertoj')
+		l = ldap.initialize(LDAP_SERVER)
+		l.simple_bind_s(LDAP_BINDDN, LDAP_BINDPW)
 		user_ldap = l.search_s(people_basedn, ldap.SCOPE_ONELEVEL, '(uid=%s)' % (form.username.data), None)
+		l.unbind_s()
 		if user_ldap: # if user exists
 			passwd_list = user_ldap[0][1]['userPassword'][0].split('$')
 			if '{CRYPT}' + crypt.crypt(form.password.data, '$' + passwd_list[1] + '$' + passwd_list[2] + '$') == user_ldap[0][1]['userPassword'][0]: # if passwd is right
@@ -212,15 +208,6 @@ def problem(problem_id):
 @app.route('/oj/profile/', defaults={'page': 1})
 @login_required
 def profile(page):
-	try:
-		global l
-		l.whoami_s()
-	except ldap.LDAPError, e:
-		l.unbind_s()
-		l = ldap.initialize("ldap://lambda.cool:389")
-		l.simple_bind_s('ou=oj, ou=services, dc=lambda, dc=cool', 'aoeirtnsqwertoj')
-	user_attrs = l.search_s(people_basedn, ldap.SCOPE_ONELEVEL, '(uid=%s)' % (g.user.username), None)
-
 	subs = Submit.query.filter_by(user=g.user.id).order_by(Submit.submit_time).paginate(page, SUBS_PER_PAGE)
 	for s in subs.items:
 		s.language = languages[s.language]
@@ -231,7 +218,6 @@ def profile(page):
 			s.status = status_tmp
 
 	return render_template('profile.html', 
-		user_attrs = user_attrs[0][1],
 		user = g.user, 
 		subs = subs)
 
@@ -240,14 +226,10 @@ def profile(page):
 def passwd():
 	form = EditForm()
 	if form.validate_on_submit():
-		try:
-			global l
-			l.whoami_s()
-		except ldap.LDAPError, e:
-			l.unbind_s()
-			l = ldap.initialize("ldap://lambda.cool:389")
-			l.simple_bind_s('ou=oj, ou=services, dc=lambda, dc=cool', 'aoeirtnsqwertoj')
+		l = ldap.initialize(LDAP_SERVER)
+		l.simple_bind_s(LDAP_BINDDN, LDAP_BINDPW)
 		[(dn, attrs)] = l.search_s(people_basedn, ldap.SCOPE_ONELEVEL, '(uid=%s)' % (g.user.username), None)
+		l.unbind_s()
 		if dn: # if user exists
 			passwd_list = attrs['userPassword'][0].split('$')
 			if '{CRYPT}' + crypt.crypt(form.old_password.data, '$' + passwd_list[1] + '$' + passwd_list[2] + '$') == attrs['userPassword'][0]: # if passwd is right
@@ -258,7 +240,7 @@ def passwd():
 				logout_user()
 				flash('Your password has been reset, please login now.')
 				return redirect(url_for('login'))
-			else: # if passwd is wrong
+                        else: # if passwd is wrong
 				flash('Password incorrect!')
 				return render_template('passwd.html',
 						form = form,

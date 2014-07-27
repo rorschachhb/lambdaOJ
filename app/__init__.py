@@ -8,14 +8,12 @@ import os.path as op
 import redis
 import ldap
 import crypt
-from config import CSRF_SECRET_KEY, LDAP_BINDDN, LDAP_BINDPW
+from config import CSRF_SECRET_KEY
 
 app = Flask(__name__, static_url_path='/oj/static')
 app.config['MAX_CONTENT_LENGTH'] = 100 * 1024
 app.config['CSRF_ENABLED'] = True
 app.config['SECRET_KEY'] = CSRF_SECRET_KEY
-
-print "1"
 
 parent_dir = op.split(op.dirname(__file__))[0]
 db_dir = op.join(parent_dir, 'db')
@@ -24,26 +22,16 @@ SQLALCHEMY_MIGRATE_REPO = op.join(db_dir, 'db_repository')
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_MIGRATE_REPO'] = SQLALCHEMY_MIGRATE_REPO
 
-print "2"
-
 db = SQLAlchemy(app)
 
 lm = LoginManager()
 lm.init_app(app)
 lm.login_view = 'login'
 
-print "3"
-
 rds = redis.Redis(host='127.0.0.1', port=6379, db=0)
 
-print "4"
-
-LDAP_SERVER = config.LDAP_SERVER
-print LDAP_SERVER
-l = ldap.initialize(LDAP_SERVER)
-l.simple_bind_s(LDAP_BINDDN, LDAP_BINDPW)
-
-print "5"
+# l = ldap.initialize(LDAP_SERVER)
+# l.simple_bind_s(LDAP_BINDDN, LDAP_BINDPW)
 
 people_basedn = 'ou=people,dc=lambda,dc=cool'
 groups_basedn = 'ou=groups,dc=lambda,dc=cool'
