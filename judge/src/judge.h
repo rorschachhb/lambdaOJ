@@ -3,6 +3,7 @@
 #include <sys/reg.h>
 #include <sys/user.h>
 #include <sys/syscall.h>
+#include <syslog.h>
 #include "csapp.h"
 #include "hiredis/hiredis.h"
 
