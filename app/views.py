@@ -168,7 +168,7 @@ def submit(pid = None):
 				fp = open(filepath,"rb")
 				hmd5.update(fp.read())
 				filehash = hmd5.hexdigest()
-				new_filepath = os.path.join(basedir, 'users/%d/%s%s' % (g.user.id, datetime.now().strftime('%Y-%m-%d-%H:%M:%S'), '_' + filehash + '_' + filename))
+				new_filepath = os.path.join(basedir, 'users/%s/%s%s' % (g.user.username, datetime.now().strftime('%Y-%m-%d-%H:%M:%S'), '_' + filehash + '_' + filename))
 				os.rename(filepath, new_filepath)
 
 				#write database
@@ -254,7 +254,7 @@ def judge_on_commit(mapper, connection, model):
 	            "code_path": model.code_file,
 	            "test_sample_num": p.sample_num,
 	            "lang_flag": model.language,
-	            "work_dir": os.path.join(basedir, "users/%d/%s/" % (user_id, filehash)),
+	            "work_dir": os.path.join(basedir, "users/%s/%s/" % (u.username, filehash)),
 	            "test_dir": os.path.join(basedir, "problems/%d/data/" % (pid)),
 	            "time_limit": [p.time_limit]*p.sample_num,
 	            "mem_limit": [p.memory_limit]*p.sample_num}
