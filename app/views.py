@@ -184,7 +184,10 @@ def submit(pid = None):
 
 				#return something
 				s = Submit.query.filter_by(user=g.user.id, submit_time=timenow).first()
-				return redirect(url_for('submit_info', sid = s.id))
+                                if s == None:
+                                        return redirect(url_for('status'))
+                                else:
+                                        return redirect(url_for('submit_info', sid = s.id))
 	vimg, vstr = validate_code.create_validate_code(font_type="app/static/fonts/SourceCodePro-Bold.otf")
 	hmd5 = hashlib.md5()
 	hmd5.update(vstr)
@@ -305,4 +308,4 @@ def judge_on_commit(mapper, connection, model):
 
 	#remove work dir
 	#rmtree( basedir + "/users/%d/%s/" % (g.user.id, filehash))
-# event.listen(Submit, 'after_insert', judge_on_commit)
+event.listen(Submit, 'after_insert', judge_on_commit)

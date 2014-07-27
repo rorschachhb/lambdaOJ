@@ -48,7 +48,7 @@ languages = {
 
 class User(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
-	username = db.Column(db.String(256), index = True, unique = True)
+	username = db.Column(db.String(64), index = True, unique = True)
 	role = db.Column(db.String(5), default = 'user')
 	sid = db.Column(db.String(10))
 
@@ -86,4 +86,4 @@ class Submit(db.Model):
 	user = db.Column(db.Integer, db.ForeignKey('user.id'))
 	language = db.Column(db.SmallInteger)
 	submit_time = db.Column(db.Float)
-	code_file = db.Column(db.Text)
+	code_file = db.Column(db.Text(500))
