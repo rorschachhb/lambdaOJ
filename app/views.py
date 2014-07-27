@@ -220,11 +220,22 @@ def profile(page):
 	user_attrs = l.search_s(people_basedn, ldap.SCOPE_ONELEVEL, '(uid=%s)' % (g.user.username), None)
 
 	subs = Submit.query.filter_by(user=g.user.id).order_by(Submit.submit_time).paginate(page, SUBS_PER_PAGE)
+	for s in subs.items:
+		s.language = languages[s.language]
+		status_tmp = rds.hget('lambda:%d:head' % (s.id), 'state')
+		if status_tmp is None:
+			s.status = 'Pending'
+		else:
+			s.status = status_tmp
 
 	return render_template('profile.html', 
 		user_attrs = user_attrs[0][1],
 		user = g.user, 
 		subs = subs)
+
+@app.route('/oj/passwd/')
+@fresh_login_required
+def 
 
 @app.errorhandler(413)
 def request_entity_too_large(e):
