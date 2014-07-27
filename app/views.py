@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, session, url_for, request, g 
 from flask.ext.login import login_user, logout_user, current_user, login_required, login_fresh, confirm_login, fresh_login_required
 from app import app, db, lm, rds, l, people_basedn, groups_basedn
-from forms import LoginForm, EditForm, SubmitForm, PostForm
+from forms import LoginForm, EditForm, SubmitForm
 from models import *
 from werkzeug import secure_filename
 import os
@@ -14,7 +14,10 @@ from app import validate_code
 from time import time
 from datetime import datetime
 import ldap
+import ldap.modlist as modlist
 import crypt
+import random
+import string
 
 PROBLEMS_PER_PAGE = 10
 SUBS_PER_PAGE = 50
@@ -207,18 +210,66 @@ def problem(problem_id):
 	else:
 		return redirect(url_for('index'))
 
-@app.route('/oj/profile/', defaults={'user_id': None})
-@app.route('/oj/profile/<int:user_id>')
-def profile(user_id):
-	if user_id is None:
-		user_id = g.user.id
-	u = User.query.get(user_id)
-	if u is None:
-		flash("User %d doesn't exit." % (user_id))
-		return redirect(url_for('index'))
-	else:
-		return render_template('profile.html',
-			user = u)
+@app.route('/oj/profile/', defaults={'page': 1})
+@login_required
+def profile(page):
+	try:
+		global l
+		l.whoami_s()
+	except ldap.LDAPError, e:
+		l.unbind_s()
+		l = ldap.initialize("ldap://lambda.cool:389")
+		l.simple_bind_s('ou=oj, ou=services, dc=lambda, dc=cool', 'aoeirtnsqwertoj')
+	user_attrs = l.search_s(people_basedn, ldap.SCOPE_ONELEVEL, '(uid=%s)' % (g.user.username), None)
+
+	subs = Submit.query.filter_by(user=g.user.id).order_by(Submit.submit_time).paginate(page, SUBS_PER_PAGE)
+	for s in subs.items:
+		s.language = languages[s.language]
+		status_tmp = rds.hget('lambda:%d:head' % (s.id), 'state')
+		if status_tmp is None:
+			s.status = 'Pending'
+		else:
+			s.status = status_tmp
+
+	return render_template('profile.html', 
+		user_attrs = user_attrs[0][1],
+		user = g.user, 
+		subs = subs)
+
+@app.route('/oj/passwd/', methods = ['GET', 'POST'])
+@fresh_login_required
+def passwd():
+	form = EditForm()
+	if form.validate_on_submit():
+		try:
+			global l
+			l.whoami_s()
+		except ldap.LDAPError, e:
+			l.unbind_s()
+			l = ldap.initialize("ldap://lambda.cool:389")
+			l.simple_bind_s('ou=oj, ou=services, dc=lambda, dc=cool', 'aoeirtnsqwertoj')
+		[(dn, attrs)] = l.search_s(people_basedn, ldap.SCOPE_ONELEVEL, '(uid=%s)' % (g.user.username), None)
+		if dn: # if user exists
+			passwd_list = attrs['userPassword'][0].split('$')
+			if '{CRYPT}' + crypt.crypt(form.old_password.data, '$' + passwd_list[1] + '$' + passwd_list[2] + '$') == attrs['userPassword'][0]: # if passwd is right
+				old = {'userPassword': attrs['userPassword']}
+				new = {'userPassword': ['{CRYPT}' + crypt.crypt(form.new_password.data, '$6$%s$'%(''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(10)])))]}
+				ldif = modlist.modifyModlist(old, new)
+				l.modify_s(dn, ldif)
+				logout_user()
+				flash('Your password has been reset, please login now.')
+				return redirect(url_for('login'))
+			else: # if passwd is wrong
+				flash('Password incorrect!')
+				return render_template('passwd.html',
+						form = form,
+						user = g.user)
+		else:
+			flash("User doesn't exist, please login again.")
+			return redirect(url_for('login'))
+	return render_template('passwd.html',
+			form = form,
+			user = g.user)
 
 @app.errorhandler(413)
 def request_entity_too_large(e):
@@ -268,4 +319,4 @@ def judge_on_commit(mapper, connection, model):
 
 	#remove work dir
 	#rmtree( basedir + "/users/%d/%s/" % (g.user.id, filehash))
-event.listen(Submit, 'after_insert', judge_on_commit)
+# event.listen(Submit, 'after_insert', judge_on_commit)

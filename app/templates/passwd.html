@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}
+Change Password
+{% endblock %}
+
+{% block content %}
+<form action="" method="post" name="passwd" id="passwdform">
+  {{ form.hidden_tag() }}
+
+  <fieldset>
+    <legend>Change Password</legend>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    {% if loop.last %}
+    <p class="message">[{{ message }}]</p>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <div>
+      <lable for="new_password" class="form-title">New Password :</lable>
+      {{ form.new_password }}
+      {% for error in form.errors.new_password %}
+      <p class="form-error">[{{ error }}]</p>
+      {% endfor %}
+    </div>
+
+    <div>
+      <lable for="confirm_password" class="form-title">Again :</lable>
+      {{ form.confirm_password }}
+      {% for error in form.errors.confirm_password %}
+      <p class="form-error">[{{ error }}]</p>
+      {% endfor %}
+    </div>
+    
+    <div class="separator">
+    </div>
+
+    <div>
+      <lable for="old_password" class="form-title">Confirm Old Password :</lable>
+      {{ form.old_password }}
+      {% for error in form.errors.old_password %}
+      <p class="form-error">[{{ error }}]</p>
+      {% endfor %}
+    </div>
+
+    <div>
+      <span class="submit">
+	<input type="submit" name="passwd" value="Change Password">
+      </span>
+    </div>
+  </fieldset>
+</form>
+{% endblock content %}
