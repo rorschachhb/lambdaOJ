@@ -86,4 +86,4 @@ class Submit(db.Model):
 	user = db.Column(db.Integer, db.ForeignKey('user.id'))
 	language = db.Column(db.SmallInteger)
 	submit_time = db.Column(db.Float)
-	code_file = db.Column(db.String(100))
+	code_file = db.Column(db.Text)
