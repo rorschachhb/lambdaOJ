@@ -47,7 +47,7 @@
 	  <li class="disabled">Profile</li>
 	  {% endblock navprofile %}
 
-	  {% if user %}
+	  {% if user.is_authenticated() %}
 	  <li class="last"><a href="{{ url_for('logout') }}">Logout</a></li>
 	  {% else %}
 	  {% block navlogin %}
