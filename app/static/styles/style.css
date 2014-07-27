@@ -305,6 +305,63 @@ table.list a:hover {
     text-decoration: underline;
 }
 
+table.sub td.id a {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+}
+table.sub td.id a span.id {
+    float: left;
+    display: block;
+    width: 42%;
+    text-align: right;
+}
+table.sub td.id a:hover span.id {
+    text-decoration: underline;
+}
+table.sub td.id a span[class|=status] {
+    font-weight: bold;
+    font-style: oblique;
+    color: #ffffff;
+    padding: 1px 6px 1px 5px;
+    border-radius: 5px;
+    box-shadow: 1px 2px 1px 0px rgba(0, 0, 0, 0.1);
+}
+table.sub td.id a span.status-waiting {
+    color: blue;
+    box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
+}
+table.sub td.id a span.status-cool {
+    color: #585858;
+    background-color: rgb(250, 245, 50);
+    background: linear-gradient(rgb(250, 245, 50),
+				rgb(255, 250, 230));
+}
+table.sub td.id a span.status-fine {
+    color: #585858;
+    background-color: rgb(200, 200, 190);
+    background: linear-gradient(rgb(200, 200, 190),
+				rgb(243, 243, 238));
+}
+table.sub td.id a span.status-safe {
+    color: #585858;
+    background-color: rgb(128, 255, 73);
+    background: linear-gradient(rgb(128, 255, 73),
+				rgb(220, 255, 225));
+}
+table.sub td.id a span.status-sad {
+    color: #f0f0f0;
+    background-color: rgb(6, 150, 220);
+    background: linear-gradient(rgb(6, 150, 220),
+				rgb(146, 253, 255));
+}
+table.sub td.id a span.status-worst {
+    color: #f0f0f0;
+    background-color: rgb(200, 48, 240);
+    background: linear-gradient(rgb(200, 48, 240),
+				rgb(220, 185, 244));
+}
+
 
 #pbs {
     width: 80%;
@@ -324,63 +381,6 @@ table.list a:hover {
 #subs {
     width: 61.8%;
 }
-#subs td.id a {
-    display: block;
-    text-align: center;
-    text-decoration: none;
-}
-#subs td.id a span.id {
-    float: left;
-    display: block;
-    width: 42%;
-    text-align: right;
-}
-#subs td.id a:hover span.id {
-    text-decoration: underline;
-}
-
-#subs td.id a span[class|=status] {
-    font-weight: bold;
-    font-style: oblique;
-    color: #ffffff;
-    padding: 1px 6px 1px 5px;
-    border-radius: 5px;
-    box-shadow: 1px 2px 1px 0px rgba(0, 0, 0, 0.1);
-}
-#subs td.id a span.status-waiting {
-    color: blue;
-}
-#subs td.id a span.status-cool {
-    color: #585858;
-    background-color: rgb(250, 245, 50);
-    background: linear-gradient(rgb(250, 245, 50),
-				rgb(255, 250, 230));
-}
-#subs td.id a span.status-fine {
-    color: #585858;
-    background-color: rgb(200, 200, 190);
-    background: linear-gradient(rgb(200, 200, 190),
-				rgb(243, 243, 238));
-}
-#subs td.id a span.status-safe {
-    color: #585858;
-    background-color: rgb(128, 255, 73);
-    background: linear-gradient(rgb(128, 255, 73),
-				rgb(220, 255, 225));
-}
-#subs td.id a span.status-sad {
-    color: #f0f0f0;
-    background-color: rgb(6, 150, 220);
-    background: linear-gradient(rgb(6, 150, 220),
-				rgb(146, 253, 255));
-}
-#subs td.id a span.status-worst {
-    color: #f0f0f0;
-    background-color: rgb(200, 48, 240);
-    background: linear-gradient(rgb(200, 48, 240),
-				rgb(220, 185, 244));
-}
-
 #subs .problem {
     width: 110px;
 }
@@ -551,6 +551,43 @@ table.list a:hover {
 .sub-details span.status-error {
     background-color: rgb(164, 52, 52);
 }
+
+
+.pf-title h2 {
+    width: 100%;
+    text-align: center;
+}
+.pf-details {
+    width: 68%;
+    margin: 0px auto;
+}
+.pf-details h3 {
+    color: rgb(20, 0, 48);
+    color: rgba(20, 0, 48, 0.8);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
+}
+.pf-details p.email span {
+    padding: 2px 9px;
+    border-radius: 5px;
+    background-color: #e0e0e0;
+}
+.pf-details p {
+    text-align: center;
+}
+.pf-details .pagenav {
+    width: 53%;
+}
+#history {
+    width: 64%;
+}
+#history .problem {
+    width: 110px;
+}
+#history .language {
+    width: 120px;
+    text-align: center;
+}
+
 
 
 footer {

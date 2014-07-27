@@ -44,7 +44,7 @@
 	  {% endblock navstatus %}
 
 	  {% block navprofile %}
-	  <li><a href="{{ url_for('profile') }}">Profile</li>
+	  <li><a href="{{ url_for('profile') }}">Profile</a></li>
 	  {% endblock navprofile %}
 
 	  {% if user.is_authenticated() %}

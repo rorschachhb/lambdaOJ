@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}
+Profile
+{% endblock title %}
+
+{% block navprofile %}
+<li class="now"><a href="{{ url_for('profile') }}">Profile</a></li>
+{% endblock navprofile %}
+
+{% block content %}
+<article class="pf-title">
+  <h2>{{ user_attrs['uid'][0] }}
+    {% if user_attrs['employeeNumber'] %}
+    ({{ user_attrs['employeeNumber'][0] }})
+    {% endif %}
+  </h2>
+</article>
+
+<article class="pf-details">
+  <h3>Account Information</h3>
+  <p class="email">
+    Email : &nbsp; <span>{{ user_attrs['mail'][0] }}</span> 
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Password : &nbsp;
+    <a href="{{ url_for('passwd') }}">Change Password</a>
+  <p class="contact">
+    ( If you want to change your email, please
+    <a href="mailto:admin@lambda.cool">contact us</a> .
+    )
+  </p>
+
+  <h3>Submit History</h3>
+  <table id="history" class="list sub">
+    <tr>
+      <th class="id">Submit</th>
+      <th class="problem">Problem</th>
+      <th class="language">Language</th>
+    </tr>
+    {% for sub in subs.items %}
+    <tr class="{{ loop.cycle('odd', 'even') }}">
+      <td class="id">
+	<a href="{{ url_for('submit_info', 
+		 sid =  sub.id, page = subs.page) }}">
+	  <span class="id">
+	    {{ sub.id }}
+	  </span>
+
+	  {% if sub.status == "Pending" %}
+	  <span class="status-waiting">-</span>
+	  {% elif sub.status == "Compilation Error" %}
+	  <span class="status-worst">WORST</span>
+	  {% elif sub.status|float() == 1.00 %}
+	  <span class="status-cool">COOL</span>
+	  {% elif sub.status|float() >= 0.80 %}
+	  <span class="status-fine">FINE</span>
+	  {% elif sub.status|float() >= 0.60 %}
+	  <span class="status-safe">SAFE</span>
+	  {% elif sub.status|float() > 0.00 %}
+	  <span class="status-sad">SAD</span>
+	  {% else %}
+	  <span class="status-worst">WORST</span>
+	  {% endif %}
+	</a>
+      </td>
+      <td class="problem">
+	<a class="id" href="{{ url_for('problem',
+			    problem_id = sub.problem) }}">{{ sub.problem }}</a>
+      </td>
+      <td class="language">{{ sub.language }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <div class="pagenav">
+    <ul>
+      {% if subs.has_prev %}
+      <li>
+	<a href="{{ url_for('status', page = 1) }}"><strong>&lt;&lt;&lt;</strong></a>
+      </li>
+      <li>
+	<a href="{{ url_for('status', page = subs.prev_num) }}"><strong>&lt; Prev</strong></a>
+      </li>
+      {% else %}
+      <li class="disabled"><strong>&lt;&lt;&lt;</strong></li>
+      <li class="disabled"><strong>&lt; Prev</strong></li>
+      {% endif %}
+
+      <li class="page">{{ subs.page }}</li>
+
+      {% if subs.has_next %}
+      <li>
+	<a href="{{ url_for('status', page = subs.next_num) }}"><strong>Next &gt;</strong></a>
+      </li>
+      <li>
+	<a href="{{ url_for('status', page = subs.pages) }}"><strong>&gt;&gt;&gt;</strong></a>
+      </li>
+      {% else %}
+      <li class="disabled"><strong>Next &gt;</strong></li>
+      <li class="disabled"><strong>&gt;&gt;&gt;</strong></li>
+      {% endif %}
+    </ul>
+  </div>
+</article>
+{% endblock content %}
