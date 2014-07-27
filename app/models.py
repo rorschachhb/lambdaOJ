@@ -48,10 +48,9 @@ languages = {
 
 class User(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
-	username = db.Column(db.String(120), index = True, unique = True)
-	password = db.Column(db.String(120))
-	role = db.Column(db.SmallInteger, default = ROLE_USER)
-	status = db.Column(db.SmallInteger, default = STATUS_NORMAL)
+	username = db.Column(db.String(256), index = True, unique = True)
+	role = db.Column(db.String(5), default = 'user')
+	sid = db.Column(db.String(10))
 
 	def is_authenticated(self):
 		return True

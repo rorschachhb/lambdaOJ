@@ -37,13 +37,6 @@ class SubmitForm(Form):
 	validate_code = TextField('validate_code', validators = [InputRequired(), Captcha(fieldname='validate_code_hash')])
 	validate_code_hash = TextField('validate_code_ans')
 
-class SignupForm(Form):
-	email = TextField('email', validators = [InputRequired(), Email()])
-	nickname = TextField('nickname', validators = [InputRequired()])
-	password =  PasswordField('password', validators = [InputRequired()])
-	password_confirm =  PasswordField('password_confirm', validators = [InputRequired(),EqualTo('password', message='Passwords must match')])
-	role = SelectField('role', choices = [(ROLE_USER, 'user'), (ROLE_ADMIN, 'admin')], validators = [InputRequired()], coerce=int)
-
 class PostForm(Form):
 	problem_id = IntegerField('problem_id', validators = [InputRequired()])
 	title = TextField('title', validators = [InputRequired(), Length(max = 100)])

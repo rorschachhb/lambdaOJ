@@ -24,6 +24,7 @@ rds = redis.Redis(host='127.0.0.1', port=6379, db=0)
 
 l = ldap.initialize("ldap://lambda.cool:389")
 l.simple_bind_s('ou=oj, ou=services, dc=lambda, dc=cool', 'aoeirtnsqwertoj')
+print 'ldap connected'
 
 people_basedn = 'ou=people,dc=lambda,dc=cool'
 groups_basedn = 'ou=groups,dc=lambda,dc=cool'

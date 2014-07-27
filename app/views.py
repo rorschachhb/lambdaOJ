@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, session, url_for, request, g 
 from flask.ext.login import login_user, logout_user, current_user, login_required, login_fresh, confirm_login, fresh_login_required
 from app import app, db, lm, rds, l, people_basedn, groups_basedn
-from forms import LoginForm, EditForm, SubmitForm, SignupForm, PostForm
+from forms import LoginForm, EditForm, SubmitForm, PostForm
 from models import *
 from werkzeug import secure_filename
 import os
@@ -30,10 +30,9 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 @app.route('/oj/index/<int:page>')
 def index(page):
 	pbs = Problem.query.paginate(page, PROBLEMS_PER_PAGE)
-	tuser = modify_user(g.user)
 	return render_template("index.html",
 		pbs=pbs, 
-		user = tuser)
+		user = g.user)
 
 @app.route('/oj/login/', methods = ['GET', 'POST'])
 def login():
@@ -41,26 +40,46 @@ def login():
 		return redirect(url_for('index'))
 	form = LoginForm()
 	if form.validate_on_submit():
+		try:
+			global l
+			l.whoami_s()
+		except ldap.LDAPError, e:
+			l.unbind_s()
+			l = ldap.initialize("ldap://lambda.cool:389")
+			l.simple_bind_s('ou=oj, ou=services, dc=lambda, dc=cool', 'aoeirtnsqwertoj')
 		user_ldap = l.search_s(people_basedn, ldap.SCOPE_ONELEVEL, '(uid=%s)' % (form.username.data), None)
 		if user_ldap: # if user exists
 			passwd_list = user_ldap[0][1]['userPassword'][0].split('$')
 			if '{CRYPT}' + crypt.crypt(form.password.data, '$' + passwd_list[1] + '$' + passwd_list[2] + '$') == user_ldap[0][1]['userPassword'][0]: # if passwd is right
 				print 'password is right'
 				user_sql = User.query.filter_by(username=user_ldap[0][1]['uid'][0]).first()
-				if user_sql is None: # if user is not in sql database
-					user = User(username=user_ldap[0][1]['uid'][0])
+				if l.search_s(groups_basedn, ldap.SCOPE_ONELEVEL, '(&(cn=admin)(member=uid=%s, ou=people, dc=lambda, dc=cool))' % (user_ldap[0][1]['uid'][0]), None):
+					role = 'admin'
+				else:
+					role = 'user'
+				try:
+					sid = user_ldap[0][1]['employeeNumber'][0]
+				except KeyError:
+					sid = None
+				if user_sql is None: # if user is not in sql database, create one
+					user = User(username=user_ldap[0][1]['uid'][0],
+						role=role,
+						sid=sid)
 					db.session.add(user)
 					db.session.commit()
 					user_sql = User.query.filter_by(username=user_ldap[0][1]['uid'][0]).first()
+				else: # if user is already in sql database, overwrite it
+					user_sql.role = role
+					user_sql.sid = sid
+					db.session.commit()
 				login_user(user_sql, remember = form.remember_me.data) # login user
 				return redirect(request.args.get('next') or url_for('index'))
 			else: # if passwd is wrong
 				flash('Wrong name or password!')
 		else: # if user doesn't exist
 			flash('Wrong name or password!')
-	tuser = modify_user(g.user)
 	return render_template('login.html',
-		               form = form, user = tuser)
+		               form = form, user = g.user)
 
 @app.route('/oj/logout/')
 @login_required
@@ -82,10 +101,9 @@ def status(page):
 			s.status = 'Pending'
 		else:
 			s.status = status_tmp
-	tuser = modify_user(g.user)
 	return render_template('status.html', 
 		subs = subs, 
-		user = tuser)
+		user = g.user)
 
 @app.route('/oj/submit_info/<int:sid>/', defaults={'page':1})
 @app.route('/oj/submit_info/<int:sid>/<int:page>')
@@ -99,7 +117,6 @@ def submit_info(sid, page):
 				sub.language = languages[sub.language]
 				sub.user = user.username
 				problem = Problem.query.filter_by(id=sub.problem).first()
-				tuser = modify_user(g.user)
 				fp = open(sub.code_file, 'r')
 				code = fp.read()
 				fp.close()
@@ -122,7 +139,7 @@ def submit_info(sid, page):
 					sub_results = sub_results, 
 					error_message = error_message,
 					code = code,
-					user = tuser)
+					user = g.user)
 	return redirect(url_for('status', page=page))
 
 @app.route('/oj/submit/', methods = ['GET', 'POST'])
@@ -143,9 +160,9 @@ def submit(pid = None):
 			else:
 				#rename
 				filename = secure_filename(form.upload_file.data.filename)
-				filepath = os.path.join(basedir, 'users/%d/%s' % (g.user.id, filename))
-				if not os.path.exists(os.path.join(basedir, 'users/%d/' % (g.user.id))):
-					os.makedirs(os.path.join(basedir, 'users/%d/' % (g.user.id)))
+				filepath = os.path.join(basedir, 'users/%s/%s' % (g.user.username, filename))
+				if not os.path.exists(os.path.join(basedir, 'users/%s/' % (g.user.username))):
+					os.makedirs(os.path.join(basedir, 'users/%s/' % (g.user.username)))
 				form.upload_file.data.save(filepath)
 				hmd5 = hashlib.md5()
 				fp = open(filepath,"rb")
@@ -173,22 +190,20 @@ def submit(pid = None):
 	vhash = hmd5.hexdigest()
 	vimg.save(os.path.join(basedir, 'static/tmp/%s.gif' % (vhash)), "GIF")
 	form.validate_code_hash.data = vhash
-	tuser = modify_user(g.user)
 	return render_template('submit.html',
                                form = form,
                                validate_img = vhash,
                                pid = pid, 
-                               user = tuser)
+                               user = g.user)
 
 @app.route('/oj/problem/', defaults={'problem_id':1})
 @app.route('/oj/problem/<int:problem_id>')
 def problem(problem_id):
 	problem = Problem.query.filter_by(id=problem_id).first()
 	if problem:
-		tuser = modify_user(g.user)
 		return render_template('problem.html',
 			problem=problem, 
-			user = tuser)
+			user = g.user)
 	else:
 		return redirect(url_for('index'))
 
@@ -205,33 +220,6 @@ def profile(user_id):
 		return render_template('profile.html',
 			user = u)
 
-
-@app.route('/oj/signup/', methods = ['GET', 'POST'])
-def signup():
-	if g.user and g.user.is_authenticated():
-		return redirect(url_for('index'))
-	form = SignupForm()
-	if form.validate_on_submit():
-		user = User.query.filter_by(email=form.email.data).first()
-		if user is None:
-			user = User(email=form.email.data, 
-				password=form.password.data, 
-				nickname=form.nickname.data, 
-				role=form.role.data,
-				status=STATUS_NORMAL)
-			db.session.add(user)
-			db.session.commit()
-			u = User.query.filter_by(email=user.email).first()
-			if not os.path.exists(os.path.join(basedir, 'users/%d' % (u.id))):
-				os.makedirs(os.path.join(basedir, 'users/%d' % (u.id)))
-			flash('Please log in now.')
-			return redirect(url_for('login'))
-		else:
-			flash('This email address has already been registerd, please try another one.')
-	tuser = modify_user(g.user)
-	return render_template('signup.html',
-                               form = form, user = tuser)
-
 @app.errorhandler(413)
 def request_entity_too_large(e):
 	# return render_template('413.html'), 413
@@ -246,14 +234,6 @@ def before_request():
 def load_user(id):
 	return User.query.get(int(id))
 
-def modify_user(tuser):
-        try: 
-                tuser.role = roles[tuser.role]
-                tuser.status = statuses[tuser.status]
-        except AttributeError:
-                tuser = None
-        return tuser
-
 def judge_on_commit(mapper, connection, model):
 	#write redis
 	rds.hset('lambda:%d:head' % (model.id), 'state', 'Pending')
@@ -264,9 +244,9 @@ def judge_on_commit(mapper, connection, model):
 	fp = open(filepath,"rb")
 	hmd5.update(fp.read())
 	filehash = hmd5.hexdigest()
-	user_id = model.user
-	if not os.path.exists(os.path.join(basedir, "users/%d/%s" % (user_id, filehash))):
-		os.makedirs(os.path.join(basedir, "users/%d/%s" % (user_id, filehash)))
+	u = User.query.get(model.user)
+	if not os.path.exists(os.path.join(basedir, "users/%s/%s" % (u.username, filehash))):
+		os.makedirs(os.path.join(basedir, "users/%s/%s" % (u.username, filehash)))
 	#request
 	pid = model.problem
 	p = Problem.query.get(pid)
@@ -278,11 +258,7 @@ def judge_on_commit(mapper, connection, model):
 	            "test_dir": os.path.join(basedir, "problems/%d/data/" % (pid)),
 	            "time_limit": [p.time_limit]*p.sample_num,
 	            "mem_limit": [p.memory_limit]*p.sample_num}
-	print json_req['code_path']
-	print json_req['work_dir']
-	print json_req['test_dir']
 	request_json = json.dumps(json_req)
-        print request_json
 
 	#connect socket
 	jsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
