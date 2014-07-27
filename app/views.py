@@ -14,7 +14,10 @@ from app import validate_code
 from time import time
 from datetime import datetime
 import ldap
+import ldap.modlist as modlist
 import crypt
+import random
+import string
 
 PROBLEMS_PER_PAGE = 10
 SUBS_PER_PAGE = 50
@@ -233,7 +236,7 @@ def profile(page):
 		user = g.user, 
 		subs = subs)
 
-@app.route('/oj/passwd/')
+@app.route('/oj/passwd/', methods = ['GET', 'POST'])
 @fresh_login_required
 def passwd():
 	form = EditForm()
@@ -246,13 +249,14 @@ def passwd():
 			l = ldap.initialize("ldap://lambda.cool:389")
 			l.simple_bind_s('ou=oj, ou=services, dc=lambda, dc=cool', 'aoeirtnsqwertoj')
 		[(dn, attrs)] = l.search_s(people_basedn, ldap.SCOPE_ONELEVEL, '(uid=%s)' % (g.user.username), None)
-		if user_ldap: # if user exists
+		if dn: # if user exists
 			passwd_list = attrs['userPassword'][0].split('$')
 			if '{CRYPT}' + crypt.crypt(form.old_password.data, '$' + passwd_list[1] + '$' + passwd_list[2] + '$') == attrs['userPassword'][0]: # if passwd is right
 				old = {'userPassword': attrs['userPassword']}
 				new = {'userPassword': ['{CRYPT}' + crypt.crypt(form.new_password.data, '$6$%s$'%(''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(10)])))]}
 				ldif = modlist.modifyModlist(old, new)
 				l.modify_s(dn, ldif)
+				logout_user()
 				flash('Your password has been reset, please login now.')
 				return redirect(url_for('login'))
 			else: # if passwd is wrong
