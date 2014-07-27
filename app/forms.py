@@ -11,8 +11,9 @@ class LoginForm(Form):
 	remember_me = BooleanField('remember_me', default = True)
 
 class EditForm(Form):	
-	password =  PasswordField('password', validators = [InputRequired(), EqualTo('password_confirm', message='Passwords must match')])
-	password_confirm =  PasswordField('password_confirm', validators = [InputRequired()])
+	old_password = PasswordField('old_password', validators = [InputRequired()])
+	new_password =  PasswordField('new_password', validators = [InputRequired()])
+	confirm_password =  PasswordField('confirm_password', validators = [InputRequired(), EqualTo(fieldname='new_password', message='Password must match!')])
 
 class Captcha(object):
 	def __init__(self, fieldname, message=None):
@@ -36,15 +37,3 @@ class SubmitForm(Form):
 	upload_file = FileField('upload_file', validators = [FileRequired(), FileAllowed(['c', 'C', 'cpp', 'CPP', 'py'], 'C/C++ and Python codes only!')])
 	validate_code = TextField('validate_code', validators = [InputRequired(), Captcha(fieldname='validate_code_hash')])
 	validate_code_hash = TextField('validate_code_ans')
-
-class PostForm(Form):
-	problem_id = IntegerField('problem_id', validators = [InputRequired()])
-	title = TextField('title', validators = [InputRequired(), Length(max = 100)])
-	time_limit = IntegerField('time_limit', validators = [InputRequired()])
-	memory_limit = IntegerField('time_limit', validators = [InputRequired()])
-	description = TextAreaField('description', validators = [InputRequired()])
-	input_description = TextAreaField('input_description', validators = [InputRequired()])
-	output_description = TextAreaField('output_description', validators = [InputRequired()])
-	input_sample = TextAreaField('input_sample', validators = [InputRequired()])
-	output_sample = TextAreaField('output_sample', validators = [InputRequired()])
-	hint = TextAreaField('hint', validators = [Optional()])

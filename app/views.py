@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, session, url_for, request, g 
 from flask.ext.login import login_user, logout_user, current_user, login_required, login_fresh, confirm_login, fresh_login_required
 from app import app, db, lm, rds, l, people_basedn, groups_basedn
-from forms import LoginForm, EditForm, SubmitForm, PostForm
+from forms import LoginForm, EditForm, SubmitForm
 from models import *
 from werkzeug import secure_filename
 import os
@@ -235,7 +235,37 @@ def profile(page):
 
 @app.route('/oj/passwd/')
 @fresh_login_required
-def 
+def passwd():
+	form = EditForm()
+	if form.validate_on_submit():
+		try:
+			global l
+			l.whoami_s()
+		except ldap.LDAPError, e:
+			l.unbind_s()
+			l = ldap.initialize("ldap://lambda.cool:389")
+			l.simple_bind_s('ou=oj, ou=services, dc=lambda, dc=cool', 'aoeirtnsqwertoj')
+		[(dn, attrs)] = l.search_s(people_basedn, ldap.SCOPE_ONELEVEL, '(uid=%s)' % (g.user.username), None)
+		if user_ldap: # if user exists
+			passwd_list = attrs['userPassword'][0].split('$')
+			if '{CRYPT}' + crypt.crypt(form.old_password.data, '$' + passwd_list[1] + '$' + passwd_list[2] + '$') == attrs['userPassword'][0]: # if passwd is right
+				old = {'userPassword': attrs['userPassword']}
+				new = {'userPassword': ['{CRYPT}' + crypt.crypt(form.new_password.data, '$6$%s$'%(''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(10)])))]}
+				ldif = modlist.modifyModlist(old, new)
+				l.modify_s(dn, ldif)
+				flash('Your password has been reset, please login now.')
+				return redirect(url_for('login'))
+			else: # if passwd is wrong
+				flash('Password incorrect!')
+				return render_template('passwd.html',
+						form = form,
+						user = g.user)
+		else:
+			flash("User doesn't exist, please login again.")
+			return redirect(url_for('login'))
+	return render_template('passwd.html',
+			form = form,
+			user = g.user)
 
 @app.errorhandler(413)
 def request_entity_too_large(e):
