@@ -248,10 +248,13 @@ form div span.submit {
 }
 
 #passwdform {
-    width: 70%;
+    width: 48%;
+}
+#passwdform .form-title {
+    width: 45%;
 }
 #passwdform div.separator {
-    height: 20px;
+    height: 17px;
 }
 
 
