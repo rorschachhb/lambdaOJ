@@ -55,19 +55,6 @@ Submit
     </div>
 
     <div>
-      <lable for="validate_code" class="form-title">Captcha :</lable>
-      <span class="validate">
-	{{ form.validate_code }}
-	<img src="{{ url_for('static', filename='tmp/%s.gif' % (validate_img)) }}" alt="Validate Code" />
-      </span>
-      {% for error in form.errors.validate_code %}
-      <p class="form-error">[{{ error }}]</p>
-      {% endfor %}
-    </div>
-
-    {{ form.validate_code_hash }}
-
-    <div>
       <span class="submit">
 	<input type="submit" value="Submit">
       </span>

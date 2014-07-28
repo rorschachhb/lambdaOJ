@@ -10,7 +10,6 @@ import json
 import socket
 from shutil import rmtree
 from sqlalchemy import event
-from app import validate_code
 from time import time
 from datetime import datetime
 import ldap
@@ -113,7 +112,7 @@ def submit_info(sid, page):
 		sub = Submit.query.filter_by(id=sid).first()
 		if sub:
 			user = User.query.filter_by(id=sub.user).first()
-			if ( user.id == g.user.id ) or ( g.user.role is ROLE_ADMIN ):
+			if ( user.id == g.user.id ) or ( g.user.role == 'admin' ):
 				sub.language = languages[sub.language]
 				sub.user = user.username
 				problem = Problem.query.filter_by(id=sub.problem).first()
@@ -147,10 +146,7 @@ def submit_info(sid, page):
 @login_required
 def submit(pid = None):
 	form = SubmitForm()
-	form.problem_id.choices = [(p.id, p.title) for p in Problem.query.all()]
 	if request.method == 'POST':
-		if os.path.isfile(os.path.join(basedir, 'static/tmp/%s.gif' % (form.validate_code_hash.data))):
-			os.remove(os.path.join(basedir, 'static/tmp/%s.gif' % (form.validate_code_hash.data)))
 		if form.validate_on_submit():
 			pid = form.problem_id.data
 			p = Problem.query.get(pid)
@@ -158,6 +154,11 @@ def submit(pid = None):
 				flash("Problem %d doesn't exist!" % (pid))
 				return redirect(url_for('submit'))
 			else:
+				try:
+					languages[form.language.data]
+				except KeyError:
+					flash('Language not allowed!')
+					return redirect(url_for('submit'))
 				#rename
 				filename = secure_filename(form.upload_file.data.filename)
 				filepath = os.path.join(basedir, 'users/%s/%s' % (g.user.username, filename))
@@ -181,15 +182,8 @@ def submit(pid = None):
 				db.session.commit()
 
                                 return redirect(url_for('status'))
-	vimg, vstr = validate_code.create_validate_code(font_type="app/static/fonts/SourceCodePro-Bold.otf")
-	hmd5 = hashlib.md5()
-	hmd5.update(vstr)
-	vhash = hmd5.hexdigest()
-	vimg.save(os.path.join(basedir, 'static/tmp/%s.gif' % (vhash)), "GIF")
-	form.validate_code_hash.data = vhash
 	return render_template('submit.html',
                                form = form,
-                               validate_img = vhash,
                                pid = pid, 
                                user = g.user)
 
@@ -221,7 +215,7 @@ def profile(page):
 		subs = subs)
 
 @app.route('/oj/passwd/', methods = ['GET', 'POST'])
-@fresh_login_required
+@login_required
 def passwd():
 	form = EditForm()
 	if form.validate_on_submit():

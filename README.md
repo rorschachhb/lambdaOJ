@@ -10,6 +10,9 @@ Packages:
 
 * python python-pip python-virtualenv
 * python-imaging python-devel
+* openldap-devel-static
+* hiredis hiredis-devel libhiredis0_10
+* libmysqld-devel
 
 Services:
 
@@ -50,7 +53,8 @@ editor db/config.py
 Create local database:
 
 ```
-db/db_create.py  
+cd db
+./db_create.py  
 ```
 
 Compile core judge program, initialize redis for it:
