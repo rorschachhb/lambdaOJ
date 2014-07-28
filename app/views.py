@@ -113,7 +113,7 @@ def submit_info(sid, page):
 		sub = Submit.query.filter_by(id=sid).first()
 		if sub:
 			user = User.query.filter_by(id=sub.user).first()
-			if ( user.id == g.user.id ) or ( g.user.role is ROLE_ADMIN ):
+			if ( user.id == g.user.id ) or ( g.user.role is "admin" ):
 				sub.language = languages[sub.language]
 				sub.user = user.username
 				problem = Problem.query.filter_by(id=sub.problem).first()
