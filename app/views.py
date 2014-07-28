@@ -225,7 +225,7 @@ def profile(page):
 		subs = subs)
 
 @app.route('/oj/passwd/', methods = ['GET', 'POST'])
-@fresh_login_required
+@login_required
 def passwd():
 	form = EditForm()
 	if form.validate_on_submit():
