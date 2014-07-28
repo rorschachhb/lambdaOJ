@@ -19,9 +19,10 @@ import crypt
 import random
 import string
 from config import LDAP_BINDDN, LDAP_BINDPW, LDAP_SERVER, people_basedn, groups_basedn
+from sqlalchemy import desc
 
 PROBLEMS_PER_PAGE = 10
-SUBS_PER_PAGE = 50
+SUBS_PER_PAGE = 100
 
 host = '127.0.0.1'
 port = 8787
@@ -90,7 +91,7 @@ def logout():
 @app.route('/oj/status/<int:page>')
 @login_required
 def status(page):
-	subs = Submit.query.order_by(Submit.submit_time).paginate(page, SUBS_PER_PAGE)
+	subs = Submit.query.order_by(desc(Submit.id)).paginate(page, SUBS_PER_PAGE)
 	for s in subs.items:
 		s.language = languages[s.language]
 		user_tmp = User.query.filter_by(id=s.user).first()
@@ -171,21 +172,15 @@ def submit(pid = None):
 				os.rename(filepath, new_filepath)
 
 				#write database
-				timenow = -1.0 * time()
 				sub = Submit(problem = pid,
 					user = g.user.id,
 					language = form.language.data,
-					submit_time = timenow,
+					submit_time = time(),
 					code_file = new_filepath)
 				db.session.add(sub)
 				db.session.commit()
 
-				#return something
-				s = Submit.query.filter_by(user=g.user.id, submit_time=timenow).first()
-                                if s == None:
-                                        return redirect(url_for('status'))
-                                else:
-                                        return redirect(url_for('submit_info', sid = s.id))
+                                return redirect(url_for('status'))
 	vimg, vstr = validate_code.create_validate_code(font_type="app/static/fonts/SourceCodePro-Bold.otf")
 	hmd5 = hashlib.md5()
 	hmd5.update(vstr)
