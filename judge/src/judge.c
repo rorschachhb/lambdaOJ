@@ -175,7 +175,6 @@ int check_syscall_ok(struct user_regs_struct *uregs)
 	    int open_flag = uregs->ebx ;
 	    #endif
 	    //check for WR
-            printf("%x : %x : %d\n",open_flag,O_RDWR, open_flag & O_RDWR) ;
 	    if ( ((open_flag & O_WRONLY) ) || ((open_flag & O_RDWR) ) ) {
 		return 0 ;
 	    }else return 1;	       
