@@ -207,7 +207,7 @@ def problem(problem_id):
 @app.route('/oj/profile/', defaults={'page': 1})
 @login_required
 def profile(page):
-	subs = Submit.query.filter_by(user=g.user.id).order_by(Submit.submit_time).paginate(page, SUBS_PER_PAGE)
+	subs = Submit.query.filter_by(user=g.user.id).order_by(desc(Submit.id)).paginate(page, SUBS_PER_PAGE)
 	for s in subs.items:
 		s.language = languages[s.language]
 		status_tmp = rds.hget('lambda:%d:head' % (s.id), 'state')
