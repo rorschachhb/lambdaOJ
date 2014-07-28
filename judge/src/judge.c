@@ -67,7 +67,7 @@ void set_lang_option(struct lang_config* lc, enum lang lang_flag,char *path)
 void compile_term(int sig)
 {
     signal(SIGCHLD,SIG_DFL);
-    wait(NULL) ;
+    while (waitpid(-1,0,WNOHANG) > 0) ;
     siglongjmp(buf,1) ;
 }
 
@@ -83,8 +83,8 @@ void compile_code(char *compile_cmd,char *argv[],char *err_file)
 	}
 	sleep(max_compile_time) ;
 	signal(SIGCHLD,SIG_DFL);
-	kill(pid, SIGKILL) ;
-	wait(NULL) ;
+	kill(-pid, SIGKILL) ;
+	while (waitpid(-1,0,WNOHANG) > 0) ;
 	FILE* ferr = fopen(err_file,"w") ;
 	fprintf(ferr,"compile error!");
 	fclose(ferr);
