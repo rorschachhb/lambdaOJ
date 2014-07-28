@@ -33,7 +33,7 @@ for each_type in test_type :
 	n = s.send(text)
 	print "send %d bytes json text" % n
 	s.close()
-	time.sleep(3)
+	time.sleep(7)
 	print "get head..."
 	print r.hgetall("lambda:%d:head" % sid)
 	print "print result..."

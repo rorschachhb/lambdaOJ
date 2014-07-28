@@ -74,12 +74,14 @@ void compile_term(int sig)
 void compile_code(char *compile_cmd,char *argv[],char *err_file)
 {
     signal(SIGCHLD,compile_term) ;
+    pid_t pid ;
     if (sigsetjmp(buf,1)==0) { 
-	pid_t pid ;
 	pid = fork() ;
 	if (pid == 0) {
+	    setpgid(pid,pid);
 	    freopen(err_file,"w",stderr) ;
 	    execv(compile_cmd,argv) ;
+	    exit(0) ;
 	}
 	sleep(max_compile_time) ;
 	signal(SIGCHLD,SIG_DFL);
@@ -173,8 +175,8 @@ int check_syscall_ok(struct user_regs_struct *uregs)
 	    int open_flag = uregs->ebx ;
 	    #endif
 	    //check for WR
-	    if ( ((open_flag & O_WRONLY) == 1) ||
-		 ((open_flag & O_RDWR) == 1) ) {
+            printf("%x : %x : %d\n",open_flag,O_RDWR, open_flag & O_RDWR) ;
+	    if ( ((open_flag & O_WRONLY) ) || ((open_flag & O_RDWR) ) ) {
 		return 0 ;
 	    }else return 1;	       
 	}else {
