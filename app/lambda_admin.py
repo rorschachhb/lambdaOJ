@@ -8,12 +8,18 @@ import ldap
 from config import LDAP_SERVER, LDAP_BINDDN, LDAP_BINDPW, groups_basedn
 
 def is_admin():
-	l = ldap.initialize(LDAP_SERVER)
-	l.simple_bind_s(LDAP_BINDDN, LDAP_BINDPW)
-	if l.search_s(groups_basedn, ldap.SCOPE_ONELEVEL, '(&(cn=admin)(member=uid=%s, ou=people, dc=lambda, dc=cool))' % (current_user.username), None):
-		return True
-	else:
-		return False
+        if current_user.role == "admin":
+                return True
+        else:
+                return False
+	# l = ldap.initialize(LDAP_SERVER)
+	# l.simple_bind_s(LDAP_BINDDN, LDAP_BINDPW)
+	# if l.search_s(groups_basedn, ldap.SCOPE_ONELEVEL, '(&(cn=admin)(member=uid=%s, ou=people, dc=lambda, dc=cool))' % (current_user.username), None):
+        #         l.unbind_s()
+	# 	return True
+	# else:
+        #         l.unbind_s()
+	# 	return False
 
 class lambdaIndexView(AdminIndexView):
 	def __init__(self,
