@@ -6,100 +6,82 @@ LambdaOJ
 
 ## Requirements
 
-Basic Requirements:
+Packages:
 
-* python
-* python-pip
-* python-virtualenv
+* python python-pip python-virtualenv
+* python-imaging python-devel
 
-To start from uWSGI, you need to have it installed:
+Services:
 
-```
-sudo pip install uwsgi
-```
+* MySQL (you need to create a lambdaoj database in Mysql, too)
+* Redis server
+* LDAP server
+* Web server
+* uWSGI
 
 
 
 ## Installation
 
-First, install build requirements,
-```
-sudo apt-get build-dep python-imaging
-sudo apt-get install python-dev
-```
-
-For Ubuntu users, make sure that PIL's setup.py can find JPEG/ZLIB, by creating find-able links to the libraries,
-
-for Ubuntu x64:
-```
-sudo ln -s /usr/lib/i386-linux-gnu/libfreetype.so /usr/lib/
-
-sudo ln -s /usr/lib/i386-linux-gnu/libz.so /usr/lib/
-
-sudo ln -s /usr/lib/i386-linux-gnu/libjpeg.so /usr/lib/
-```
-
-for Ubuntu x86:
-```
-sudo ln -s /usr/lib/x86_64-linux-gnu/libfreetype.so /usr/lib/
-
-sudo ln -s /usr/lib/x86_64-linux-gnu/libz.so /usr/lib/
-
-sudo ln -s /usr/lib/x86_64-linux-gnu/libjpeg.so /usr/lib/
-```
-
- Second, `cd` into the `lambdaOJ` directory,
-create and activate virtual environment:
+Create and activate virtual environment:
 
 ```
+cd <path/to/lambdaoj>
 virtualenv --no-site-packages venv
 source venv/bin/activate
 ```
 
-Then, install requirements:
+Install requirements:
+(you may need to install other dependencies)
 
 ```
 pip install -r requirements.txt
 ```
 
-`cd` into `db` directory, create local database:
-```
-./db_create.py  
-./db_migrate.py
-```
-
-
-
-## Testing
-
-Make sure you have activated the virtual environment:
+Copy the example config files, modify them as you need:
 
 ```
-source venv/bin/activate
+cp app/config.py.example app/config.py
+cp db/config.py.example db/config.py
+editor app/config.py
+editor db/config.py
 ```
 
-Run it (without a web server):
+Create local database:
 
 ```
-./lambdaoj.py
+db/db_create.py  
 ```
 
-It will listen on `127.0.0.1:5000` by default.
-	
+Compile core judge program, initialize redis for it:
 
+```
+cd judge
+make
+./init-redis.py
+```
 
-## uWSGI
+If you want syslog from the core judge program, configure your `rsyslog`:
+(it will send messages to user.*)
 
-Initialization:
+```
+sudo editor /etc/rsyslog.conf
+```
+
+Initialization uWSGI:
+(It will prompt for `user`, `group`, `port` for lambdaOJ Web Process,
+and generate `lambdaoj.ini` and `run.sh`.)
 
 ```
 ./init-uwsgi.sh
 ```
 
-It will prompt for `user`, `group`, `port` for lambdaOJ Web Process,
-and generate `lambdaoj.ini` and `run.sh`.
+After that, You need to configure Web Server according to port in lambdaoj.ini
 
-After that, you can execute `run.sh` to run from uWSGI each time.
 
-Of course, for actual use,
-you also need to configure your web server.
+
+## Running
+
+```
+<path/to/lambdaoj>/run.sh
+```

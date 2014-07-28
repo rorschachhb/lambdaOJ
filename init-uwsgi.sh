@@ -35,6 +35,8 @@ read -p "Uwsgi Listem Port ($DEFAULT_PORT) : " OJ_PORT
     echo
     echo "cd " $CURRENT_PATH
     echo
+    echo "judge/lambdajudge &"
+    echo
     echo "source venv/bin/activate"
     echo "uwsgi --ini lambdaoj.ini"
 } > $SH_FILE
