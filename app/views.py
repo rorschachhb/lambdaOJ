@@ -10,7 +10,6 @@ import json
 import socket
 from shutil import rmtree
 from sqlalchemy import event
-from app import validate_code
 from time import time
 from datetime import datetime
 import ldap
@@ -148,8 +147,6 @@ def submit_info(sid, page):
 def submit(pid = None):
 	form = SubmitForm()
 	if request.method == 'POST':
-		if os.path.isfile(os.path.join(basedir, 'static/tmp/%s.gif' % (form.validate_code_hash.data))):
-			os.remove(os.path.join(basedir, 'static/tmp/%s.gif' % (form.validate_code_hash.data)))
 		if form.validate_on_submit():
 			pid = form.problem_id.data
 			p = Problem.query.get(pid)
@@ -185,15 +182,8 @@ def submit(pid = None):
 				db.session.commit()
 
                                 return redirect(url_for('status'))
-	vimg, vstr = validate_code.create_validate_code(font_type="app/static/fonts/SourceCodePro-Bold.otf")
-	hmd5 = hashlib.md5()
-	hmd5.update(vstr)
-	vhash = hmd5.hexdigest()
-	vimg.save(os.path.join(basedir, 'static/tmp/%s.gif' % (vhash)), "GIF")
-	form.validate_code_hash.data = vhash
 	return render_template('submit.html',
                                form = form,
-                               validate_img = vhash,
                                pid = pid, 
                                user = g.user)
 

@@ -5,22 +5,6 @@ from flask_wtf.file import FileField, FileRequired, FileAllowed
 from models import *
 import hashlib
 
-class Captcha(object):
-	def __init__(self, fieldname, message=None):
-		self.fieldname = fieldname
-		self.message = message
-
-	def __call__(self, form, field):
-		try:
-			other = form[self.fieldname]
-		except KeyError:
-			raise ValidationError(field.gettext("Invalid field name '%s'.") % self.fieldname)
-		hmd5 = hashlib.md5()
-		hmd5.update(field.data)
-		vhash = hmd5.hexdigest()
-		if vhash != other.data:
-			raise ValidationError('Validate code incorrect!')
-
 class LoginForm(Form):
 	username = TextField('username', validators = [InputRequired()])
 	password =  PasswordField('password', validators = [InputRequired()])
@@ -37,5 +21,3 @@ class SubmitForm(Form):
                                choices = [(C, 'C'), (CPP, 'C++')],
                                validators = [InputRequired()], coerce=int)
 	upload_file = FileField('upload_file', validators = [FileRequired()])
-	validate_code = TextField('validate_code', validators = [InputRequired(), Captcha(fieldname='validate_code_hash')])
-	validate_code_hash = TextField('validate_code_ans')
