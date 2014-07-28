@@ -7,12 +7,12 @@ lambdajudge
 run.sh
 venv/
 README.html
-db/app.db
+add_*.py
+dump.rdb
 db/config.py
+db/app.db
 db/db_repository/
+app/config.py
 app/users/*
 app/problems/*
 app/static/tmp/*
-config.py
-add_*.py
-dump.rdb

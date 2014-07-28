@@ -1,0 +1,7 @@
+LDAP_SERVER = "ldap://localhost:389"
+LDAP_BINDDN = "ou=,dc=,dc="
+LDAP_BINDPW = ""
+people_basedn = "ou=,dc=,dc="
+groups_basedn = "ou=,dc=,dc="
+SQLALCHEMY_DATABASE_URI = "mysql://oj:password@localhost/lambdaoj"
+CSRF_SECRET_KEY="some hard to guess"
