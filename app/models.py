@@ -38,12 +38,10 @@ oj_states = {
 
 C = 0
 CPP = 1
-PYTHON = 2
 
 languages = {
 	C: 'C',
 	CPP: 'C++',
-	PYTHON: 'Python'
 }
 
 class User(db.Model):

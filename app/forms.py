@@ -33,7 +33,9 @@ class EditForm(Form):
 
 class SubmitForm(Form):
 	problem_id = IntegerField('problem_id', validators = [InputRequired(), NumberRange(min=1)])
-	language = SelectField('language', choices = [(C, 'C'), (CPP, 'C++'), (PYTHON, 'Python')], validators = [InputRequired()], coerce=int)
-	upload_file = FileField('upload_file', validators = [FileRequired(), FileAllowed(['c', 'C', 'cpp', 'CPP', 'py'], 'C/C++ and Python codes only!')])
+	language = SelectField('language',
+                               choices = [(C, 'C'), (CPP, 'C++')],
+                               validators = [InputRequired()], coerce=int)
+	upload_file = FileField('upload_file', validators = [FileRequired()])
 	validate_code = TextField('validate_code', validators = [InputRequired(), Captcha(fieldname='validate_code_hash')])
 	validate_code_hash = TextField('validate_code_ans')
