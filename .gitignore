@@ -9,6 +9,7 @@ venv/
 README.html
 add_*.py
 dump.rdb
+config.py
 db/config.py
 db/app.db
 db/db_repository/

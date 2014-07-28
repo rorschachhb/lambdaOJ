@@ -147,7 +147,6 @@ def submit_info(sid, page):
 @login_required
 def submit(pid = None):
 	form = SubmitForm()
-	form.problem_id.choices = [(p.id, p.title) for p in Problem.query.all()]
 	if request.method == 'POST':
 		if os.path.isfile(os.path.join(basedir, 'static/tmp/%s.gif' % (form.validate_code_hash.data))):
 			os.remove(os.path.join(basedir, 'static/tmp/%s.gif' % (form.validate_code_hash.data)))
@@ -158,6 +157,11 @@ def submit(pid = None):
 				flash("Problem %d doesn't exist!" % (pid))
 				return redirect(url_for('submit'))
 			else:
+				try:
+					languages[form.language.data]
+				except KeyError:
+					flash('Language not allowed!')
+					return redirect(url_for('submit'))
 				#rename
 				filename = secure_filename(form.upload_file.data.filename)
 				filepath = os.path.join(basedir, 'users/%s/%s' % (g.user.username, filename))
