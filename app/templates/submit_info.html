@@ -61,8 +61,13 @@ Submit {{ sub.id }}
 	<span class="status-error">{{ sp['state'] }}</span>
 	{% endif %}
       </td>
+      {% if sp['state'] == "Accepted" %}
       <td class="time"><span class="code">{{ sp['time'] }}</span> ms</td>
       <td class="memory"><span class="code">{{ sp['memory'] }}</span> KiB</td>
+      {% else %}
+      <td class="time">-</td>
+      <td class="memory">-</td>
+      {% endif %}
     </tr>
     {% endfor %}
   </table>
