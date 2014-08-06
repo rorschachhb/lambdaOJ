@@ -168,6 +168,7 @@ def submit(pid = None):
 				hmd5 = hashlib.md5()
 				fp = open(filepath,"rb")
 				hmd5.update(fp.read())
+				fp.close()
 				filehash = hmd5.hexdigest()
 				new_filepath = os.path.join(basedir, 'users/%s/%s%s' % (g.user.username, datetime.now().strftime('%Y-%m-%d-%H:%M:%S'), '_' + filehash + '_' + filename))
 				os.rename(filepath, new_filepath)
@@ -270,6 +271,7 @@ def judge_on_commit(mapper, connection, model):
 	hmd5 = hashlib.md5()
 	fp = open(filepath,"rb")
 	hmd5.update(fp.read())
+	fp.close()
 	filehash = hmd5.hexdigest()
 	u = User.query.get(model.user)
 	if not os.path.exists(os.path.join(basedir, "users/%s/%s" % (u.username, filehash))):
