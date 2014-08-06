@@ -14,7 +14,7 @@
 #define PYTHON "/usr/bin/python"
 
 enum judge_state {AC=0, WA, TLE, MLE, RE, CE, BAD_SYSCALL,OLE};
-enum lang {C=0,CPP,PY} ;
+enum lang {C=0,CPP} ;
 
 struct judge_result {
     enum judge_state state ;

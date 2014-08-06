@@ -10,13 +10,13 @@ static int max_compile_time = 5;
 static int max_output_size = 1024;
 static int max_as = 1024*1024*60 ;
 
-static char* support_language[]={"C","C++","Python2.7"};//match enum order
+static char* support_language[]={"C","C++"};//match enum order
 char* state_string[]={"Accepted","Wrong Answer","Time Limit Exceeded","Memory Limit Exceeded","Runtime Error","Compilation Error","Banned Syscall","Output Limit Exceeded"}; //match enum
 
-static redisReply* compiler[PY+1] ; //
-static redisReply* execute[PY+1] ;
-static redisReply* compile_args[PY+1] ;
-static redisReply* execute_args[PY+1] ;
+static redisReply* compiler[CPP+1] ; //
+static redisReply* execute[CPP+1] ;
+static redisReply* compile_args[CPP+1] ;
+static redisReply* execute_args[CPP+1] ;
 
 void init_banned_syscall(){
     redisContext* r= redisConnect(REDIS_IP,REDIS_PORT) ;
@@ -34,7 +34,7 @@ void init_lang_config()
 {
     redisContext *r = redisConnect(REDIS_IP,REDIS_PORT) ;
     int i ;
-    for(i=0;i<=PY;i++){
+    for(i=0;i<=CPP;i++){
 	compiler[i] = redisCommand(r,"get lambda:%s:compiler",support_language[i]);
 	execute[i] = redisCommand(r,"get lambda:%s:execute",support_language[i]);
 	compile_args[i] = redisCommand(r,"lrange lambda:%s:compile_args 0 -1",support_language[i]) ;
@@ -129,7 +129,7 @@ int next_word(char *s, int size, FILE* fin)
     while (1) {
 	if(k == (size-1)) {
 	    s[k] = '\0' ;
-	    break ;
+	    return k ;
 	}
 	int flag = fread(s+k,1,1,fin) ;
 	if(flag<=0) {
