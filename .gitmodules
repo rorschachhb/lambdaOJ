@@ -1,0 +1,3 @@
+[submodule "app/static/QapTcha"]
+	path = app/static/QapTcha
+	url = https://github.com/alpixel/QapTcha.git

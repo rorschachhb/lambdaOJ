@@ -26,7 +26,7 @@ Submit
     {% endif %}
     {% endwith %}
 
-    <div>
+    <div class="field">
       <lable for="problem_id" class="form-title">Problem ID :</lable>
       {% if pid %}
       {{ form.problem_id(value=pid) }}
@@ -38,7 +38,7 @@ Submit
       {% endfor %}
     </div>
 
-    <div>
+    <div class="field">
       <lable for="language" class="form-title">Language :</lable>
       {{ form.language }}
       {% for error in form.errors.language %}
@@ -46,7 +46,7 @@ Submit
       {% endfor %}
     </div>
 
-    <div>
+    <div class="field">
       <lable for="upload_file" class="form-title">File :</lable>
       {{ form.upload_file }}
       {% for error in form.errors.upload_file %}
@@ -54,11 +54,15 @@ Submit
       {% endfor %}
     </div>
 
-    <div>
+    <div class="QapTcha field">
+    </div>
+
+    <div class="field">
       <span class="submit">
 	<input type="submit" value="Submit">
       </span>
     </div>
   </fieldset>
 </form>
+{% include 'qaptcha.html' %}
 {% endblock content %}

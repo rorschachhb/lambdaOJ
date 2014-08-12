@@ -45,7 +45,7 @@ Change Password
     {% endif %}
     {% endwith %}
 
-    <div>
+    <div class="field">
       <lable for="new_password" class="form-title">New Password :</lable>
       {{ form.new_password }}
       {% for error in form.errors.new_password %}
@@ -53,7 +53,7 @@ Change Password
       {% endfor %}
     </div>
 
-    <div>
+    <div class="field">
       <lable for="confirm_password" class="form-title">Again :</lable>
       {{ form.confirm_password }}
       {% for error in form.errors.confirm_password %}
@@ -61,10 +61,10 @@ Change Password
       {% endfor %}
     </div>
     
-    <div class="separator">
+    <div class="separator field">
     </div>
 
-    <div>
+    <div class="field">
       <lable for="old_password" class="form-title">Confirm Old Password :</lable>
       {{ form.old_password }}
       {% for error in form.errors.old_password %}
@@ -72,11 +72,15 @@ Change Password
       {% endfor %}
     </div>
 
-    <div>
+    <div class="QapTcha field">
+    </div>
+
+    <div class="field">
       <span class="submit">
 	<input type="submit" name="passwd" value="Change Password">
       </span>
     </div>
   </fieldset>
 </form>
+{% include 'qaptcha.html' %}
 {% endblock content %}

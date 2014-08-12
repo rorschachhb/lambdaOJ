@@ -5,6 +5,15 @@
     <meta charset="utf-8">
     <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}" />
     <link href="{{ url_for('static', filename='styles/style.css') }}" type="text/css" rel="stylesheet" />
+    <!-- include CSS & JS files -->
+    <!-- CSS file -->
+    <link rel="stylesheet" type="text/css" href="/oj/static/QapTcha/jquery/QapTcha.jquery.css" media="screen" />
+ 
+    <!-- jQuery files -->
+    <script type="text/javascript" src="/oj/static/QapTcha/jquery/jquery.js"></script>
+    <script type="text/javascript" src="/oj/static/QapTcha/jquery/jquery-ui.js"></script>
+    <script type="text/javascript" src="/oj/static/QapTcha/jquery/jquery.ui.touch.js"></script>
+    <script type="text/javascript" src="/oj/static/QapTcha/jquery/QapTcha.jquery.js"></script>
     <title>{% block title %}{% endblock %} - LambdaOJ</title>
     {% block head_add %}
     {% endblock head_add %}

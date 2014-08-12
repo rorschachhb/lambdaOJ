@@ -26,16 +26,16 @@ Problem {{ problem.id }}
 
 <article class="pb-details">
   <h3>Description</h3>
-  <div class="zh">{{ problem.description }}</div>
+  <div class="zh">{{ problem.description|safe }}</div>
   <h3>Input Description</h3>
-  <div class="zh">{{ problem.input_description }}</div>
+  <div class="zh">{{ problem.input_description|safe }}</div>
   <h3>Output Description</h3>
-  <div class="zh">{{ problem.output_description }}</div>
+  <div class="zh">{{ problem.output_description|safe }}</div>
   <h3>Input Sample</h3>
   <pre>{{ problem.input_sample }}</pre>
   <h3>Output Sample</h3>
   <pre>{{ problem.output_sample }}</pre>
   <h3>Hint</h3>
-  <div class="zh">{{ problem.hint }}</div>
+  <div class="zh">{{ problem.hint|safe }}</div>
 </article>
 {% endblock content %}

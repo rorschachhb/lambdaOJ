@@ -1,7 +1,7 @@
-from flask import render_template, flash, redirect, session, url_for, request, g 
+from flask import jsonify, render_template, flash, redirect, session, url_for, request, g 
 from flask.ext.login import login_user, logout_user, current_user, login_required, login_fresh, confirm_login, fresh_login_required
 from app import app, db, lm, rds
-from forms import LoginForm, EditForm, SubmitForm
+from forms import LoginForm, EditForm, SubmitForm, Form
 from models import *
 from werkzeug import secure_filename
 import os
@@ -42,7 +42,7 @@ def login():
 	if g.user is not None and g.user.is_authenticated():
 		return redirect(url_for('index'))
 	form = LoginForm()
-	if form.validate_on_submit():
+	if form.validate_on_submit() and check_qaptcha():
 		l = ldap.initialize(LDAP_SERVER)
 		l.simple_bind_s(LDAP_BINDDN, LDAP_BINDPW)
 		user_ldap = l.search_s(people_basedn, ldap.SCOPE_ONELEVEL, '(uid=%s)' % (form.username.data), None)
@@ -147,7 +147,7 @@ def submit_info(sid, page):
 def submit(pid = None):
 	form = SubmitForm()
 	if request.method == 'POST':
-		if form.validate_on_submit():
+		if form.validate_on_submit() and check_qaptcha():
 			pid = form.problem_id.data
 			p = Problem.query.get(pid)
 			if p is None:
@@ -219,7 +219,7 @@ def profile(page):
 @login_required
 def passwd():
 	form = EditForm()
-	if form.validate_on_submit():
+	if form.validate_on_submit() and check_qaptcha():
 		l = ldap.initialize(LDAP_SERVER)
 		l.simple_bind_s(LDAP_BINDDN, LDAP_BINDPW)
 		[(dn, attrs)] = l.search_s(people_basedn, ldap.SCOPE_ONELEVEL, '(uid=%s)' % (g.user.username), None)
@@ -248,6 +248,22 @@ def passwd():
 			form = form,
 			user = g.user)
 
+@app.route('/oj/qaptcha/key', methods = ['GET', 'POST'])
+def qaptcha_getkey():
+	response = {}
+	response["error"] = False
+	try:
+		session["qaptcha_key"] = False
+		if request.form["action"] == "qaptcha":
+			session["qaptcha_key"] = request.form["qaptcha_key"]
+			return jsonify(**response)
+		else:
+			response["error"] = True
+			return jsonify(**response)
+	except KeyError:
+		response["error"] = True
+		return jsonify(**response)
+
 @app.errorhandler(413)
 def request_entity_too_large(e):
 	# return render_template('413.html'), 413
@@ -261,6 +277,20 @@ def before_request():
 @lm.user_loader
 def load_user(id):
 	return User.query.get(int(id))
+
+
+def check_qaptcha():
+	try:
+		k = session["qaptcha_key"]
+		if (request.form[str(k)]):
+			# it should be empty
+			return False
+		else:
+			return True
+	except KeyError:
+		return False
+
+
 
 def judge_on_commit(mapper, connection, model):
 	#write redis

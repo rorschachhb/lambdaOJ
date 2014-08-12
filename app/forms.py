@@ -5,6 +5,7 @@ from flask_wtf.file import FileField, FileRequired, FileAllowed
 from models import *
 import hashlib
 
+
 class LoginForm(Form):
 	username = TextField('username', validators = [InputRequired()])
 	password =  PasswordField('password', validators = [InputRequired()])

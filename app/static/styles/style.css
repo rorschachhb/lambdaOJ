@@ -186,7 +186,7 @@ form p.message {
     font-size: 0.9em;
     margin: 0px 0px 17px 0px;
 }
-form div {
+form div.field {
     margin: 10px 0px 10px 0px;
     overflow: auto;
 }

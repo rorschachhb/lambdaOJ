@@ -25,7 +25,7 @@ Login
     {% endif %}
     {% endwith %}
 
-    <div>
+    <div class="field">
       <lable for="username" class="form-title">Username :</lable>
       {{ form.username }}
       {% for error in form.errors.username %}
@@ -33,7 +33,7 @@ Login
       {% endfor %}
     </div>
 
-    <div>
+    <div class="field">
       <lable for="password" class="form-title">Password :</lable>
       {{ form.password }}
       {% for error in form.errors.password %}
@@ -41,16 +41,20 @@ Login
       {% endfor %}
     </div>
 
-    <div>
+    <div class="field">
       <lable for="remember_me">{{ form.remember_me }} Remember Me</lable>
     </div>
 
-    <div>
+    <div class="QapTcha field">
+    </div>
+
+    <div class="field">
       <span class="submit">
 	<input type="submit" name="login" value="Login">
       </span>
     </div>
   </fieldset>
 </form>
+{% include 'qaptcha.html' %}
 {% endblock content %}
 
