@@ -15,6 +15,7 @@ Status
     <th class="problem">Problem</th>
     <th class="user">User</th>
     <th class="language">Language</th>
+    <th class="time">Submit Time</th>
   </tr>
   {% for sub in subs.items %}
   <tr class="{{ loop.cycle('odd', 'even') }}">
@@ -48,6 +49,7 @@ Status
     </td>
     <td class="user">{{ sub.user }}</td>
     <td class="language">{{ sub.language }}</td>
+    <td class="time">{{ sub.submit_time }}</td>
   </tr>
   {% endfor %}
 </table>

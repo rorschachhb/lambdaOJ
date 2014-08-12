@@ -250,15 +250,6 @@ form div span.submit {
 #submitform lable[for="upload_file"] {
     padding-top: 3px;
 }
-#submitform #validate_code {
-    width: 60px;
-}
-#submitform .validate img {
-    vertical-align: top;
-}
-#submitform #validate_code_hash {
-    display: none;
-}
 
 #passwdform {
     width: 48%;
@@ -404,7 +395,7 @@ table.sub td.id a span.status-worst {
 }
 
 #subs {
-    width: 61.8%;
+    width: 80%;
 }
 #subs .problem {
     width: 110px;
@@ -416,6 +407,10 @@ table.sub td.id a span.status-worst {
 }
 #subs td.language {
     width: 120px;
+    text-align: center;
+}
+#subs td.time {
+    width: 190px;
     text-align: center;
 }
 
