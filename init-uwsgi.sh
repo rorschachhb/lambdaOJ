@@ -21,7 +21,9 @@ read -p "uWSGI Workers ($DEFAULT_WORKERS) : " OJ_WORKERS
 {
     printf "[uwsgi]\n"
     printf "pythonpath = %s\n" $CURRENT_PATH
+    printf "pidfile = %s\n"    $CURRENT_PATH/tmp/uwsgi.pid
     printf "module = %s\n"     $APP_NAME
+    printf "master = true\n"
     printf "workers = %s\n"    ${OJ_WORKERS:-$DEFAULT_WORKERS}
     printf "uid = %s\n"        ${OJ_WEB_USER:-$CURRENT_USER}
     printf "gid = %s\n"        ${OJ_WEB_GROUP:-$CURRENT_GROUP}
@@ -36,6 +38,7 @@ read -p "uWSGI Workers ($DEFAULT_WORKERS) : " OJ_WORKERS
     echo "#!/usr/bin/env bash"
     echo
     echo "cd " $CURRENT_PATH
+    echo "mkdir -p tmp"
     echo
     echo "judge/lambdajudge &"
     echo
