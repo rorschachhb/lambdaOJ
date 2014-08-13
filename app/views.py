@@ -286,6 +286,7 @@ def check_qaptcha():
 			# it should be empty
 			return False
 		else:
+			session["qaptcha_key"] = False
 			return True
 	except KeyError:
 		return False
