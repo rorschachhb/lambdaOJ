@@ -30,6 +30,7 @@ Profile
       <th class="id">Submit</th>
       <th class="problem">Problem</th>
       <th class="language">Language</th>
+      <th class="time">Submit Time</th>
     </tr>
     {% for sub in subs.items %}
     <tr class="{{ loop.cycle('odd', 'even') }}">
@@ -62,6 +63,7 @@ Profile
 			    problem_id = sub.problem) }}">{{ sub.problem }}</a>
       </td>
       <td class="language">{{ sub.language }}</td>
+      <td class="time">{{ sub.submit_time }}</td>
     </tr>
     {% endfor %}
   </table>

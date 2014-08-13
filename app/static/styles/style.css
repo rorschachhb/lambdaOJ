@@ -395,22 +395,37 @@ table.sub td.id a span.status-worst {
 }
 
 #subs {
-    width: 80%;
+    width: 76%;
 }
 #subs .problem {
-    width: 110px;
+    width: 108px;
 }
 #subs td.user {
-    width: 150px;
+    width: 120px;
     text-align: right;
     padding-right: 16px;
 }
 #subs td.language {
-    width: 120px;
+    width: 116px;
     text-align: center;
 }
 #subs td.time {
-    width: 190px;
+    width: 186px;
+    text-align: center;
+}
+
+#history {
+    width: 90%;
+}
+#history .problem {
+    width: 108px;
+}
+#history .language {
+    width: 116px;
+    text-align: center;
+}
+#history td.time {
+    width: 186px;
     text-align: center;
 }
 
@@ -591,16 +606,6 @@ table.sub td.id a span.status-worst {
 }
 .pf-details .pagenav {
     width: 53%;
-}
-#history {
-    width: 64%;
-}
-#history .problem {
-    width: 110px;
-}
-#history .language {
-    width: 120px;
-    text-align: center;
 }
 
 
