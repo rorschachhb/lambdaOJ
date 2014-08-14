@@ -19,6 +19,7 @@ import random
 import string
 from config import LDAP_BINDDN, LDAP_BINDPW, LDAP_SERVER, people_basedn, groups_basedn
 from sqlalchemy import desc
+import chardet
 
 PROBLEMS_PER_PAGE = 10
 SUBS_PER_PAGE = 100
@@ -159,12 +160,13 @@ def submit(pid = None):
 				except KeyError:
 					flash('Language not allowed!')
 					return redirect(url_for('submit'))
-				#rename
+				#save
 				filename = secure_filename(form.upload_file.data.filename)
 				filepath = os.path.join(basedir, 'users/%s/%s' % (g.user.username, filename))
 				if not os.path.exists(os.path.join(basedir, 'users/%s/' % (g.user.username))):
 					os.makedirs(os.path.join(basedir, 'users/%s/' % (g.user.username)))
 				form.upload_file.data.save(filepath)
+				#rename
 				hmd5 = hashlib.md5()
 				fp = open(filepath,"rb")
 				hmd5.update(fp.read())
@@ -175,7 +177,19 @@ def submit(pid = None):
 				elif form.language.data == CPP:
 					extension = '.cpp'
 				new_filepath = os.path.join(basedir, 'users/%s/%s%s' % (g.user.username, datetime.now().strftime('%Y-%m-%d-%H:%M:%S'), '_' + filehash[0:5] + extension))
-				os.rename(filepath, new_filepath)
+				#detect encoding
+				f = open(filepath, 'r')
+				result = chardet.detect(f.read())
+				#save file with new name
+				fnew = open(new_filepath, 'w')
+				if result['encoding'] is not None:
+					fnew.write(f.read().decode(result['encoding']))
+				else:
+					fnew.write(f.read())
+				f.close()
+				fnew.close()
+				os.remove(filepath)
+				# os.rename(filepath, new_filepath)
 
 				#write database
 				sub = Submit(problem = pid,
