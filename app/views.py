@@ -170,7 +170,11 @@ def submit(pid = None):
 				hmd5.update(fp.read())
 				fp.close()
 				filehash = hmd5.hexdigest()
-				new_filepath = os.path.join(basedir, 'users/%s/%s%s' % (g.user.username, datetime.now().strftime('%Y-%m-%d-%H:%M:%S'), '_' + filehash + '_' + filename))
+				if form.language.data == C:
+					extension = '.c'
+				elif form.language.data == CPP:
+					extension = '.cpp'
+				new_filepath = os.path.join(basedir, 'users/%s/%s%s' % (g.user.username, datetime.now().strftime('%Y-%m-%d-%H:%M:%S'), '_' + filehash[0:5] + extension))
 				os.rename(filepath, new_filepath)
 
 				#write database
