@@ -39,7 +39,7 @@ Submit {{ sub.id }}
   </a>
   {% elif sub_results == "Compilation Error" %}
   <span class="status-error">Compilation Error</span>
-  <pre class="error_message">{{ error_message.decode('utf-8') }}</pre>
+  <pre class="error_message">{{ error_message }}</pre>
   {% else %}
   <table id="sps" class="list">
     <tr>
