@@ -164,44 +164,39 @@ def submit(pid = None):
 				except KeyError:
 					flash('Language not allowed!')
 					return redirect(url_for('submit'))
-				#save
+				#mkdir
 				filename = secure_filename(form.upload_file.data.filename)
-				filepath = os.path.join(basedir, 'users/%s/%s' % (g.user.username, filename))
+				file_data = form.upload_file.data.read()
 				if not os.path.exists(os.path.join(basedir, 'users/%s/' % (g.user.username))):
 					os.makedirs(os.path.join(basedir, 'users/%s/' % (g.user.username)))
-				form.upload_file.data.save(filepath)
 				#rename
 				hmd5 = hashlib.md5()
-				fp = open(filepath,"rb")
-				hmd5.update(fp.read())
-				fp.close()
+				hmd5.update(file_data)
 				filehash = hmd5.hexdigest()
 				if form.language.data == C:
 					extension = '.c'
 				elif form.language.data == CPP:
 					extension = '.cpp'
-				new_filepath = os.path.join(basedir, 'users/%s/%s%s' % (g.user.username, datetime.now().strftime('%Y-%m-%d-%H:%M:%S'), '_' + filehash[0:5] + extension))
+				filepath = os.path.join(basedir, 'users/%s/%s%s' % (g.user.username, datetime.now().strftime('%Y-%m-%d-%H:%M:%S'), '_' + filehash[0:5] + extension))
 				#detect encoding
-				f = open(filepath, 'r')
-				result = chardet.detect(f.read())
+				result = chardet.detect(file_data)
 				#save file with new name
-				fnew = open(new_filepath, 'w')
-				f.seek(0)
+				fnew = open(filepath, 'w')
 				if result['encoding'] is not None:
-					fnew.write(f.read().decode(result['encoding']))
+					try:
+						fnew.write(file_data.decode(result['encoding']))
+					except UnicodeDecodeError:
+						fnew.write(file_data)
 				else:
-					fnew.write(f.read())
-				f.close()
+					fnew.write(file_data)
 				fnew.close()
-				os.remove(filepath)
-				# os.rename(filepath, new_filepath)
 
 				#write database
 				sub = Submit(problem = pid,
 					user = g.user.id,
 					language = form.language.data,
 					submit_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-					code_file = new_filepath)
+					code_file = filepath)
 				db.session.add(sub)
 				db.session.commit()
 
