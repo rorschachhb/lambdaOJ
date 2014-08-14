@@ -40,7 +40,12 @@ Submit
 
     <div class="field">
       <lable for="language" class="form-title">Language :</lable>
-      {{ form.language }}
+      {% for subfield in form.language %}
+          <tr>
+              <td>{{ subfield }}</td>
+              <td>{{ subfield.label }}</td>
+          </tr>
+      {% endfor %}
       {% for error in form.errors.language %}
       <p class="form-error">[{{ error }}]</p>
       {% endfor %}
