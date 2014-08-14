@@ -129,6 +129,10 @@ def submit_info(sid, page):
 				elif status == 'Compilation Error':
 					sub_results = status
 					error_message = rds.hget('lambda:%d:head' % (sub.id), 'err_message')
+                                        try:
+                                                error_message = error_message.decode("ascii")
+                                        except:
+                                                error_message = "Compilation Error"
 				else:
 					sub_results = []
 					for i in range(0, problem.sample_num):
