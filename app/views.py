@@ -186,6 +186,7 @@ def submit(pid = None):
 				result = chardet.detect(f.read())
 				#save file with new name
 				fnew = open(new_filepath, 'w')
+				f.seek(0)
 				if result['encoding'] is not None:
 					fnew.write(f.read().decode(result['encoding']))
 				else:
