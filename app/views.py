@@ -119,6 +119,10 @@ def submit_info(sid, page):
 				problem = Problem.query.filter_by(id=sub.problem).first()
 				fp = open(sub.code_file, 'r')
 				code = fp.read()
+                                try:
+                                        code = code.decode("utf8")
+                                except:
+                                        code = ""
 				fp.close()
 				error_message = None
 				status = rds.hget('lambda:%d:head' % (sub.id), 'state')
@@ -130,7 +134,7 @@ def submit_info(sid, page):
 					sub_results = status
 					error_message = rds.hget('lambda:%d:head' % (sub.id), 'err_message')
                                         try:
-                                                error_message = error_message.decode("ascii")
+                                                error_message = error_message.decode("utf8")
                                         except:
                                                 error_message = "Compilation Error"
 				else:
@@ -178,17 +182,24 @@ def submit(pid = None):
 				elif form.language.data == CPP:
 					extension = '.cpp'
 				filepath = os.path.join(basedir, 'users/%s/%s%s' % (g.user.username, datetime.now().strftime('%Y-%m-%d-%H:%M:%S'), '_' + filehash[0:5] + extension))
-				#detect encoding
-				result = chardet.detect(file_data)
 				#save file with new name
 				fnew = open(filepath, 'w')
-				if result['encoding'] is not None:
-					try:
-						fnew.write(file_data.decode(result['encoding']))
-					except UnicodeDecodeError:
-						fnew.write(file_data)
-				else:
-					fnew.write(file_data)
+                                # test utf8
+                                try:
+                                        fnew.write(file_data.decode("utf8"))
+                                except:
+                                        try:
+                                                fnew.write(file_data.decode("gbk").encode("utf8"))
+                                        except:
+                                                #detect encoding
+                                                result = chardet.detect(file_data)
+                                                if result['encoding'] is not None:
+                                                        try:
+                                                                fnew.write(file_data.decode(result['encoding']).encode("utf8"))
+                                                        except:
+                                                                fnew.write(file_data)
+                                                else:
+                                                        fnew.write(file_data)
 				fnew.close()
 
 				#write database
