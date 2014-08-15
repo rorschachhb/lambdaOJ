@@ -2,9 +2,11 @@ from app import db
 
 ROLE_USER = 0
 ROLE_ADMIN = 1
+TEACHING_ASSIST = 2
 
 roles = { ROLE_USER: 'user',
-	ROLE_ADMIN: 'admin'
+	ROLE_ADMIN: 'admin',
+	TEACHING_ASSIST: 'ta'
 }
 
 STATUS_NORMAL = 0

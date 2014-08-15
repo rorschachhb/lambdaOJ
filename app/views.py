@@ -53,6 +53,8 @@ def login():
 				user_sql = User.query.filter_by(username=user_ldap[0][1]['uid'][0]).first()
 				if l.search_s(groups_basedn, ldap.SCOPE_ONELEVEL, '(&(cn=admin)(member=uid=%s, ou=people, dc=lambda, dc=cool))' % (user_ldap[0][1]['uid'][0]), None):
 					role = 'admin'
+				elif l.search_s(groups_basedn, ldap.SCOPE_ONELEVEL, '(&(cn=ta)(member=uid=%s, ou=people, dc=lambda, dc=cool))' % (user_ldap[0][1]['uid'][0]), None):
+					role = 'ta'
 				else:
 					role = 'user'
 				try:
@@ -113,7 +115,7 @@ def submit_info(sid, page):
 		sub = Submit.query.filter_by(id=sid).first()
 		if sub:
 			user = User.query.filter_by(id=sub.user).first()
-			if ( user.id == g.user.id ) or ( g.user.role == 'admin' ):
+			if ( user.id == g.user.id ) or ( g.user.role == 'admin' ) or ( g.user.role == 'ta' ):
 				sub.language = languages[sub.language]
 				sub.user = user.username
 				problem = Problem.query.filter_by(id=sub.problem).first()
