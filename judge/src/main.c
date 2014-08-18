@@ -109,12 +109,14 @@ int main()
                             cJSON_GetArrayItem(time_limit_arr,i)->valueint,
                             cJSON_GetArrayItem(mem_limit_arr,i)->valueint,jr,
                             lc->exe_cmd,lc->exe_args) ;
-                  if(jr->state==AC) ac_num++;
+                  int ac_or_not = jr->state==AC ;
                   redisCommand(c,"HMSET lambda:%d:result:%d state %s time %ld memory %ld bad_syscall %d",
                                submit_id,i, state_string[jr->state],jr->time_ms,jr->mem_kb, jr->bad_syscall_number);
-                  exit(0) ;
+                  exit(ac_or_not) ;
                 }
-                wait(NULL) ;
+                int ac_add ;
+                wait(&ac_add) ;
+                ac_num += (WEXITSTATUS(ac_add)) ;
 	    }
 	    float rate = (ac_num+0.0)/(test_num+0.0) ;
 	    redisCommand(c,"HMSET lambda:%d:head state %.2f",submit_id,rate);
