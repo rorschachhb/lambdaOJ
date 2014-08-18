@@ -102,13 +102,19 @@ int main()
 		sprintf(test_in,"%s/%d.in",test_dir,i) ;
 		char test_ans[128] = {0} ;
 		sprintf(test_ans,"%s/%d.ans",test_dir,i) ;
-		judge_exe(test_in,test_ans,output,
-			  cJSON_GetArrayItem(time_limit_arr,i)->valueint,
-			  cJSON_GetArrayItem(mem_limit_arr,i)->valueint,jr,
-			  lc->exe_cmd,lc->exe_args) ;
-		if(jr->state==AC) ac_num++;
-		redisCommand(c,"HMSET lambda:%d:result:%d state %s time %ld memory %ld bad_syscall %d",
-			     submit_id,i, state_string[jr->state],jr->time_ms,jr->mem_kb, jr->bad_syscall_number);
+                pid_t test_pid ;
+                test_pid = fork() ;
+                if (test_pid == 0) {
+                  judge_exe(test_in,test_ans,output,
+                            cJSON_GetArrayItem(time_limit_arr,i)->valueint,
+                            cJSON_GetArrayItem(mem_limit_arr,i)->valueint,jr,
+                            lc->exe_cmd,lc->exe_args) ;
+                  if(jr->state==AC) ac_num++;
+                  redisCommand(c,"HMSET lambda:%d:result:%d state %s time %ld memory %ld bad_syscall %d",
+                               submit_id,i, state_string[jr->state],jr->time_ms,jr->mem_kb, jr->bad_syscall_number);
+                  exit(0) ;
+                }
+                wait(NULL) ;
 	    }
 	    float rate = (ac_num+0.0)/(test_num+0.0) ;
 	    redisCommand(c,"HMSET lambda:%d:head state %.2f",submit_id,rate);
