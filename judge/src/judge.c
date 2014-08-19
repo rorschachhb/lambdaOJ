@@ -224,6 +224,7 @@ void judge_exe(char *input_file,
     }
     else {//parent
 	int status ;
+        int first_sys_call = 1 ;
 	ptrace(PTRACE_SYSCALL, pid, NULL, NULL) ;
 	
 	while (1) {
@@ -233,7 +234,8 @@ void judge_exe(char *input_file,
 	    else if (WIFSTOPPED(status)) {
 		if (WSTOPSIG(status)==SIGTRAP) {
 		    if (!insyscall) {
-			insyscall = 1 ;
+                        if(!first_sys_call) insyscall = 1 ;
+                        else first_sys_call = 0 ;
 			ptrace(PTRACE_GETREGS,pid,NULL,&context.regs) ;
 			if (!check_syscall_ok(&context.regs)) {
 			    //bad system call
