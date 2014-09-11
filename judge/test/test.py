@@ -25,7 +25,8 @@ for each_type in test_type :
                     "test_dir" : os.path.join(base_dir,"test_filed",\
                                  each_type,"sample"),\
 		    "time_limit" : [2,2],
-                    "mem_limit" : [10000,10000]}
+                    "mem_limit" : [10000,10000],
+                    "weights":[40,60]}
 	os.system("mkdir %s" % json_req["work_dir"])
 	text = json.dumps(json_req)
 	s = socket.socket()

@@ -59,6 +59,7 @@ int main()
 	    char *test_dir = cJSON_GetObjectItem(request,"test_dir")->valuestring ;
 	    cJSON* time_limit_arr = cJSON_GetObjectItem(request,"time_limit") ;
 	    cJSON* mem_limit_arr = cJSON_GetObjectItem(request,"mem_limit") ;
+            cJSON* weights = cJSON_GetObjectItem(request,"weights") ;
 	    
 	    syslog(LOG_INFO,"submit_id : %d", submit_id) ;
 	    syslog(LOG_INFO,"test_sample_num : %d",test_num) ;
@@ -94,7 +95,8 @@ int main()
 
 	    char output[128] = {0} ;
 	    sprintf(output,"%s/output",work_dir) ;
-	    int i ; int ac_num = 0 ;
+	    int i ; int rate = 0 ;
+            
 	    for(i=0;i<test_num;i++) {
 		struct judge_result* jr ;
 		jr = (struct judge_result*)calloc(1,sizeof(struct judge_result)) ;
@@ -114,12 +116,15 @@ int main()
                                submit_id,i, state_string[jr->state],jr->time_ms,jr->mem_kb, jr->bad_syscall_number);
                   exit(ac_or_not) ;
                 }
-                int ac_add ;
-                wait(&ac_add) ;
-                ac_num += (WEXITSTATUS(ac_add)) ;
+                int ac_status ;
+                wait(&ac_status) ;
+                int ac_flag =  (WEXITSTATUS(ac_status)) ;
+                if (ac_flag) {
+                  rate = rate + cJSON_GetArrayItem(weights,i)->valueint;
+                }
 	    }
-	    float rate = (ac_num+0.0)/(test_num+0.0) ;
-	    redisCommand(c,"HMSET lambda:%d:head state %.2f",submit_id,rate);
+            
+	    redisCommand(c,"HMSET lambda:%d:head state %d",submit_id,rate);
 	    execlp("/usr/bin/rm","rm","-rf",work_dir,NULL);
 	    exit(0);
 	}
