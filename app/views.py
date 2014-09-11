@@ -348,7 +348,8 @@ def judge_on_commit(mapper, connection, model):
 	            "work_dir": os.path.join(basedir, "users/%s/%s/" % (u.username, filehash)),
 	            "test_dir": os.path.join(basedir, "problems/%d/data/" % (pid)),
 	            "time_limit": [p.time_limit]*p.sample_num,
-	            "mem_limit": [p.memory_limit]*p.sample_num}
+	            "mem_limit": [p.memory_limit]*p.sample_num,
+                    "weights":map(int,rds.lrange('lambda:problem_weights:%s' % pid,0,-1))}
 	request_json = json.dumps(json_req)
 
 	#connect socket
