@@ -49,7 +49,7 @@ Status
     </td>
     <td class="user">{{ sub.user }}</td>
     <td class="language">{{ sub.language }}</td>
-    <td class="time">{{ sub.submit_time }}</td>
+    <td class="time">{{ sub.submit_time.strftime("%Y-%m-%d %T") }}</td>
   </tr>
   {% endfor %}
 </table>

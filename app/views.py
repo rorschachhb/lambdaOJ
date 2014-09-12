@@ -208,7 +208,7 @@ def submit(pid = None):
 				sub = Submit(problem = pid,
 					user = g.user.id,
 					language = form.language.data,
-					submit_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+					submit_time = datetime.now(),
 					code_file = filepath)
 				db.session.add(sub)
 				db.session.commit()

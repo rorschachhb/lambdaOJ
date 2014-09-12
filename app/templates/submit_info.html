@@ -20,7 +20,8 @@ Submit {{ sub.id }}
 {% block content %}
 <article class="sub-title">
   <hgroup>
-    <h2>Submit &nbsp;{{ sub.id }} &nbsp;: &nbsp; {{ sub.user }} &nbsp; ({{ sub.submit_time }})</h2>
+    <h2>Submit &nbsp;{{ sub.id }} &nbsp;: &nbsp; {{ sub.user }} &nbsp; ({{
+    sub.submit_time.strftime("%Y-%m-%d %T") }})</h2>
     <h4>
       <a href="{{ url_for('problem', problem_id = problem.id) }}">
 	Problem &nbsp;{{ problem.id }} &nbsp;: &nbsp; {{ problem.title }}
