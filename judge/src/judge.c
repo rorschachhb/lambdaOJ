@@ -1,8 +1,13 @@
 #include "judge.h"
+#include "dlfcn.h"
+
+#define LD_PATH "/home/oj/lambdaoj/app/problems/"
 
 #define REDIS_IP "127.0.0.1"
 #define REDIS_PORT 6379
 #define BUF_SIZE 128
+
+typedef int (*check_function) (char*,char*);
 
 static int syscall_white_list[512] ; 
 static sigjmp_buf buf ;
@@ -187,6 +192,7 @@ int check_syscall_ok(struct user_regs_struct *uregs)
 void judge_exe(char *input_file,
 	       char *stand_answer,
 	       char *output_file,
+               char *ld_path,
 	       int max_cpu_time_limit,
 	       int max_mem_limit,
 	       struct judge_result* jr,
@@ -282,7 +288,19 @@ void judge_exe(char *input_file,
 	    return ;
 	}
 	//check answer
-	int ac = check_answer(stand_answer,output_file) ;
+        int ac = -1;
+        if (ld_path) {
+          void *ld_handler = dlopen(ld_path,RTLD_LAZY) ;
+          if (ld_handler) {
+            void * sym_addr = NULL ;
+            sym_addr = dlsym(ld_handler,"ta_check") ;
+            if (sym_addr) {
+              ac = ((check_function)sym_addr)(stand_answer,output_file) ;
+            }
+          }
+        }
+        if (ac<0)
+          ac = check_answer(stand_answer,output_file) ;
 	//remove output
 	if (ac) {
 	    jr->state = AC ;

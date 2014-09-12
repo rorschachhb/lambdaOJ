@@ -57,9 +57,11 @@ int main()
 	    char *code_path = cJSON_GetObjectItem(request,"code_path")->valuestring ;
 	    char *work_dir = cJSON_GetObjectItem(request,"work_dir")->valuestring ;
 	    char *test_dir = cJSON_GetObjectItem(request,"test_dir")->valuestring ;
+            char *ld_path = cJSON_GetObjectItem(request,"ld_path")->valuestring ;
 	    cJSON* time_limit_arr = cJSON_GetObjectItem(request,"time_limit") ;
 	    cJSON* mem_limit_arr = cJSON_GetObjectItem(request,"mem_limit") ;
             cJSON* weights = cJSON_GetObjectItem(request,"weights") ;
+
 	    
 	    syslog(LOG_INFO,"submit_id : %d", submit_id) ;
 	    syslog(LOG_INFO,"test_sample_num : %d",test_num) ;
@@ -107,7 +109,7 @@ int main()
                 pid_t test_pid ;
                 test_pid = fork() ;
                 if (test_pid == 0) {
-                  judge_exe(test_in,test_ans,output,
+                  judge_exe(test_in,test_ans,output,ld_path,
                             cJSON_GetArrayItem(time_limit_arr,i)->valueint,
                             cJSON_GetArrayItem(mem_limit_arr,i)->valueint,jr,
                             lc->exe_cmd,lc->exe_args) ;

@@ -4,6 +4,10 @@ import json
 import socket
 import redis
 import time
+import sys
+
+if len(sys.argv) > 1 : arg = sys.argv[1]
+else : arg = None
 
 base_dir = os.path.abspath(os.path.dirname(__file__))
 
@@ -13,6 +17,7 @@ sid = 0
 r = redis.Redis('127.0.0.1',6379)
 
 for each_type in test_type :
+	if arg and each_type != arg : continue
 	print 40*'-'
 	print "test for %s" % each_type
 	json_req = {"submit_id" : sid, \
@@ -24,6 +29,7 @@ for each_type in test_type :
                                  each_type,"work"),\
                     "test_dir" : os.path.join(base_dir,"test_filed",\
                                  each_type,"sample"),\
+		    "ld_path" : "/tmp/libta.so",
 		    "time_limit" : [2,2],
                     "mem_limit" : [10000,10000],
                     "weights":[40,60]}

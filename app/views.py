@@ -347,6 +347,7 @@ def judge_on_commit(mapper, connection, model):
 	            "lang_flag": model.language,
 	            "work_dir": os.path.join(basedir, "users/%s/%s/" % (u.username, filehash)),
 	            "test_dir": os.path.join(basedir, "problems/%d/data/" % (pid)),
+                    "ld_path" : os.path.join(basedir, "problems/%d/libta.so" % pid),
 	            "time_limit": [p.time_limit]*p.sample_num,
 	            "mem_limit": [p.memory_limit]*p.sample_num,
                     "weights":map(int,rds.lrange('lambda:problem_weights:%s' % pid,0,-1))}
