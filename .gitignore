@@ -18,3 +18,4 @@ app/config.py
 app/users/*
 app/problems/*
 app/static/tmp/*
+app/static/images/problems/
