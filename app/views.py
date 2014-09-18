@@ -33,7 +33,13 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 @app.route('/oj/index/', defaults={'page': 1})
 @app.route('/oj/index/<int:page>')
 def index(page):
-	pbs = Problem.query.paginate(page, PROBLEMS_PER_PAGE)
+	try:
+		if (g.user.role == 'admin') or (g.user.role == 'ta'):
+			pbs = Problem.query.paginate(page, PROBLEMS_PER_PAGE)
+		else:
+			pbs = Problem.query.filter_by(released=True).paginate(page, PROBLEMS_PER_PAGE)
+	except AttributeError:
+		pbs = Problem.query.filter_by(released=True).paginate(page, PROBLEMS_PER_PAGE)
 	return render_template("index.html",
 		pbs=pbs, 
 		user = g.user)
@@ -164,6 +170,9 @@ def submit(pid = None):
 			if p is None:
 				flash("Problem %d doesn't exist!" % (pid))
 				return redirect(url_for('submit'))
+			elif (p.released == False) and (g.user.role not in ['admin', 'ta']): #problem not released
+				flash("You don't have access to problem %d!" % (pid))
+				return redirect(url_for('submit'))
 			else:
 				try:
 					languages[form.language.data]
@@ -223,12 +232,14 @@ def submit(pid = None):
 @app.route('/oj/problem/<int:problem_id>')
 def problem(problem_id):
 	problem = Problem.query.filter_by(id=problem_id).first()
-	if problem:
-		return render_template('problem.html',
-			problem=problem, 
-			user = g.user)
-	else:
+	if problem is None:
 		return redirect(url_for('index'))
+	elif problem.released == False:
+		if (g.user.is_authenticated() == False) or (g.user.role not in ['admin', 'ta']):
+			return redirect(url_for('index'))
+	return render_template('problem.html',
+		problem=problem, 
+		user = g.user)
 
 @app.route('/oj/profile/', defaults={'page': 1})
 @login_required

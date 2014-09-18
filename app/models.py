@@ -79,7 +79,8 @@ class Problem(db.Model):
 	output_sample = db.Column(db.Text)
 	hint = db.Column(db.Text)
 	sample_num = db.Column(db.Integer)
-        deadline = db.Column(db.DateTime)
+	deadline = db.Column(db.DateTime)
+	released = db.Column(db.Boolean, default = False)
 
 class Submit(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
