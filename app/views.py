@@ -143,6 +143,7 @@ def submit_info(sid, page):
                                         except:
                                                 error_message = "Compilation Error"
 				else:
+                                        sub.score = status
 					sub_results = []
 					for i in range(0, problem.sample_num):
 						sub_results.append(rds.hgetall('lambda:%d:result:%d' % (sub.id, i)))

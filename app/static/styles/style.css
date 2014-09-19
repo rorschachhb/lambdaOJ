@@ -335,7 +335,7 @@ table.sub td.id a span.id {
 table.sub td.id a:hover span.id {
     text-decoration: underline;
 }
-table.sub td.id a span[class|=status] {
+table span[class|=status] {
     font-weight: bold;
     font-style: oblique;
     color: #ffffff;
@@ -343,35 +343,35 @@ table.sub td.id a span[class|=status] {
     border-radius: 5px;
     box-shadow: 1px 2px 1px 0px rgba(0, 0, 0, 0.1);
 }
-table.sub td.id a span.status-waiting {
+table span.status-waiting {
     color: blue;
     box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
 }
-table.sub td.id a span.status-cool {
+table span.status-cool {
     color: #585858;
     background-color: rgb(250, 245, 50);
     background: linear-gradient(rgb(250, 245, 50),
 				rgb(255, 250, 230));
 }
-table.sub td.id a span.status-fine {
+table span.status-fine {
     color: #585858;
     background-color: rgb(200, 200, 190);
     background: linear-gradient(rgb(200, 200, 190),
 				rgb(243, 243, 238));
 }
-table.sub td.id a span.status-safe {
+table span.status-safe {
     color: #585858;
     background-color: rgb(128, 255, 73);
     background: linear-gradient(rgb(128, 255, 73),
 				rgb(220, 255, 225));
 }
-table.sub td.id a span.status-sad {
+table span.status-sad {
     color: #f0f0f0;
     background-color: rgb(6, 150, 220);
     background: linear-gradient(rgb(6, 150, 220),
 				rgb(146, 253, 255));
 }
-table.sub td.id a span.status-worst {
+table span.status-worst {
     color: #f0f0f0;
     background-color: rgb(200, 48, 240);
     background: linear-gradient(rgb(200, 48, 240),
@@ -559,6 +559,11 @@ table.sub td.id a span.status-worst {
     padding: 0.3em;
     font-size: 0.96em;
 }
+.sub-details table caption.score {
+    font-size: 1.2em;
+    font-weight: bold;
+    padding-bottom: 8px;
+}
 .sub-details pre code {
     font-family: source code pro;
     border-radius: 8px;
@@ -566,7 +571,7 @@ table.sub td.id a span.status-worst {
     box-shadow: 1px 2px 2px 1px rgba(0, 0, 0, 0.15);
 }
 
-.sub-details span[class|=status] {
+.sub-details span[class|=sub-status] {
     color: white;
     border-radius: 5px;
     padding: 2px 7px 2px 6px;
@@ -574,16 +579,16 @@ table.sub td.id a span.status-worst {
     font-weight: bold;
     box-shadow: 1px 2px 1px 0px rgba(0, 0, 0, 0.15);
 }
-.sub-details span.status-waiting {
+.sub-details span.sub-status-waiting {
     background-color: rgb(0, 100, 255);
 }
-.sub-details span.status-correct {
+.sub-details span.sub-status-correct {
     background-color: rgb(0, 128, 0);
 }
-.sub-details span.status-warning {
+.sub-details span.sub-status-warning {
     background-color: rgb(236, 140, 17);
 }
-.sub-details span.status-error {
+.sub-details span.sub-status-error {
     background-color: rgb(164, 52, 52);
 }
 

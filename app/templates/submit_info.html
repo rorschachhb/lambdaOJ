@@ -33,16 +33,29 @@ Submit {{ sub.id }}
 <article class="sub-details">
   <h3>Status</h3>
   {% if sub_results == "Pending" %}
-  <span class="status-waiting">Pending...</span>
+  <span class="sub-status-waiting">Pending...</span>
   &nbsp;&nbsp;&nbsp;
   <a href="">
     This page will refresh in 3 seconds automatically...
   </a>
   {% elif sub_results == "Compilation Error" %}
-  <span class="status-error">Compilation Error</span>
+  <span class="sub-status-error">Compilation Error</span>
   <pre class="error_message">{{ error_message }}</pre>
   {% else %}
   <table id="sps" class="list">
+    <caption class="score">Total Points : &nbsp;
+      {% if sub.score|int() == 100 %}
+      <span class="status-cool">100</span>
+      {% elif sub.score|int() >= 80 %}
+      <span class="status-fine">{{ sub.score|int() }}</span>
+      {% elif sub.score|int() >= 50 %}
+      <span class="status-safe">{{ sub.score|int() }}</span>
+      {% elif sub.score|int() > 0 %}
+      <span class="status-sad">{{ sub.score|int() }}</span>
+      {% else %}
+      <span class="status-worst">0</span>
+      {% endif %}
+    </caption>
     <tr>
       <th class="id">Sample</th>
       <th class="state">Status</th>
@@ -54,12 +67,12 @@ Submit {{ sub.id }}
       <td class="id">{{ loop.index }}</td>
       <td class="status">
 	{% if sp['state'] == "Accepted" %}
-	<span class="status-correct">{{ sp['state'] }}</span>
+	<span class="sub-status-correct">{{ sp['state'] }}</span>
 	{% elif sp['state'] in ["Time Limit Exceeded", "Memory Limit Exceeded", 
 	"Output Limit Exceeded"] %}
-	<span class="status-warning">{{ sp['state'] }}</span>
+	<span class="sub-status-warning">{{ sp['state'] }}</span>
 	{% else %}
-	<span class="status-error">{{ sp['state'] }}</span>
+	<span class="sub-status-error">{{ sp['state'] }}</span>
 	{% endif %}
       </td>
       {% if sp['state'] == "Accepted" %}

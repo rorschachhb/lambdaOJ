@@ -44,17 +44,17 @@ Profile
 	  {% if sub.status == "Pending" %}
 	  <span class="status-waiting">-</span>
 	  {% elif sub.status == "Compilation Error" %}
-	  <span class="status-worst">WORST</span>
+	  <span class="status-worst">0</span>
 	  {% elif sub.status|int() == 100 %}
-	  <span class="status-cool">COOL</span>
+	  <span class="status-cool">100</span>
 	  {% elif sub.status|int() >= 80 %}
-	  <span class="status-fine">FINE</span>
+	  <span class="status-fine">{{ sub.status|int() }}</span>
 	  {% elif sub.status|int() >= 50 %}
-	  <span class="status-safe">SAFE</span>
+	  <span class="status-safe">{{ sub.status|int() }}</span>
 	  {% elif sub.status|int() > 0 %}
-	  <span class="status-sad">SAD</span>
+	  <span class="status-sad">{{ sub.status|int() }}</span>
 	  {% else %}
-	  <span class="status-worst">WORST</span>
+	  <span class="status-worst">{{ sub.status|int() }}</span>
 	  {% endif %}
 	</a>
       </td>
