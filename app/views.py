@@ -33,12 +33,9 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 @app.route('/oj/index/', defaults={'page': 1})
 @app.route('/oj/index/<int:page>')
 def index(page):
-	try:
-		if (g.user.role == 'admin') or (g.user.role == 'ta'):
-			pbs = Problem.query.paginate(page, PROBLEMS_PER_PAGE)
-		else:
-			pbs = Problem.query.filter_by(released=True).paginate(page, PROBLEMS_PER_PAGE)
-	except AttributeError:
+	if g.user.is_authenticated() and ((g.user.role == 'admin') or (g.user.role == 'ta')):
+		pbs = Problem.query.paginate(page, PROBLEMS_PER_PAGE)
+	else:
 		pbs = Problem.query.filter_by(released=True).paginate(page, PROBLEMS_PER_PAGE)
 	return render_template("index.html",
 		pbs=pbs, 
