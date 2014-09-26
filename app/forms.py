@@ -9,7 +9,7 @@ import hashlib
 class LoginForm(Form):
 	username = TextField('username', validators = [InputRequired()])
 	password =  PasswordField('password', validators = [InputRequired()])
-	remember_me = BooleanField('remember_me', default = True)
+	remember_me = BooleanField('remember_me', default = False)
 
 class EditForm(Form):	
 	old_password = PasswordField('old_password', validators = [InputRequired()])
