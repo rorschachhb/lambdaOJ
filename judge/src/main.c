@@ -4,6 +4,7 @@
 
 #define PORT 8787
 #define MAX_JSON_REQ_SIZE 4096
+#define MAX_ERR_LEN 4096
 
 static char curr_time[32] ;
 struct tm *ct;
@@ -86,9 +87,10 @@ int main()
 	    err_fd = open(err_file,O_RDONLY) ;
 	    fstat(err_fd,&buf) ;
 	    if (buf.st_size>0) {
+                int len = buf.st_size > MAX_ERR_LEN ? MAX_ERR_LEN : buf.st_size ;
 		char *err_message ;
-		err_message = (char*)calloc(1,buf.st_size+1) ;
-		read(err_fd,err_message,buf.st_size) ;
+		err_message = (char*)calloc(1,len+1) ;
+		read(err_fd,err_message,len) ;
 		redisCommand(c,"HMSET lambda:%d:head state %s err_message %s", 
 			     submit_id,state_string[CE],err_message) ;
 	        execlp("/usr/bin/rm","rm","-rf",work_dir,NULL);
