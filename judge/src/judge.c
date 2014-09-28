@@ -164,7 +164,7 @@ int check_answer(char *user_out, char *ans)
     }
 }
 
-int check_syscall_ok(struct user_regs_struct *uregs) 
+int check_syscall_ok(int first, struct user_regs_struct *uregs) 
 {
     extern int syscall_white_list[] ;
     #ifdef __x86_64__
@@ -172,6 +172,7 @@ int check_syscall_ok(struct user_regs_struct *uregs)
     #elif __i386__
 	int sys_call = uregs->orig_eax ;
     #endif
+    if (first) return 1 ;
     if (syscall_white_list[sys_call] == 1) {
 	if(sys_call == SYS_open){
 	    #ifdef __x86_64__
@@ -232,7 +233,7 @@ void judge_exe(char *input_file,
 	int status ;
         int first_sys_call = 1 ;
 	ptrace(PTRACE_SYSCALL, pid, NULL, NULL) ;
-	
+        
 	while (1) {
 	    wait(&status) ;
 	    if (WIFEXITED(status))  //normally terminated
@@ -240,10 +241,10 @@ void judge_exe(char *input_file,
 	    else if (WIFSTOPPED(status)) {
 		if (WSTOPSIG(status)==SIGTRAP) {
 		    if (!insyscall) {
-                        if(!first_sys_call) insyscall = 1 ;
-                        else first_sys_call = 0 ;
+                        if(!first_sys_call)
+                          insyscall = 1 ;
 			ptrace(PTRACE_GETREGS,pid,NULL,&context.regs) ;
-			if (!check_syscall_ok(&context.regs)) {
+			if (!check_syscall_ok(first_sys_call,&context.regs)) {
 			    //bad system call
 			    jr->state = BAD_SYSCALL ;
                             #ifdef __x86_64__
@@ -255,6 +256,7 @@ void judge_exe(char *input_file,
 			    kill(pid, SIGKILL) ; wait(NULL) ;
 			    return ;
 			}
+                        if(first_sys_call) first_sys_call = 0 ;
 		    }else insyscall = 0 ;
 		}else if(WSTOPSIG(status) == SIGXCPU) {
 		    jr->state = TLE ;

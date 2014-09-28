@@ -42,5 +42,5 @@ void compile_code(char *,char *argv[],char*);
 long convert2ms(struct timeval *tv) ;
 void set_cost_time(struct judge_result* jr, struct rusage* usage) ;
 int check_answer(char *f1, char *f2) ;
-int check_syscall_ok(struct user_regs_struct *uregs) ;
+int check_syscall_ok(int,struct user_regs_struct *uregs) ;
 void judge_exe(char *,char *, char *,char*,int, int, struct judge_result*,char *, char *[]);
