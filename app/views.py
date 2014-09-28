@@ -20,6 +20,9 @@ import string
 from config import LDAP_BINDDN, LDAP_BINDPW, LDAP_SERVER, people_basedn, groups_basedn
 from sqlalchemy import desc
 import chardet
+import re
+
+path_pattern = re.compile(r'/home/oj/[^ ]+[.](?:c[^p]|cpp)')
 
 PROBLEMS_PER_PAGE = 10
 SUBS_PER_PAGE = 100
@@ -139,6 +142,7 @@ def submit_info(sid, page):
 					sub_results = status
 					error_message = rds.hget('lambda:%d:head' % (sub.id), 'err_message')
                                         try:
+                                                error_message = path_pattern.sub(' *your_code* ', error_message)
                                                 error_message = error_message.decode("utf8")
                                         except:
                                                 error_message = "Compilation Error"
