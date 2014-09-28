@@ -22,8 +22,6 @@ from sqlalchemy import desc
 import chardet
 import re
 
-path_pattern = re.compile(r'/home/oj/[^ ]+[.](?:c[^p]|cpp)')
-
 PROBLEMS_PER_PAGE = 10
 SUBS_PER_PAGE = 100
 
@@ -31,6 +29,11 @@ host = '127.0.0.1'
 port = 8787
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+path_pattern = re.compile(basedir.strip('/') + '/[^ ]+[.](?:c[^p]|cpp)')
+
+def rand_fn() :
+        alpha = 'abcdefghijklmnopqrstuvwxyz0123456789'
+        return ''.join(random.sample(alpha,4))
 
 @app.route('/oj/', defaults={'page': 1})
 @app.route('/oj/index/', defaults={'page': 1})
@@ -194,7 +197,9 @@ def submit(pid = None):
 					extension = '.c'
 				elif form.language.data == CPP:
 					extension = '.cpp'
-				filepath = os.path.join(basedir, 'users/%s/%s%s' % (g.user.username, datetime.now().strftime('%Y-%m-%d-%H:%M:%S'), '_' + filehash[0:5] + extension))
+                                        
+                                rfn = rand_fn()
+				filepath = os.path.join(basedir, 'users/%s/%s%s' % (g.user.username, datetime.now().strftime('%Y-%m-%d-%H:%M:%S'), '_' + filehash[0:5] + rfn + extension))
 				#save file with new name
 				fnew = open(filepath, 'w')
                                 # test utf8
