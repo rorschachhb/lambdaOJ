@@ -12,7 +12,7 @@ typedef int (*check_function) (char*,char*);
 static int syscall_white_list[512] ; 
 static sigjmp_buf buf ;
 static int max_compile_time = 5;
-static int max_output_size = 1024;
+static int max_output_size = 1024*1024*60;
 static int max_as = 1024*1024*60 ;
 
 static char* support_language[]={"C","C++"};//match enum order
