@@ -249,6 +249,7 @@ def problem(problem_id):
 		user = g.user)
 
 @app.route('/oj/profile/', defaults={'page': 1})
+@app.route('/oj/profile/<int:page>')
 @login_required
 def profile(page):
 	subs = Submit.query.filter_by(user=g.user.id).order_by(desc(Submit.id)).paginate(page, SUBS_PER_PAGE)
