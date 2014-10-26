@@ -72,10 +72,10 @@ Profile
     <ul>
       {% if subs.has_prev %}
       <li>
-	<a href="{{ url_for('status', page = 1) }}"><strong>&lt;&lt;&lt;</strong></a>
+	<a href="{{ url_for('profile', page = 1) }}"><strong>&lt;&lt;&lt;</strong></a>
       </li>
       <li>
-	<a href="{{ url_for('status', page = subs.prev_num) }}"><strong>&lt; Prev</strong></a>
+	<a href="{{ url_for('profile', page = subs.prev_num) }}"><strong>&lt; Prev</strong></a>
       </li>
       {% else %}
       <li class="disabled"><strong>&lt;&lt;&lt;</strong></li>
@@ -86,10 +86,10 @@ Profile
 
       {% if subs.has_next %}
       <li>
-	<a href="{{ url_for('status', page = subs.next_num) }}"><strong>Next &gt;</strong></a>
+	<a href="{{ url_for('profile', page = subs.next_num) }}"><strong>Next &gt;</strong></a>
       </li>
       <li>
-	<a href="{{ url_for('status', page = subs.pages) }}"><strong>&gt;&gt;&gt;</strong></a>
+	<a href="{{ url_for('profile', page = subs.pages) }}"><strong>&gt;&gt;&gt;</strong></a>
       </li>
       {% else %}
       <li class="disabled"><strong>Next &gt;</strong></li>
